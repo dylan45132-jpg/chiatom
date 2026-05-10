@@ -362,7 +362,7 @@
 
 /* ── 表格 ───────────────────────────────── */
 
-.page .ProseMirror table {
+:where(.page .ProseMirror) table {
   border-collapse: collapse;
   table-layout: fixed;
   width: 100%;
@@ -370,8 +370,8 @@
   margin-bottom: 0.75em;
 }
 
-.page .ProseMirror th,
-.page .ProseMirror td {
+:where(.page .ProseMirror) th,
+:where(.page .ProseMirror) td {
   border: 1px solid #d1d5db;
   padding: 8px 10px;
   vertical-align: top;
@@ -379,19 +379,21 @@
   position: relative;
 }
 
-.page .ProseMirror th {
-  background: #f3f4f6;
-  font-weight: 600;
+:where(.page .ProseMirror) th {
   text-align: left;
 }
 
-.page .ProseMirror .tableWrapper {
+:where(.page .ProseMirror) .tableWrapper {
   overflow-x: auto;
   margin-bottom: 0.75em;
 }
 
-.page .ProseMirror table p {
+:where(.page .ProseMirror) table p {
   margin: 0;
+}
+
+:where(.page .ProseMirror) th p {
+  color: inherit !important;
 }
 
 /* 選取中的 cell */

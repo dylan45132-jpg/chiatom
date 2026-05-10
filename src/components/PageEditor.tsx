@@ -62,6 +62,7 @@ export default function PageEditor({ page }: PageEditorProps) {
       TableCell,
       Placeholder.configure({
         placeholder: ({ node }) => {
+          const { t } = useLangStore.getState()
           if (node.type.name === 'heading') return t.placeholderHeading
           return t.placeholderDefault
         },

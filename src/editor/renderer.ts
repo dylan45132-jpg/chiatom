@@ -167,25 +167,25 @@ export function exportToHtml(
       box-shadow: 0 2px 12px rgba(0,0,0,0.15);
     }
 
-    p  { margin-bottom: 0.75em; line-height: 1.7; }
-    h1 { font-size: 1.8em; font-weight: 700; margin-bottom: 0.5em; }
-    h2 { font-size: 1.4em; font-weight: 600; margin-bottom: 0.4em; }
-    h3 { font-size: 1.15em; font-weight: 600; margin-bottom: 0.35em; }
-    ul, ol { padding-left: 1.5em; margin-bottom: 0.75em; }
-    li { margin-bottom: 0.25em; line-height: 1.6; }
-    blockquote { border-left: 3px solid #ccc; padding-left: 1em; color: #555; margin: 0.75em 0; }
-    hr { border: none; border-top: 1px solid #e0e0e0; margin: 1em 0; }
-    pre { background: #f5f5f5; padding: 1em; border-radius: 4px; overflow-x: auto; margin-bottom: 0.75em; }
-    code { font-family: monospace; font-size: 0.9em; }
+    .page p  { margin-bottom: 0.75em; line-height: 1.7; }
+    .page h1 { font-size: 1.8em; font-weight: 700; margin-bottom: 0.5em; }
+    .page h2 { font-size: 1.4em; font-weight: 600; margin-bottom: 0.4em; }
+    .page h3 { font-size: 1.15em; font-weight: 600; margin-bottom: 0.35em; }
+    .page ul, .page ol { padding-left: 1.5em; margin-bottom: 0.75em; }
+    .page li { margin-bottom: 0.25em; line-height: 1.6; }
+    .page blockquote { border-left: 3px solid #ccc; padding-left: 1em; color: #555; margin: 0.75em 0; }
+    .page hr { border: none; border-top: 1px solid #e0e0e0; margin: 1em 0; }
+    .page pre { background: #f5f5f5; padding: 1em; border-radius: 4px; overflow-x: auto; margin-bottom: 0.75em; }
+    .page code { font-family: monospace; font-size: 0.9em; }
+
+    /* ── Table ── */
+    .page table { border-collapse: collapse; width: 100%; margin-bottom: 0.75em; }
+    .page th, .page td { border: 1px solid #d1d5db; padding: 8px 10px; vertical-align: top; min-width: 80px; }
+    .page th { background: #f3f4f6; font-weight: 600; text-align: left; }
+    .page table p { margin: 0; }\r\n    .page th p { color: inherit !important; }
 
     /* ── Theme CSS ── */
 ${theme.css ? theme.css.split('\n').map(l => '    ' + l).join('\n') : ''}
-
-    /* ── Table ── */
-    table { border-collapse: collapse; width: 100%; margin-bottom: 0.75em; }
-    th, td { border: 1px solid #d1d5db; padding: 8px 10px; vertical-align: top; min-width: 80px; }
-    th { background: #f3f4f6; font-weight: 600; text-align: left; }
-    table p { margin: 0; }
 
     /* ── Print ── */
     @media print {
