@@ -1,3 +1,4 @@
+[English](README.md) | 繁體中文
 # Chiatom
 
 以 A4 頁面為單位的區塊式講義編輯器。你編輯的就是你印出來的。
@@ -69,6 +70,7 @@ pnpm tauri build
 4. 在頁面上直接打字，或按 `/` 插入區塊
 5. 完成後點擊「匯出 HTML」，用瀏覽器開啟後列印為 PDF
 
+詳細的使用手冊請參考 [docs/zh/使用手冊.md](docs/zh/使用手冊.md)。
 ---
 
 ## 主題
@@ -83,7 +85,7 @@ my-theme/
 
 匯入方式：點擊右上角「主題」→「資料夾匯入」，選取主題資料夾。
 
-詳細的主題製作方式請參考 [docs/主題製作指南.md](docs/主題製作指南.md)。
+詳細的主題製作方式請參考 [docs/zh/主題製作指南.md](docs/zh/主題製作指南.md)。
 
 ---
 
@@ -118,6 +120,3 @@ Chiatom 以 [GNU General Public License v3.0](LICENSE) 授權開源。
 
 ---
 
-## 相關專案
-
-[Chiraph](https://github.com/your-username/chiraph) — 學術寫作中繼站，同屬 Chi 系列工具
