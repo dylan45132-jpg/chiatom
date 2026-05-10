@@ -1,0 +1,42 @@
+/* ── 測試主題 ── */
+
+.page {
+  font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  color: #1a1a1a;
+}
+
+/* 重點摘要 */
+.block-summary-box {
+  background: #f0f7ff;
+  border-left: 4px solid #4a90d9;
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin: 1em 0;
+}
+
+.block-summary-box .block-label {
+  font-size: 0.8em;
+  font-weight: 700;
+  color: #4a90d9;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+/* 核心目標 */
+.block-objective {
+  background: #fff8f0;
+  border-left: 4px solid #e8923a;
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin: 1em 0;
+}
+
+.block-objective .block-label {
+  font-size: 0.8em;
+  font-weight: 700;
+  color: #e8923a;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}

@@ -1,0 +1,29 @@
+{
+  "name": "測試主題",
+  "version": "1.0.0",
+  "author": "test",
+  "description": "用於測試複合區塊的主題",
+  "pageSize": "A4",
+  "blocks": [
+    {
+      "name": "重點摘要",
+      "key": "summary-box",
+      "icon": "📋",
+      "class": "block-summary-box",
+      "children": [
+        { "type": "label", "placeholder": "標籤文字" },
+        { "type": "ol", "placeholder": "條列重點..." }
+      ]
+    },
+    {
+      "name": "核心目標",
+      "key": "objective",
+      "icon": "🎯",
+      "class": "block-objective",
+      "children": [
+        { "type": "label", "placeholder": "目標說明" },
+        { "type": "ol", "placeholder": "目標條列..." }
+      ]
+    }
+  ]
+}

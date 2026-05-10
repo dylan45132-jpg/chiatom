@@ -1,0 +1,140 @@
+import { useEffect, useRef, useState } from 'react'
+import type { Editor } from '@tiptap/react'
+
+interface BubbleToolbarProps {
+  editor: Editor
+}
+
+interface ToolbarPos {
+  x: number
+  y: number
+  mode: 'text' | 'table' | null
+}
+
+export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
+  const [pos, setPos] = useState<ToolbarPos>({ x: 0, y: 0, mode: null })
+  const toolbarRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const update = () => {
+      const { state, view } = editor
+      const { selection } = state
+
+      // 表格模式：游標在表格內
+      if (editor.isActive('table')) {
+        const coords = view.coordsAtPos(selection.from)
+        setPos({
+          x: coords.left,
+          y: coords.top - 48,
+          mode: 'table',
+        })
+        return
+      }
+
+      // 文字模式：有選取文字
+      if (!selection.empty) {
+        const coords = view.coordsAtPos(selection.from)
+        const endCoords = view.coordsAtPos(selection.to)
+        const x = (coords.left + endCoords.left) / 2
+        setPos({
+          x,
+          y: coords.top - 48,
+          mode: 'text',
+        })
+        return
+      }
+
+      setPos({ x: 0, y: 0, mode: null })
+    }
+
+    editor.on('selectionUpdate', update)
+    editor.on('focus', update)
+    editor.on('blur', () => setPos({ x: 0, y: 0, mode: null }))
+
+    return () => {
+      editor.off('selectionUpdate', update)
+    }
+  }, [editor])
+
+  // 位置修正：避免超出視窗
+  useEffect(() => {
+    if (!pos.mode || !toolbarRef.current) return
+    const rect = toolbarRef.current.getBoundingClientRect()
+    let x = pos.x - rect.width / 2
+    const y = pos.y
+
+    if (x < 8) x = 8
+    if (x + rect.width > window.innerWidth - 8)
+      x = window.innerWidth - rect.width - 8
+
+    toolbarRef.current.style.left = `${x}px`
+    toolbarRef.current.style.top = `${y}px`
+  }, [pos])
+
+  if (!pos.mode) return null
+
+  return (
+    <div ref={toolbarRef} className="bubble-menu" style={{ position: 'fixed', zIndex: 8000 }}>
+      {pos.mode === 'text' && (
+        <>
+          <button
+            className={`bubble-btn ${editor.isActive('bold') ? 'is-active' : ''}`}
+            onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleBold().run() }}
+            title="粗體"
+          >B</button>
+          <button
+            className={`bubble-btn ${editor.isActive('italic') ? 'is-active' : ''}`}
+            onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleItalic().run() }}
+            title="斜體"
+          >I</button>
+          <button
+            className={`bubble-btn ${editor.isActive('strike') ? 'is-active' : ''}`}
+            onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleStrike().run() }}
+            title="刪除線"
+          >S</button>
+          <div className="bubble-divider" />
+          <button
+            className={`bubble-btn ${editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}`}
+            onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleHeading({ level: 1 }).run() }}
+            title="大標題"
+          >H1</button>
+          <button
+            className={`bubble-btn ${editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}`}
+            onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleHeading({ level: 2 }).run() }}
+            title="中標題"
+          >H2</button>
+          <button
+            className={`bubble-btn ${editor.isActive('heading', { level: 3 }) ? 'is-active' : ''}`}
+            onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleHeading({ level: 3 }).run() }}
+            title="小標題"
+          >H3</button>
+          <div className="bubble-divider" />
+          <button
+            className={`bubble-btn ${editor.isActive('bulletList') ? 'is-active' : ''}`}
+            onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleBulletList().run() }}
+            title="無序清單"
+          >•</button>
+          <button
+            className={`bubble-btn ${editor.isActive('orderedList') ? 'is-active' : ''}`}
+            onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleOrderedList().run() }}
+            title="有序清單"
+          >1.</button>
+        </>
+      )}
+
+      {pos.mode === 'table' && (
+        <>
+          <button className="bubble-btn" onMouseDown={e => { e.preventDefault(); editor.chain().focus().addColumnBefore().run() }} title="左側插入欄">←欄</button>
+          <button className="bubble-btn" onMouseDown={e => { e.preventDefault(); editor.chain().focus().addColumnAfter().run() }} title="右側插入欄">欄→</button>
+          <button className="bubble-btn" onMouseDown={e => { e.preventDefault(); editor.chain().focus().deleteColumn().run() }} title="刪除欄">刪欄</button>
+          <div className="bubble-divider" />
+          <button className="bubble-btn" onMouseDown={e => { e.preventDefault(); editor.chain().focus().addRowBefore().run() }} title="上方插入列">↑列</button>
+          <button className="bubble-btn" onMouseDown={e => { e.preventDefault(); editor.chain().focus().addRowAfter().run() }} title="下方插入列">列↓</button>
+          <button className="bubble-btn" onMouseDown={e => { e.preventDefault(); editor.chain().focus().deleteRow().run() }} title="刪除列">刪列</button>
+          <div className="bubble-divider" />
+          <button className="bubble-btn bubble-btn-danger" onMouseDown={e => { e.preventDefault(); editor.chain().focus().deleteTable().run() }} title="刪除表格">刪表格</button>
+        </>
+      )}
+    </div>
+  )
+}

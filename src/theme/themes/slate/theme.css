@@ -1,0 +1,113 @@
+/* Slate — 石板灰調，理工講義 */
+
+.page {
+  font-family: 'Georgia', 'Noto Serif TC', serif;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #1a1a1a;
+  background: #ffffff;
+  padding: 72px 80px;
+}
+
+/* 標題 */
+.page h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111111;
+  border-bottom: 2px solid #1a1a1a;
+  padding-bottom: 6px;
+  margin: 0 0 24px 0;
+  letter-spacing: 0.02em;
+}
+
+.page h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111111;
+  border-left: 3px solid #555555;
+  padding-left: 10px;
+  margin: 28px 0 12px 0;
+}
+
+.page h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #333333;
+  margin: 20px 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* 段落 */
+.page p {
+  margin: 0 0 10px 0;
+  color: #1a1a1a;
+}
+
+/* 清單 */
+.page ul,
+.page ol {
+  margin: 0 0 10px 0;
+  padding-left: 20px;
+  color: #1a1a1a;
+}
+
+.page li {
+  margin-bottom: 4px;
+}
+
+/* 引用 */
+.page blockquote {
+  border-left: 3px solid #aaaaaa;
+  margin: 12px 0;
+  padding: 6px 16px;
+  color: #555555;
+  font-style: italic;
+}
+
+/* 表格 */
+.page table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 12px;
+}
+
+.page th {
+  background: #1a1a1a;
+  color: #ffffff;
+  padding: 7px 10px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.page td {
+  border: 1px solid #cccccc;
+  padding: 6px 10px;
+  color: #1a1a1a;
+}
+
+.page tr:nth-child(even) td {
+  background: #f5f5f5;
+}
+
+/* 分隔線 */
+.page hr {
+  border: none;
+  border-top: 1px solid #cccccc;
+  margin: 20px 0;
+}
+
+/* 圖片 */
+.page img {
+  max-width: 100%;
+  display: block;
+  margin: 12px auto;
+}
+
+@media print {
+  .page {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
