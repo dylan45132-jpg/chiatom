@@ -5,6 +5,7 @@ import { join, tempDir } from '@tauri-apps/api/path'
 import { convertFileSrc } from '@tauri-apps/api/core'
 import { Document } from '../store/documentStore'
 import { Page } from '../store/documentStore'
+import { useLangStore } from '../store/langStore'
 
 export async function resolveImageSrcs(pages: Page[]): Promise<Page[]> {
   // 深度複製，不改原始資料
@@ -88,6 +89,7 @@ export async function saveHandout(
   doc: Document,
   filePath?: string
 ): Promise<string | null> {
+  const t = useLangStore.getState().t
   const zip = new JSZip()
   const assets = zip.folder('assets')!
 
@@ -121,7 +123,7 @@ export async function saveHandout(
   const bytes = await zip.generateAsync({ type: 'uint8array', compression: 'DEFLATE' })
 
   const targetPath = filePath ?? await save({
-    filters: [{ name: 'Chiatom 講義', extensions: ['handout'] }],
+    filters: [{ name: t.filterDocument, extensions: ['handout'] }],
     defaultPath: `${doc.title}.handout`,
   })
 
@@ -137,9 +139,10 @@ export async function loadHandout(): Promise<{
   doc: Document
   tempPath: string
 } | null> {
+  const t = useLangStore.getState().t
   const selected = await open({
     multiple: false,
-    filters: [{ name: 'Chiatom 講義', extensions: ['handout'] }],
+    filters: [{ name: t.filterDocument, extensions: ['handout'] }],
   })
 
   if (!selected || Array.isArray(selected)) return null
@@ -149,7 +152,7 @@ export async function loadHandout(): Promise<{
 
   // 讀取 document.json
   const docEntry = zip.file('document.json')
-  if (!docEntry) throw new Error('無效的 .handout 檔案')
+  if (!docEntry) throw new Error('Invalid .handout file')
   const docText = await docEntry.async('string')
   const doc = JSON.parse(docText) as Document
 

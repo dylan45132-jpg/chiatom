@@ -2,28 +2,31 @@ import { useState } from 'react'
 import { useDocumentStore } from '../store/documentStore'
 import { importThemeFromFolder, importThemeFromCss } from '../theme/themeLoader'
 import { toast } from '../store/toastStore'
-import { BUILTIN_THEMES } from '../theme/builtinThemes'
+import { getBuiltinThemes } from '../theme/builtinThemes'
 import type { ThemeConfig } from '../store/documentStore'
+import { useLangStore } from '../store/langStore'
 
 interface ThemeImporterProps {
   onClose: () => void
 }
 
 export default function ThemeImporter({ onClose }: ThemeImporterProps) {
+  const { t } = useLangStore()
   const { setTheme, document } = useDocumentStore()
   const [tab, setTab] = useState<'builtin' | 'folder' | 'paste'>('builtin')
   const [cssText, setCssText] = useState('')
-  const [themeName, setThemeName] = useState('自訂主題')
+  const [themeName, setThemeName] = useState(t.customTheme)
   const [loading, setLoading] = useState(false)
+  const BUILTIN_THEMES = getBuiltinThemes()
 
-  const handleApplyBuiltinTheme = (theme: typeof BUILTIN_THEMES[0]) => {
+  const handleApplyBuiltinTheme = (theme: (typeof BUILTIN_THEMES)[0]) => {
     const themeConfig: ThemeConfig = {
       name: theme.name,
       css: theme.css,
       json: theme.json,
     }
     setTheme(themeConfig)
-    toast.success(`已套用主題：${theme.name}`)
+    toast.success(`${t.toastThemeApplied} ${theme.name}`)
     onClose()
   }
 
@@ -33,10 +36,10 @@ export default function ThemeImporter({ onClose }: ThemeImporterProps) {
       const theme = await importThemeFromFolder()
       if (!theme) return
       setTheme(theme)
-      toast.success(`已套用主題：${theme.name}`)
+      toast.success(`${t.toastThemeApplied} ${theme.name}`)
       onClose()
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : '匯入失敗')
+      toast.error(err instanceof Error ? err.message : t.toastImportFailed)
     } finally {
       setLoading(false)
     }
@@ -44,22 +47,22 @@ export default function ThemeImporter({ onClose }: ThemeImporterProps) {
 
   const handleImportCss = () => {
     if (!cssText.trim()) {
-      toast.error('請貼上 CSS 內容')
+      toast.error(t.toastNoCss)
       return
     }
     const theme = importThemeFromCss(cssText, themeName)
     setTheme(theme)
-    toast.success(`已套用主題：${theme.name}`)
+    toast.success(`${t.toastThemeApplied} ${theme.name}`)
     onClose()
   }
 
   const handleReset = () => {
     setTheme({
-      name: '預設主題',
+      name: t.defaultThemeName,
       css: '',
-      json: { name: '預設主題', version: '1.0.0', author: '', description: '', pageSize: 'A4', blocks: [] },
+      json: { name: t.defaultThemeName, version: '1.0.0', author: '', description: '', pageSize: 'A4', blocks: [] },
     })
-    toast.info('已重設為預設主題')
+    toast.info(t.toastReset)
     onClose()
   }
 
@@ -67,8 +70,8 @@ export default function ThemeImporter({ onClose }: ThemeImporterProps) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
-          <span className="modal-title">主題設定</span>
-          <span className="modal-current">目前：{document.theme.name}</span>
+          <span className="modal-title">{t.themeSettings}</span>
+          <span className="modal-current">{t.currentTheme}{document.theme.name}</span>
           <button className="modal-close" onClick={onClose}>×</button>
         </div>
 
@@ -77,26 +80,26 @@ export default function ThemeImporter({ onClose }: ThemeImporterProps) {
             className={`modal-tab ${tab === 'builtin' ? 'is-active' : ''}`}
             onClick={() => setTab('builtin')}
           >
-            內建主題
+            {t.builtinThemes}
           </button>
           <button
             className={`modal-tab ${tab === 'folder' ? 'is-active' : ''}`}
             onClick={() => setTab('folder')}
           >
-            資料夾匯入
+            {t.folderImport}
           </button>
           <button
             className={`modal-tab ${tab === 'paste' ? 'is-active' : ''}`}
             onClick={() => setTab('paste')}
           >
-            貼上 CSS
+            {t.pasteCSS}
           </button>
         </div>
 
         <div className="modal-body">
           {tab === 'builtin' && (
             <div className="modal-section builtin-themes-list">
-              {BUILTIN_THEMES.map(theme => (
+              {getBuiltinThemes().map(theme => (
                 <div key={theme.id} className="builtin-theme-item">
                   <div className="builtin-theme-info">
                     <span className="builtin-theme-name">{theme.name}</span>
@@ -106,7 +109,7 @@ export default function ThemeImporter({ onClose }: ThemeImporterProps) {
                     className="modal-btn"
                     onClick={() => handleApplyBuiltinTheme(theme)}
                   >
-                    套用
+                    {t.applyTheme}
                   </button>
                 </div>
               ))}
@@ -116,14 +119,14 @@ export default function ThemeImporter({ onClose }: ThemeImporterProps) {
           {tab === 'folder' && (
             <div className="modal-section">
               <p className="modal-desc">
-                選取包含 <code>theme.css</code> 和 <code>theme.json</code> 的主題資料夾。
+                {t.folderHint}
               </p>
               <button
                 className="modal-btn-primary"
                 onClick={handleImportFolder}
                 disabled={loading}
               >
-                {loading ? '匯入中…' : '選取主題資料夾'}
+                {loading ? t.selectingFolder : t.selectFolder}
               </button>
             </div>
           )}
@@ -134,17 +137,17 @@ export default function ThemeImporter({ onClose }: ThemeImporterProps) {
                 className="modal-input"
                 value={themeName}
                 onChange={e => setThemeName(e.target.value)}
-                placeholder="主題名稱"
+                placeholder={t.themeNamePlaceholder}
               />
               <textarea
                 className="modal-textarea"
                 value={cssText}
                 onChange={e => setCssText(e.target.value)}
-                placeholder="貼上 theme.css 內容…"
+                placeholder={t.cssPastePlaceholder}
                 rows={10}
               />
               <button className="modal-btn-primary" onClick={handleImportCss}>
-                套用
+                {t.applyTheme}
               </button>
             </div>
           )}
@@ -152,7 +155,7 @@ export default function ThemeImporter({ onClose }: ThemeImporterProps) {
 
         <div className="modal-footer">
           <button className="modal-btn-ghost" onClick={handleReset}>
-            重設為預設主題
+            {t.resetTheme}
           </button>
         </div>
       </div>

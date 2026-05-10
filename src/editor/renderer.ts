@@ -1,62 +1,64 @@
 import { JSONContent } from '@tiptap/react'
 import { ThemeConfig } from '../store/documentStore'
 import katex from 'katex'
+import { useLangStore } from '../store/langStore'
 
 // ============================================
 // Tiptap JSON → HTML 轉換器
 // ============================================
 
-function renderChildren(node: JSONContent): string {
+function renderChildren(node: JSONContent, t: any): string {
   if (!node.content) return ''
-  return node.content.map(renderNode).join('')
+  return node.content.map(child => renderNode(child, t)).join('')
 }
 
-function renderMarks(text: string, marks?: JSONContent['marks']): string {
+function renderMarks(text: string, marks?: JSONContent['marks']
+): string {
   if (!marks || marks.length === 0) return text
   return marks.reduce((acc, mark) => {
     switch (mark.type) {
-      case 'bold':      return `<strong>${acc}</strong>`
-      case 'italic':    return `<em>${acc}</em>`
+      case 'bold': return `<strong>${acc}</strong>`
+      case 'italic': return `<em>${acc}</em>`
       case 'underline': return `<u>${acc}</u>`
-      case 'strike':    return `<s>${acc}</s>`
-      case 'code':      return `<code>${acc}</code>`
-      default:          return acc
+      case 'strike': return `<s>${acc}</s>`
+      case 'code': return `<code>${acc}</code>`
+      default: return acc
     }
   }, text)
 }
 
-function renderNode(node: JSONContent): string {
+function renderNode(node: JSONContent, t: any): string {
   switch (node.type) {
     case 'doc':
-      return renderChildren(node)
+      return renderChildren(node, t)
 
     case 'text':
       return renderMarks(
-        (node.text ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'),
+        (node.text ?? '').replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>'),
         node.marks
       )
 
     case 'paragraph': {
-      const inner = renderChildren(node)
+      const inner = renderChildren(node, t)
       return `<p>${inner || '&nbsp;'}</p>`
     }
 
     case 'heading': {
       const level = node.attrs?.level ?? 1
-      return `<h${level}>${renderChildren(node)}</h${level}>`
+      return `<h${level}>${renderChildren(node, t)}</h${level}>`
     }
 
     case 'bulletList':
-      return `<ul>${renderChildren(node)}</ul>`
+      return `<ul>${renderChildren(node, t)}</ul>`
 
     case 'orderedList':
-      return `<ol>${renderChildren(node)}</ol>`
+      return `<ol>${renderChildren(node, t)}</ol>`
 
     case 'listItem':
-      return `<li>${renderChildren(node)}</li>`
+      return `<li>${renderChildren(node, t)}</li>`
 
     case 'blockquote':
-      return `<blockquote>${renderChildren(node)}</blockquote>`
+      return `<blockquote>${renderChildren(node, t)}</blockquote>`
 
     case 'horizontalRule':
       return `<hr>`
@@ -65,11 +67,11 @@ function renderNode(node: JSONContent): string {
       return `<br>`
 
     case 'codeBlock':
-      return `<pre><code>${renderChildren(node)}</code></pre>`
+      return `<pre><code>${renderChildren(node, t)}</code></pre>`
 
     case 'compoundBlock': {
       const blockClass = node.attrs?.class ?? ''
-      return `<div class="${blockClass}">${renderChildren(node)}</div>`
+      return `<div class="${blockClass}">${renderChildren(node, t)}</div>`
     }
 
     case 'imagePlaceholder': {
@@ -77,7 +79,7 @@ function renderNode(node: JSONContent): string {
         const alt = node.attrs?.alt ?? ''
         return `<img src="${node.attrs.src}" alt="${alt}" style="max-width:100%;display:block;margin:0.75em 0;">`
       }
-      return `<div style="padding:16px;border:2px dashed #ccc;text-align:center;color:#999;margin:0.75em 0;">[圖片]</div>`
+      return `<div style="padding:16px;border:2px dashed #ccc;text-align:center;color:#999;margin:0.75em 0;">${t.imagePlaceholder}</div>`
     }
 
     case 'inlineMath':
@@ -101,19 +103,19 @@ function renderNode(node: JSONContent): string {
       }
 
     case 'table':
-      return `<table>${renderChildren(node)}</table>`
+      return `<table>${renderChildren(node, t)}</table>`
 
     case 'tableRow':
-      return `<tr>${renderChildren(node)}</tr>`
+      return `<tr>${renderChildren(node, t)}</tr>`
 
     case 'tableHeader':
-      return `<th>${renderChildren(node)}</th>`
+      return `<th>${renderChildren(node, t)}</th>`
 
     case 'tableCell':
-      return `<td>${renderChildren(node)}</td>`
+      return `<td>${renderChildren(node, t)}</td>`
 
     default:
-      return renderChildren(node)
+      return renderChildren(node, t)
   }
 }
 
@@ -136,10 +138,11 @@ export function exportToHtml(
   docTitle: string,
   theme: ThemeConfig
 ): string {
+  const t = useLangStore.getState().t
   const hasMath = pages.some(page => hasMathNode(page.content))
 
   const pagesHtml = pages.map(page => {
-    const content = renderNode(page.content)
+    const content = renderNode(page.content, t)
     return `  <div class="page">\n${content}\n  </div>`
   }).join('\n\n')
 

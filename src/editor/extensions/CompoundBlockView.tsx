@@ -1,7 +1,9 @@
 import { NodeViewWrapper, NodeViewContent, type NodeViewProps } from '@tiptap/react'
 import { useDocumentStore } from '../../store/documentStore'
+import { useLangStore } from '../../store/langStore'
 
 export default function CompoundBlockView({ node, selected }: NodeViewProps) {
+  const { t } = useLangStore()
   const { document } = useDocumentStore()
   const blocks = document.theme.json.blocks ?? []
   const def = blocks.find(b => b.key === node.attrs.key)
@@ -15,7 +17,7 @@ export default function CompoundBlockView({ node, selected }: NodeViewProps) {
     >
       {isUnknown && (
         <div className="compound-block-warning" contentEditable={false}>
-          此區塊在目前主題無對應樣式（{node.attrs.key}）
+          {t.compoundFallback} ({node.attrs.key})
         </div>
       )}
       <div className={className}>

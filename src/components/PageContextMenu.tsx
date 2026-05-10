@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useDocumentStore } from '../store/documentStore'
 import { toast } from '../store/toastStore'
+import { useLangStore } from '../store/langStore'
 
 const GAP = 8
 
@@ -36,6 +37,7 @@ interface PageContextMenuProps {
 }
 
 export default function PageContextMenu({ menu, onClose }: PageContextMenuProps) {
+  const { t } = useLangStore()
   const menuRef = useRef<HTMLDivElement>(null)
   const [pos, setPos] = useState({ x: menu.x, y: menu.y })
 
@@ -82,7 +84,7 @@ export default function PageContextMenu({ menu, onClose }: PageContextMenuProps)
   const index = pages.findIndex(p => p.id === menu.pageId)
 
   const handleInsertBefore = () => {
-    const newPage = { id: crypto.randomUUID(), title: `頁面 ${pages.length + 1}`, content: { type: 'doc' as const, content: [{ type: 'paragraph' }] } }
+    const newPage = { id: crypto.randomUUID(), title: `${t.pageTitle} ${pages.length + 1}`, content: { type: 'doc' as const, content: [{ type: 'paragraph' }] } }
     useDocumentStore.setState(state => ({
       document: {
         ...state.document,
@@ -99,7 +101,7 @@ export default function PageContextMenu({ menu, onClose }: PageContextMenuProps)
   }
 
   const handleInsertAfter = () => {
-    const newPage = { id: crypto.randomUUID(), title: `頁面 ${pages.length + 1}`, content: { type: 'doc' as const, content: [{ type: 'paragraph' }] } }
+    const newPage = { id: crypto.randomUUID(), title: `${t.pageTitle} ${pages.length + 1}`, content: { type: 'doc' as const, content: [{ type: 'paragraph' }] } }
     useDocumentStore.setState(state => ({
       document: {
         ...state.document,
@@ -117,13 +119,13 @@ export default function PageContextMenu({ menu, onClose }: PageContextMenuProps)
 
   const handleDuplicate = () => {
     duplicatePage(menu.pageId)
-    toast.success('已複製頁面')
+    toast.success(t.toastDuplicated)
     onClose()
   }
 
   const handleDelete = () => {
     deletePage(menu.pageId)
-    toast.info('已刪除頁面')
+    toast.info(t.toastDeleted)
     onClose()
   }
 
@@ -134,21 +136,21 @@ export default function PageContextMenu({ menu, onClose }: PageContextMenuProps)
       style={{ left: pos.x, top: pos.y }}
     >
       <button className="context-menu-item" onClick={handleInsertBefore}>
-        在上方插入頁面
+        {t.insertAbove}
       </button>
       <button className="context-menu-item" onClick={handleInsertAfter}>
-        在下方插入頁面
+        {t.insertBelow}
       </button>
       <div className="context-menu-divider" />
       <button className="context-menu-item" onClick={handleDuplicate}>
-        複製頁面
+        {t.duplicatePage}
       </button>
       <div className="context-menu-divider" />
       <button
         className="context-menu-item context-menu-danger"
         onClick={handleDelete}
       >
-        刪除頁面
+        {t.deletePageMenu}
       </button>
     </div>
   )

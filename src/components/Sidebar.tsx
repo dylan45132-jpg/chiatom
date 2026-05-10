@@ -11,6 +11,7 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import PageContextMenu, { usePageContextMenu } from './PageContextMenu'
+import { useLangStore } from '../store/langStore'
 
 // ── 單一頁面項目 ──────────────────────────
 
@@ -24,6 +25,7 @@ interface PageItemProps {
 }
 
 function PageItem({ id, title, isActive, onClick, onDelete, onContextMenu }: PageItemProps) {
+  const { t } = useLangStore()
   const {
     attributes,
     listeners,
@@ -51,7 +53,7 @@ function PageItem({ id, title, isActive, onClick, onDelete, onContextMenu }: Pag
         className="sidebar-drag-handle"
         {...attributes}
         {...listeners}
-        title="拖曳排序"
+        title={t.dragToSort}
       >
         ⠿
       </span>
@@ -59,7 +61,7 @@ function PageItem({ id, title, isActive, onClick, onDelete, onContextMenu }: Pag
       <button
         className="sidebar-delete-btn"
         onClick={e => { e.stopPropagation(); onDelete() }}
-        title="刪除頁面"
+        title={t.deletePage}
       >
         ×
       </button>
@@ -70,6 +72,7 @@ function PageItem({ id, title, isActive, onClick, onDelete, onContextMenu }: Pag
 // ── Sidebar 主體 ──────────────────────────
 
 export default function Sidebar() {
+  const { t } = useLangStore()
   const {
     document,
     activePageId,
@@ -96,8 +99,8 @@ export default function Sidebar() {
     <>
       <div className="sidebar">
         <div className="sidebar-header">
-          <span className="sidebar-label">頁面</span>
-          <button className="sidebar-add-btn" onClick={addPage} title="新增頁面">
+          <span className="sidebar-label">{t.pages}</span>
+          <button className="sidebar-add-btn" onClick={addPage} title={t.addPage}>
             +
           </button>
         </div>

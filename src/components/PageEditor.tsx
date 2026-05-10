@@ -14,6 +14,7 @@ import { CompoundBlock } from '../editor/extensions/CompoundBlock'
 import { Mathematics } from '@tiptap/extension-mathematics'
 import 'katex/dist/katex.min.css'
 import { MathModal } from './MathModal'
+import { useLangStore } from '../store/langStore'
 
 // A4 @ 96dpi，扣掉 padding（上下各 72px）
 const A4_CONTENT_HEIGHT = 1123 - 72 * 2
@@ -23,6 +24,7 @@ interface PageEditorProps {
 }
 
 export default function PageEditor({ page }: PageEditorProps) {
+  const { t } = useLangStore()
   const { updatePageContent, updatePageTitle } = useDocumentStore()
   const editorRef = useRef<HTMLDivElement>(null)
   const [isOverflow, setIsOverflow] = useState(false)
@@ -60,8 +62,8 @@ export default function PageEditor({ page }: PageEditorProps) {
       TableCell,
       Placeholder.configure({
         placeholder: ({ node }) => {
-          if (node.type.name === 'heading') return '輸入標題…'
-          return '輸入內容，或按 / 插入區塊'
+          if (node.type.name === 'heading') return t.placeholderHeading
+          return t.placeholderDefault
         },
         showOnlyCurrent: true,
       }),
@@ -114,7 +116,7 @@ export default function PageEditor({ page }: PageEditorProps) {
         {isOverflow && (
           <div className="page-overflow-warning">
             <div className="page-overflow-line" />
-            <span className="page-overflow-label">內容超出 A4 範圍</span>
+            <span className="page-overflow-label">{t.overflowLabel}</span>
           </div>
         )}
       </div>

@@ -2,21 +2,22 @@ English | [繁體中文](README.zh.md)
 
 # Chiatom
 
-A block-based handout editor built around A4 pages. What you edit is what you print.
+A block-based structured content editor built around A4 pages. What you edit is what you output.
 
 ---
 
 ## What is this
 
-Chiatom is a desktop application designed for teachers, instructors, and course designers who regularly create structured handouts.
+Chiatom is a desktop application for anyone who needs structured content creation with precise page output — teachers making handouts, knowledge workers who think better within boundaries, or anyone who wants to design a theme once and keep filling it with content.
 
-Most tools don't solve a real problem: **LLMs can generate beautiful HTML handout layouts, but there's no tool that lets you fill in content directly within that layout.**
+Most tools don't solve a real problem: **whether you're making handouts or taking notes, existing tools are either too fluid (Notion's infinite canvas), too heavy (Word), or can't control final output (Typora).**
 
 - Typora is a great Markdown editor, but you can't control where content appears on the page
 - Notion's page feel is an illusion — print results are unpredictable
 - Word can't apply custom HTML layouts
+- For many people, a bounded page isn't a constraint — it's what makes focus possible
 
-Chiatom's approach: pages are first-class citizens. You edit directly on an A4 page, and what you see is exactly what gets printed.
+Chiatom's approach: pages are first-class citizens. You edit directly on an A4 page, and what you see is exactly what you get.
 
 ---
 
@@ -79,15 +80,14 @@ The built installer will be in `src-tauri/target/release/bundle/`.
 
 ## Themes
 
-The visual style of your handout is entirely controlled by themes. A theme package contains two files:
-
-```
+The visual style of your document is entirely controlled by themes. A theme package contains two files:
 my-theme/
 ├── theme.css    # Page styles
 └── theme.json   # Theme metadata and compound block definitions
-```
 
 To import: click "Theme" in the toolbar → "Import Folder", then select your theme folder.
+
+Browse and download community themes at [chiatom-themes](https://dylan45132-jpg.github.io/chiatom-themes/).
 
 For details on creating your own theme, see [docs/en/theme-guide.md](docs/en/theme-guide.md).
 
@@ -110,7 +110,7 @@ For details on creating your own theme, see [docs/en/theme-guide.md](docs/en/the
 - Phase 1 MVP ✅
 - Phase 2 Full editing experience ✅
 - Phase 3 Polish ✅
-- Phase 4 Open source preparation ⬜
+- Phase 4 Open source preparation ✅
 
 ---
 
@@ -120,5 +120,3 @@ Chiatom is open source under the [GNU General Public License v3.0](LICENSE).
 
 Theme packages (theme.css + theme.json) are published separately under the MIT License, so the community can freely create, share, and sell themes without GPL restrictions.
 See [chiatom-themes](https://github.com/dylan45132-jpg/chiatom-themes).
-
----

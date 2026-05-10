@@ -1,5 +1,6 @@
 import { open } from '@tauri-apps/plugin-dialog'
 import { readFile } from '@tauri-apps/plugin-fs'
+import { useLangStore } from '../store/langStore'
 
 function bytesToBase64(bytes: Uint8Array): string {
   let binary = ''
@@ -24,9 +25,10 @@ export async function pickImageAsDataUrl(): Promise<{
   path: string
   dataUrl: string
 } | null> {
+  const t = useLangStore.getState().t
   const selected = await open({
     multiple: false,
-    filters: [{ name: '圖片', extensions: ['png', 'jpg', 'jpeg', 'gif', 'webp'] }],
+    filters: [{ name: t.filterImage, extensions: ['png', 'jpg', 'jpeg', 'gif', 'webp'] }],
   })
 
   if (!selected || Array.isArray(selected)) return null

@@ -296,7 +296,7 @@ Chiatom's theme system is designed to be LLM-friendly. You can use ChatGPT, Clau
 ### Recommended prompt structure
 
 ```
-Design a theme.css file for Chiatom, a handout editor.
+Design a theme.css file for Chiatom, a document editor.
 
 Requirements:
 - All styles must be scoped inside the .page class (e.g. .page h1 { ... })

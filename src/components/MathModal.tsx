@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import katex from 'katex'
+import { useLangStore } from '../store/langStore'
 
 interface MathModalProps {
   isOpen: boolean
@@ -9,22 +10,23 @@ interface MathModalProps {
   onClose: () => void
 }
 
-const SNIPPETS = [
-  { label: '分數', latex: '\\frac{a}{b}' },
-  { label: '根號', latex: '\\sqrt{x}' },
-  { label: '次方', latex: 'x^{n}' },
-  { label: '下標', latex: 'x_{n}' },
-  { label: '積分', latex: '\\int_{a}^{b} f(x)\\,dx' },
-  { label: '極限', latex: '\\lim_{x \\to 0}' },
-  { label: '求和', latex: '\\sum_{i=1}^{n}' },
-  { label: '希臘字母', latex: '\\alpha \\beta \\gamma' },
-  { label: '矩陣', latex: '\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}' },
-]
-
 export function MathModal({ isOpen, initialLatex, mode, onConfirm, onClose }: MathModalProps) {
+  const { t } = useLangStore()
   const [latex, setLatex] = useState(initialLatex)
   const [preview, setPreview] = useState('')
   const [error, setError] = useState('')
+
+  const SNIPPETS = [
+    { label: t.mathSnippets.fraction, latex: '\\frac{a}{b}' },
+    { label: t.mathSnippets.sqrt, latex: '\\sqrt{x}' },
+    { label: t.mathSnippets.power, latex: 'x^{n}' },
+    { label: t.mathSnippets.subscript, latex: 'x_{n}' },
+    { label: t.mathSnippets.integral, latex: '\\int_{a}^{b} f(x)\\,dx' },
+    { label: t.mathSnippets.limit, latex: '\\lim_{x \\to 0}' },
+    { label: t.mathSnippets.sum, latex: '\\sum_{i=1}^{n}' },
+    { label: t.mathSnippets.greek, latex: '\\alpha \\beta \\gamma' },
+    { label: t.mathSnippets.matrix, latex: '\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}' },
+  ]
 
   useEffect(() => {
     setLatex(initialLatex)
@@ -40,7 +42,7 @@ export function MathModal({ isOpen, initialLatex, mode, onConfirm, onClose }: Ma
       setError('')
     } catch (e: any) {
       setPreview('')
-      setError(e.message || '語法錯誤')
+      setError(e.message || 'Syntax error')
     }
   }, [latex, mode])
 
@@ -51,35 +53,35 @@ export function MathModal({ isOpen, initialLatex, mode, onConfirm, onClose }: Ma
       <div className="math-modal" onClick={e => e.stopPropagation()}>
         <div className="math-modal-header">
           <span className="math-modal-title">
-            {mode === 'inline' ? '行內方程式' : '區塊方程式'}
+            {mode === 'inline' ? t.inlineEquation : t.blockEquation}
           </span>
           <button className="math-modal-close" onClick={onClose}>✕</button>
         </div>
 
         <div className="math-modal-body">
           {/* 預覽區 */}
-          <div className="math-preview-label">預覽</div>
+          <div className="math-preview-label">{t.preview}</div>
           <div className="math-preview">
             {preview
               ? <span dangerouslySetInnerHTML={{ __html: preview }} />
-              : <span className="math-preview-empty">{error || '輸入 LaTeX 查看預覽'}</span>
+              : <span className="math-preview-empty">{error || t.mathPreviewEmpty}</span>
             }
           </div>
 
           {/* 輸入區 */}
-          <div className="math-input-label">LaTeX</div>
+          <div className="math-input-label">{t.latex}</div>
           <textarea
             className="math-input"
             value={latex}
             onChange={e => setLatex(e.target.value)}
             rows={3}
-            placeholder="輸入 LaTeX，例如：E=mc^2"
+            placeholder={t.mathPlaceholder}
             autoFocus
             spellCheck={false}
           />
 
           {/* 常用語法 */}
-          <div className="math-snippets-label">常用語法</div>
+          <div className="math-snippets-label">{t.commonSyntax}</div>
           <div className="math-snippets">
             {SNIPPETS.map(s => (
               <button
@@ -94,13 +96,13 @@ export function MathModal({ isOpen, initialLatex, mode, onConfirm, onClose }: Ma
         </div>
 
         <div className="math-modal-footer">
-          <button className="math-btn-cancel" onClick={onClose}>取消</button>
+          <button className="math-btn-cancel" onClick={onClose}>{t.cancel}</button>
           <button
             className="math-btn-confirm"
             onClick={() => { if (!error) onConfirm(latex) }}
             disabled={!!error}
           >
-            確定
+            {t.confirm}
           </button>
         </div>
       </div>

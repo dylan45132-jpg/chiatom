@@ -63,7 +63,7 @@ Click "Open" in the toolbar and select a `.handout` file.
 
 ### Document title
 
-Click the title text in the toolbar to edit it. The title does not appear in the handout itself — it's only used for the filename and toolbar display.
+Click the title text in the toolbar to edit it. The title does not appear in the document itself — it's only used for the filename and toolbar display.
 
 ---
 
@@ -90,7 +90,7 @@ Right-click a page item in the sidebar to:
 
 ### Page title
 
-The page title shown in the sidebar (e.g. "Page 1", "Page 2") does not appear in the handout — it's only for identification.
+The page title shown in the sidebar (e.g. "Page 1", "Page 2") does not appear in the document — it's only for identification.
 
 ### Overflow warning
 
@@ -147,7 +147,7 @@ When inserting a table, a panel lets you choose the number of rows and columns. 
 
 ### What is a theme
 
-A theme controls the visual style of your handout — fonts, colors, spacing, and block appearance. Themes only affect content inside the `.page` container, not the editor UI itself.
+A theme controls the visual style of your document — fonts, colors, spacing, and block appearance. Themes only affect content inside the `.page` container, not the editor UI itself.
 
 ### Built-in themes
 
@@ -155,7 +155,7 @@ Click "Theme" in the toolbar → "Built-in Themes". Three themes are available:
 
 | Theme | Style |
 |---|---|
-| Slate | Slate gray, fine borders, technical handouts |
+| Slate | Slate gray, fine borders, technical documents |
 | Washi | Warm off-white, washi paper feel, humanities |
 | Moss | Low-saturation green accent, natural, general purpose |
 

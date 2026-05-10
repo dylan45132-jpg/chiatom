@@ -2,6 +2,7 @@ import { open } from '@tauri-apps/plugin-dialog'
 import { readTextFile } from '@tauri-apps/plugin-fs'
 import { join } from '@tauri-apps/api/path'
 import { ThemeConfig, ThemeDefinition } from '../store/documentStore'
+import { useLangStore } from '../store/langStore'
 
 const defaultThemeDefinition: ThemeDefinition = {
   name: '',
@@ -15,10 +16,11 @@ const defaultThemeDefinition: ThemeDefinition = {
 // ── 從資料夾匯入主題 ──────────────────────
 
 export async function importThemeFromFolder(): Promise<ThemeConfig | null> {
+  const t = useLangStore.getState().t
   const selected = await open({
     directory: true,
     multiple: false,
-    title: '選取主題資料夾',
+    title: t.selectThemeFolder,
   })
 
   if (!selected || Array.isArray(selected)) return null
@@ -30,7 +32,7 @@ export async function importThemeFromFolder(): Promise<ThemeConfig | null> {
     const cssPath = await join(folderPath, 'theme.css')
     css = await readTextFile(cssPath)
   } catch {
-    throw new Error('找不到 theme.css，請確認資料夾內有此檔案')
+    throw new Error(t.errorNoCss)
   }
 
   // 讀取 theme.json（可選）
@@ -43,17 +45,19 @@ export async function importThemeFromFolder(): Promise<ThemeConfig | null> {
     // theme.json 不存在時用預設值，不報錯
   }
 
-  const name = json.name || folderPath.split(/[\\/]/).pop() || '自訂主題'
+  const name = json.name || folderPath.split(/[\\/]/).pop() || t.customTheme
 
   return { name, css, json: { ...json, name } }
 }
 
 // ── 從貼上的 CSS 建立主題 ─────────────────
 
-export function importThemeFromCss(css: string, name = '自訂主題'): ThemeConfig {
+export function importThemeFromCss(css: string, name?: string): ThemeConfig {
+  const t = useLangStore.getState().t
+  const themeName = name || t.customTheme
   return {
-    name,
+    name: themeName,
     css,
-    json: { ...defaultThemeDefinition, name },
+    json: { ...defaultThemeDefinition, name: themeName },
   }
 }

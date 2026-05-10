@@ -6,9 +6,12 @@ import { save } from '@tauri-apps/plugin-dialog'
 import { writeTextFile } from '@tauri-apps/plugin-fs'
 import { toast } from '../store/toastStore'
 import ThemeImporter from './ThemeImporter'
+import { openUrl } from '@tauri-apps/plugin-opener'
+import { useLangStore } from '../store/langStore'
 
 export default function Toolbar() {
   const { document, setDocumentTitle, loadFromDocument } = useDocumentStore()
+  const { t, toggleLang, lang } = useLangStore()
   const [savePath, setSavePath] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [showTheme, setShowTheme] = useState(false)
@@ -19,10 +22,10 @@ export default function Toolbar() {
       const path = await saveHandout(document, savePath ?? undefined)
       if (path) {
         setSavePath(path)
-        toast.success('已儲存')
+        toast.success(t.toastSaved)
       }
     } catch {
-      toast.error('儲存失敗')
+      toast.error(t.toastSaveFailed)
     } finally {
       setSaving(false)
     }
@@ -34,10 +37,10 @@ export default function Toolbar() {
       if (result) {
         loadFromDocument(result.doc)
         setSavePath(null)
-        toast.success('已開啟')
+        toast.success(t.toastOpened)
       }
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : '開啟失敗')
+      toast.error(err instanceof Error ? err.message : t.toastOpenFailed)
     }
   }
 
@@ -46,15 +49,23 @@ export default function Toolbar() {
       const resolvedPages = await resolveImageSrcs(document.pages)
       const html = exportToHtml(resolvedPages, document.title, document.theme)
       const targetPath = await save({
-        filters: [{ name: 'HTML 檔案', extensions: ['html'] }],
+        filters: [{ name: t.filterHtml, extensions: ['html'] }],
         defaultPath: `${document.title}.html`,
       })
       if (!targetPath) return
       await writeTextFile(targetPath, html)
-      toast.success('已匯出 HTML')
+      toast.success(t.toastExported)
     } catch {
-      toast.error('匯出失敗')
+      toast.error(t.toastExportFailed)
     }
+  }
+
+  const handleOpenThemes = () => {
+    openUrl('https://dylan45132-jpg.github.io/chiatom-themes/')
+  }
+
+  const handleOpenGitHub = () => {
+    openUrl('https://github.com/dylan45132-jpg/chiatom')
   }
 
   return (
@@ -69,23 +80,32 @@ export default function Toolbar() {
             className="toolbar-title"
             value={document.title}
             onChange={e => setDocumentTitle(e.target.value)}
-            placeholder="未命名講義"
+            placeholder={t.untitledDocument}
             spellCheck={false}
           />
         </div>
 
         <div className="toolbar-right">
           <button className="toolbar-btn" onClick={() => setShowTheme(true)}>
-            主題
+            {t.theme}
           </button>
           <button className="toolbar-btn" onClick={handleOpen}>
-            開啟
+            {t.open}
           </button>
           <button className="toolbar-btn" onClick={handleSave} disabled={saving}>
-            {saving ? '儲存中…' : '儲存'}
+            {saving ? t.saving : t.save}
           </button>
           <button className="toolbar-btn" onClick={handleExport}>
-            匯出 HTML
+            {t.exportHtml}
+          </button>
+          <button className="toolbar-btn" onClick={handleOpenThemes}>
+            {t.themeGallery}
+          </button>
+          <button className="toolbar-btn" onClick={handleOpenGitHub}>
+            GitHub
+          </button>
+          <button className="toolbar-btn" onClick={toggleLang}>
+            {lang === 'en' ? '中文' : 'EN'}
           </button>
         </div>
       </div>

@@ -6,7 +6,8 @@ import Suggestion, {
 } from '@tiptap/suggestion'
 import { PluginKey } from 'prosemirror-state'
 import type { Editor } from '@tiptap/react'
-import { useDocumentStore } from '../../store/documentStore' 
+import { useDocumentStore } from '../../store/documentStore'
+import { useLangStore } from '../../store/langStore'
 
 const SlashCommandPluginKey = new PluginKey('slash-command')
 
@@ -18,96 +19,99 @@ type SlashItem = {
   command: (props: { editor: Editor; range: Range }) => void
 }
 
-const slashItems: SlashItem[] = [
-  {
-    title: '段落',
-    icon: '¶',
-    keywords: ['p', 'paragraph', 'text'],
-    command: ({ editor, range }) =>
-      editor.chain().focus().deleteRange(range).setParagraph().run(),
-  },
-  {
-    title: '大標題',
-    icon: 'H1',
-    keywords: ['h1', 'heading1', 'title'],
-    command: ({ editor, range }) =>
-      editor.chain().focus().deleteRange(range).toggleHeading({ level: 1 }).run(),
-  },
-  {
-    title: '中標題',
-    icon: 'H2',
-    keywords: ['h2', 'heading2'],
-    command: ({ editor, range }) =>
-      editor.chain().focus().deleteRange(range).toggleHeading({ level: 2 }).run(),
-  },
-  {
-    title: '小標題',
-    icon: 'H3',
-    keywords: ['h3', 'heading3'],
-    command: ({ editor, range }) =>
-      editor.chain().focus().deleteRange(range).toggleHeading({ level: 3 }).run(),
-  },
-  {
-    title: '無序清單',
-    icon: '•',
-    keywords: ['ul', 'bullet', 'list'],
-    command: ({ editor, range }) =>
-      editor.chain().focus().deleteRange(range).toggleBulletList().run(),
-  },
-  {
-    title: '有序清單',
-    icon: '1.',
-    keywords: ['ol', 'ordered', 'numbered'],
-    command: ({ editor, range }) =>
-      editor.chain().focus().deleteRange(range).toggleOrderedList().run(),
-  },
-  {
-    title: '引用',
-    icon: '"',
-    keywords: ['quote', 'blockquote'],
-    command: ({ editor, range }) =>
-      editor.chain().focus().deleteRange(range).toggleBlockquote().run(),
-  },
-  {
-    title: '分隔線',
-    icon: '—',
-    keywords: ['hr', 'divider', 'rule'],
-    command: ({ editor, range }) =>
-      editor.chain().focus().deleteRange(range).setHorizontalRule().run(),
-  },
-  {
-    title: '表格',
-    icon: '⊞',
-    keywords: ['table', 'grid'],
-    command: ({ editor, range }) =>
-      editor.chain().focus().deleteRange(range)
-        .insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(),
-  },
-  {
-    title: '圖片',
-    icon: '🖼',
-    keywords: ['image', 'photo', 'picture'],
-    command: ({ editor, range }) =>
-      editor.chain().focus().deleteRange(range)
-        .insertContent({ type: 'imagePlaceholder', attrs: {} }).run(),
-  },
-  {
-    title: '行內方程式',
-    icon: '∫',
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).run()
-      editor.commands.insertContent({ type: 'inlineMath', attrs: { latex: 'E=mc^2' } })
+function getSlashItems(): SlashItem[] {
+  const t = useLangStore.getState().t
+  return [
+    {
+      title: t.slashParagraph,
+      icon: '¶',
+      keywords: ['p', 'paragraph', 'text'],
+      command: ({ editor, range }) =>
+        editor.chain().focus().deleteRange(range).setParagraph().run(),
     },
-  },
-  {
-    title: '區塊方程式',
-    icon: '∑',
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).run()
-      editor.commands.insertContent({ type: 'blockMath', attrs: { latex: '\\int_0^1 x^2 dx' } })
+    {
+      title: t.slashH1,
+      icon: 'H1',
+      keywords: ['h1', 'heading1', 'title'],
+      command: ({ editor, range }) =>
+        editor.chain().focus().deleteRange(range).toggleHeading({ level: 1 }).run(),
     },
-  },
-]
+    {
+      title: t.slashH2,
+      icon: 'H2',
+      keywords: ['h2', 'heading2'],
+      command: ({ editor, range }) =>
+        editor.chain().focus().deleteRange(range).toggleHeading({ level: 2 }).run(),
+    },
+    {
+      title: t.slashH3,
+      icon: 'H3',
+      keywords: ['h3', 'heading3'],
+      command: ({ editor, range }) =>
+        editor.chain().focus().deleteRange(range).toggleHeading({ level: 3 }).run(),
+    },
+    {
+      title: t.slashBullet,
+      icon: '•',
+      keywords: ['ul', 'bullet', 'list'],
+      command: ({ editor, range }) =>
+        editor.chain().focus().deleteRange(range).toggleBulletList().run(),
+    },
+    {
+      title: t.slashOrdered,
+      icon: '1.',
+      keywords: ['ol', 'ordered', 'numbered'],
+      command: ({ editor, range }) =>
+        editor.chain().focus().deleteRange(range).toggleOrderedList().run(),
+    },
+    {
+      title: t.slashQuote,
+      icon: '"',
+      keywords: ['quote', 'blockquote'],
+      command: ({ editor, range }) =>
+        editor.chain().focus().deleteRange(range).toggleBlockquote().run(),
+    },
+    {
+      title: t.slashDivider,
+      icon: '—',
+      keywords: ['hr', 'divider', 'rule'],
+      command: ({ editor, range }) =>
+        editor.chain().focus().deleteRange(range).setHorizontalRule().run(),
+    },
+    {
+      title: t.slashTable,
+      icon: '⊞',
+      keywords: ['table', 'grid'],
+      command: ({ editor, range }) =>
+        editor.chain().focus().deleteRange(range)
+          .insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(),
+    },
+    {
+      title: t.slashImage,
+      icon: '🖼',
+      keywords: ['image', 'photo', 'picture'],
+      command: ({ editor, range }) =>
+        editor.chain().focus().deleteRange(range)
+          .insertContent({ type: 'imagePlaceholder', attrs: {} }).run(),
+    },
+    {
+      title: t.slashMathInline,
+      icon: '∫',
+      command: ({ editor, range }) => {
+        editor.chain().focus().deleteRange(range).run()
+        editor.commands.insertContent({ type: 'inlineMath', attrs: { latex: 'E=mc^2' } })
+      },
+    },
+    {
+      title: t.slashMathBlock,
+      icon: '∑',
+      command: ({ editor, range }) => {
+        editor.chain().focus().deleteRange(range).run()
+        editor.commands.insertContent({ type: 'blockMath', attrs: { latex: '\\int_0^1 x^2 dx' } })
+      },
+    },
+  ]
+}
 
 function getCompoundItems(): SlashItem[] {
   const { document } = useDocumentStore.getState()
@@ -128,7 +132,7 @@ function getCompoundItems(): SlashItem[] {
 
 function filterItems(query: string): SlashItem[] {
   const q = query.trim().toLowerCase()
-  const allItems = [...slashItems, ...getCompoundItems()]
+  const allItems = [...getSlashItems(), ...getCompoundItems()]
   if (!q) return allItems
   return allItems.filter(item => {
     const haystack = [item.title, ...(item.keywords ?? [])].join(' ').toLowerCase()
@@ -170,11 +174,12 @@ function renderItems(
   selectedIndex: number,
   selectItem: (index: number) => void,
 ) {
+  const t = useLangStore.getState().t
   list.innerHTML = ''
   if (items.length === 0) {
     const empty = document.createElement('div')
     empty.className = 'slash-menu-empty'
-    empty.textContent = '沒有符合的指令'
+    empty.textContent = t.slashNoMatch
     list.appendChild(empty)
     return
   }

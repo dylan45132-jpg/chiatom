@@ -1,21 +1,23 @@
 [English](README.md) | 繁體中文
+
 # Chiatom
 
-以 A4 頁面為單位的區塊式講義編輯器。你編輯的就是你印出來的。
+以 A4 頁面為單位的區塊式結構化內容編輯器。你編輯的就是你輸出的。
 
 ---
 
 ## 這是什麼
 
-Chiatom 是一個桌面應用，專為需要定期製作講義的老師和講師設計。
+Chiatom 是一個桌面應用，適合任何需要「邊界感 + 精確輸出」的結構化內容創作場景——製作講義的老師、用有框架感的方式記筆記的知識工作者，或任何想要「設計一次主題，長期填內容，最終輸出精美文件」的人。
 
-現有工具都沒有解決一個真實問題：**LLM 可以生出精美的 HTML 講義排版，但沒有工具讓你直接在那個排版裡填內容。**
+現有工具都沒有解決一個真實問題：**無論是製作講義還是整理筆記，現有工具要麼太自由（Notion 的無限畫布）、要麼太重（Word）、要麼無法控制最終輸出（Typora）。**
 
 - Typora 是最好的 Markdown 編輯器，但無法控制內容出現在頁面的哪個位置
 - Notion 的頁面感是假的，列印結果不可預測
 - Word 無法套用自訂 HTML 排版
+- 對很多人來說，有邊界的頁面不是限制，而是專注的條件
 
-Chiatom 的做法：頁面是一等公民。你在 A4 頁面上直接編輯，看到的就是最終印出來的樣子。
+Chiatom 的做法：頁面是一等公民。你在 A4 頁面上直接編輯，看到的就是最終輸出的樣子。
 
 ---
 
@@ -49,7 +51,7 @@ Chiatom 的做法：頁面是一等公民。你在 A4 頁面上直接編輯，�
 
 ```bash
 # clone 專案
-git clone https://github.com/your-username/chiatom.git
+git clone https://github.com/dylan45132-jpg/chiatom.git
 cd chiatom
 
 # 安裝相依套件
@@ -75,19 +77,19 @@ pnpm tauri build
 5. 完成後點擊「匯出 HTML」，用瀏覽器開啟後列印為 PDF
 
 詳細的使用手冊請參考 [docs/zh/使用手冊.md](docs/zh/使用手冊.md)。
+
 ---
 
 ## 主題
 
 Chiatom 的視覺風格完全由主題控制。主題包含兩個檔案：
-
-```
 my-theme/
 ├── theme.css    # 頁面樣式
 └── theme.json   # 主題資訊與複合區塊定義
-```
 
 匯入方式：點擊右上角「主題」→「資料夾匯入」，選取主題資料夾。
+
+在 [chiatom-themes](https://dylan45132-jpg.github.io/chiatom-themes/) 瀏覽並下載社群主題。
 
 詳細的主題製作方式請參考 [docs/zh/主題製作指南.md](docs/zh/主題製作指南.md)。
 
@@ -110,7 +112,7 @@ my-theme/
 - Phase 1 MVP ✅
 - Phase 2 完整編輯體驗 ✅
 - Phase 3 打磨 ✅
-- Phase 4 開源準備 ⬜
+- Phase 4 開源準備 ✅
 
 ---
 
@@ -120,7 +122,4 @@ Chiatom 以 [GNU General Public License v3.0](LICENSE) 授權開源。
 
 主題包（theme.css + theme.json）以 MIT 授權獨立發布，
 社群可以自由製作、分享和販售主題，不受 GPL 限制。
-詳見 [chiatom-themes](https://github.com/your-username/chiatom-themes)。
-
----
-
+詳見 [chiatom-themes](https://github.com/dylan45132-jpg/chiatom-themes)。

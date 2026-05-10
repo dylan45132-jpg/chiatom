@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Editor } from '@tiptap/react'
+import { useLangStore } from '../store/langStore'
 
 interface BubbleToolbarProps {
   editor: Editor
@@ -12,6 +13,7 @@ interface ToolbarPos {
 }
 
 export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
+  const { t } = useLangStore()
   const [pos, setPos] = useState<ToolbarPos>({ x: 0, y: 0, mode: null })
   const toolbarRef = useRef<HTMLDivElement>(null)
 
@@ -80,59 +82,59 @@ export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
           <button
             className={`bubble-btn ${editor.isActive('bold') ? 'is-active' : ''}`}
             onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleBold().run() }}
-            title="粗體"
+            title={t.bold}
           >B</button>
           <button
             className={`bubble-btn ${editor.isActive('italic') ? 'is-active' : ''}`}
             onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleItalic().run() }}
-            title="斜體"
+            title={t.italic}
           >I</button>
           <button
             className={`bubble-btn ${editor.isActive('strike') ? 'is-active' : ''}`}
             onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleStrike().run() }}
-            title="刪除線"
+            title={t.strike}
           >S</button>
           <div className="bubble-divider" />
           <button
             className={`bubble-btn ${editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}`}
             onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleHeading({ level: 1 }).run() }}
-            title="大標題"
+            title={t.h1}
           >H1</button>
           <button
             className={`bubble-btn ${editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}`}
             onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleHeading({ level: 2 }).run() }}
-            title="中標題"
+            title={t.h2}
           >H2</button>
           <button
             className={`bubble-btn ${editor.isActive('heading', { level: 3 }) ? 'is-active' : ''}`}
             onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleHeading({ level: 3 }).run() }}
-            title="小標題"
+            title={t.h3}
           >H3</button>
           <div className="bubble-divider" />
           <button
             className={`bubble-btn ${editor.isActive('bulletList') ? 'is-active' : ''}`}
             onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleBulletList().run() }}
-            title="無序清單"
+            title={t.bulletList}
           >•</button>
           <button
             className={`bubble-btn ${editor.isActive('orderedList') ? 'is-active' : ''}`}
             onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleOrderedList().run() }}
-            title="有序清單"
+            title={t.orderedList}
           >1.</button>
         </>
       )}
 
       {pos.mode === 'table' && (
         <>
-          <button className="bubble-btn" onMouseDown={e => { e.preventDefault(); editor.chain().focus().addColumnBefore().run() }} title="左側插入欄">←欄</button>
-          <button className="bubble-btn" onMouseDown={e => { e.preventDefault(); editor.chain().focus().addColumnAfter().run() }} title="右側插入欄">欄→</button>
-          <button className="bubble-btn" onMouseDown={e => { e.preventDefault(); editor.chain().focus().deleteColumn().run() }} title="刪除欄">刪欄</button>
+          <button className="bubble-btn" onMouseDown={e => { e.preventDefault(); editor.chain().focus().addColumnBefore().run() }} title={t.addColBefore}>{t.colLeft}</button>
+          <button className="bubble-btn" onMouseDown={e => { e.preventDefault(); editor.chain().focus().addColumnAfter().run() }} title={t.addColAfter}>{t.colRight}</button>
+          <button className="bubble-btn" onMouseDown={e => { e.preventDefault(); editor.chain().focus().deleteColumn().run() }} title={t.deleteCol}>{t.deleteCol}</button>
           <div className="bubble-divider" />
-          <button className="bubble-btn" onMouseDown={e => { e.preventDefault(); editor.chain().focus().addRowBefore().run() }} title="上方插入列">↑列</button>
-          <button className="bubble-btn" onMouseDown={e => { e.preventDefault(); editor.chain().focus().addRowAfter().run() }} title="下方插入列">列↓</button>
-          <button className="bubble-btn" onMouseDown={e => { e.preventDefault(); editor.chain().focus().deleteRow().run() }} title="刪除列">刪列</button>
+          <button className="bubble-btn" onMouseDown={e => { e.preventDefault(); editor.chain().focus().addRowBefore().run() }} title={t.addRowBefore}>{t.rowUp}</button>
+          <button className="bubble-btn" onMouseDown={e => { e.preventDefault(); editor.chain().focus().addRowAfter().run() }} title={t.addRowAfter}>{t.rowDown}</button>
+          <button className="bubble-btn" onMouseDown={e => { e.preventDefault(); editor.chain().focus().deleteRow().run() }} title={t.deleteRow}>{t.deleteRow}</button>
           <div className="bubble-divider" />
-          <button className="bubble-btn bubble-btn-danger" onMouseDown={e => { e.preventDefault(); editor.chain().focus().deleteTable().run() }} title="刪除表格">刪表格</button>
+          <button className="bubble-btn bubble-btn-danger" onMouseDown={e => { e.preventDefault(); editor.chain().focus().deleteTable().run() }} title={t.deleteTable}>{t.deleteTable}</button>
         </>
       )}
     </div>

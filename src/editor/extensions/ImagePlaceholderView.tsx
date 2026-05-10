@@ -1,8 +1,10 @@
 import { NodeViewWrapper, type NodeViewProps } from '@tiptap/react'
 import { pickImageAsDataUrl } from '../../utils/tauriImage'
 import { toast } from '../../store/toastStore'
+import { useLangStore } from '../../store/langStore'
 
 export default function ImagePlaceholderView({ node, updateAttributes, selected }: NodeViewProps) {
+  const { t } = useLangStore()
   const hasSrc = !!node.attrs.src
 
   const handlePick = async () => {
@@ -11,7 +13,7 @@ export default function ImagePlaceholderView({ node, updateAttributes, selected 
       if (!result) return
       updateAttributes({ src: result.dataUrl, filePath: result.path })
     } catch {
-      toast.error('圖片載入失敗')
+      toast.error(t.toastImageFailed)
     }
   }
 
@@ -28,7 +30,7 @@ export default function ImagePlaceholderView({ node, updateAttributes, selected 
             onClick={handlePick}
             contentEditable={false}
           >
-            替換圖片
+            {t.replaceImage}
           </button>
         </div>
       ) : (
@@ -38,7 +40,7 @@ export default function ImagePlaceholderView({ node, updateAttributes, selected 
           contentEditable={false}
         >
           <span className="image-placeholder-icon">🖼</span>
-          <span>點擊上傳圖片</span>
+          <span>{t.uploadImage}</span>
         </button>
       )}
     </NodeViewWrapper>
