@@ -36,7 +36,23 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "windows": {
+      "digestAlgorithm": "sha256",
+      "timestampUrl": "",
+      "nsis": {
+        "installMode": "currentUser",
+        "languages": [
+          "TradChinese",
+          "SimpChinese",
+          "English"
+        ],
+        "displayLanguageSelector": false,
+        "startMenuFolder": "Chiatom",
+        "compression": "lzma",
+        "installerIcon": "icons/icon.ico"
+      }
+    }
   },
   "plugins": {
     "fs": {

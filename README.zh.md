@@ -33,7 +33,11 @@ Chiatom 的做法：頁面是一等公民。你在 A4 頁面上直接編輯，�
 
 ## 安裝
 
-> **安裝檔即將推出。** 目前請從原始碼建置。
+### 下載（Windows）
+
+從 [GitHub Releases](https://github.com/dylan45132-jpg/chiatom/releases) 下載最新安裝檔：
+
+- `chiatom_0.1.0_x64-setup.exe` — Windows 10 / 11（64 位元）
 
 ### 系統需求
 
