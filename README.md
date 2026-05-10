@@ -39,7 +39,7 @@ Chiatom's approach: pages are first-class citizens. You edit directly on an A4 p
 
 Download the latest installer from [GitHub Releases](https://github.com/dylan45132-jpg/chiatom/releases):
 
-- `chiatom_0.1.0_x64-setup.exe` — Windows 10 / 11 (64-bit)
+- `chiatom_0.1.1_x64-setup.exe` — Windows 10 / 11 (64-bit)
 
 ### Requirements
 
