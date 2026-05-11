@@ -235,9 +235,9 @@
 .canvas {
   flex: 1;
   background: var(--ui-canvas-bg);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .canvas-scroll {

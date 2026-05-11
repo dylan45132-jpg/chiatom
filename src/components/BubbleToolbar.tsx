@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import type { Editor } from '@tiptap/react'
 import { useLangStore } from '../store/langStore'
 import { AlignLeft, AlignCenter, AlignRight, AlignJustify } from 'lucide-react'
@@ -13,17 +14,17 @@ interface ToolbarPos {
   mode: 'text' | 'table' | null
 }
 
-export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
+ export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
   const { t } = useLangStore()
   const [pos, setPos] = useState<ToolbarPos>({ x: 0, y: 0, mode: null })
   const toolbarRef = useRef<HTMLDivElement>(null)
+  const [finalPos, setFinalPos] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
     const update = () => {
       const { state, view } = editor
       const { selection } = state
 
-      // 表格模式：游標在表格內
       if (editor.isActive('table')) {
         const coords = view.coordsAtPos(selection.from)
         setPos({
@@ -34,7 +35,6 @@ export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
         return
       }
 
-      // 文字模式：有選取文字
       if (!selection.empty) {
         const coords = view.coordsAtPos(selection.from)
         const endCoords = view.coordsAtPos(selection.to)
@@ -70,14 +70,13 @@ export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
     if (x + rect.width > window.innerWidth - 8)
       x = window.innerWidth - rect.width - 8
 
-    toolbarRef.current.style.left = `${x}px`
-    toolbarRef.current.style.top = `${y}px`
+    setFinalPos({ x, y })
   }, [pos])
 
   if (!pos.mode) return null
 
-  return (
-    <div ref={toolbarRef} className="bubble-menu" style={{ position: 'fixed', zIndex: 8000 }}>
+  return createPortal(
+    <div ref={toolbarRef} className="bubble-menu" style={{ position: 'fixed', zIndex: 8000, left: finalPos.x, top: finalPos.y }}>
       {pos.mode === 'text' && (
         <>
           <button
@@ -159,6 +158,7 @@ export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
           <button className="bubble-btn bubble-btn-danger" onMouseDown={e => { e.preventDefault(); editor.chain().focus().deleteTable().run() }} title={t.deleteTable}>{t.deleteTable}</button>
         </>
       )}
-    </div>
+    </div>,
+    document.body
   )
 }
