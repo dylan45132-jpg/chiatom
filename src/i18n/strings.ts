@@ -2,6 +2,7 @@ export type Lang = 'en' | 'zh'
 
 type StringsShape = {
   theme: string
+  settings: string
   open: string
   save: string
   saving: string
@@ -9,6 +10,8 @@ type StringsShape = {
   themeGallery: string
   untitledDocument: string
   toastSaved: string
+  saved: string
+  unsaved: string
   toastSaveFailed: string
   toastOpened: string
   toastOpenFailed: string
@@ -118,12 +121,44 @@ type StringsShape = {
   washiDesc: string
   mossDesc: string
   imagePlaceholder: string
+  homeTitle: string
+  recentFiles: string
+  newDocument: string
+  newDocumentTitle: string
+  newFolder: string
+  newFolderName: string
+  emptyWorkspace: string
+  emptyWorkspaceHint: string
+  openFile: string
+  settingsTitle: string
+  themeMode: string
+  lightMode: string
+  darkMode: string
+  workspacePath: string
+  changeWorkspace: string
+  language: string
+  defaultThemeLabel: string
+  github: string
+  themeGalleryLabel: string
+  back: string
+  unsavedChanges: string
+  homeGuide1: string
+  homeGuide2: string
+  homeGuide3: string
+  rename: string
+  moveToFolder: string
+  deleteFile: string
+  deleteFolder: string
+  deleteFolderConfirm: string
+  renamePrompt: string
+  confirmDelete: string
 }
 
 export const strings: Record<Lang, StringsShape> = {
   en: {
     // Toolbar
     theme: 'Theme',
+    settings: 'Settings',
     open: 'Open',
     save: 'Save',
     saving: 'Saving…',
@@ -133,6 +168,8 @@ export const strings: Record<Lang, StringsShape> = {
 
     // Toolbar toasts
     toastSaved: 'Saved',
+    saved: 'Saved',
+    unsaved: 'Unsaved',
     toastSaveFailed: 'Save failed',
     toastOpened: 'Opened',
     toastOpenFailed: 'Open failed',
@@ -272,11 +309,48 @@ export const strings: Record<Lang, StringsShape> = {
 
     // renderer
     imagePlaceholder: '[Image]',
+
+    // Home page
+    homeTitle: 'My Documents',
+    recentFiles: 'Recent',
+    newDocument: 'New Document',
+    newDocumentTitle: 'Document Title',
+    newFolder: 'New Folder',
+    newFolderName: 'Folder Name',
+    emptyWorkspace: 'No documents yet',
+    emptyWorkspaceHint: 'Click "New Document" to get started',
+    openFile: 'Open File',
+
+    // Settings page
+    settingsTitle: 'Settings',
+    themeMode: 'Appearance',
+    lightMode: 'Light',
+    darkMode: 'Dark',
+    workspacePath: 'Workspace Path',
+    changeWorkspace: 'Change',
+    language: 'Language',
+    defaultThemeLabel: 'Default Theme',
+    github: 'GitHub',
+    themeGalleryLabel: 'Theme Gallery',
+    back: 'Back',
+    unsavedChanges: 'You have unsaved changes. Are you sure?',
+    homeGuide1: 'Click a document to open it',
+    homeGuide2: 'Click "New Document" to start writing',
+    homeGuide3: 'Click "New Folder" to organize your documents',
+    
+    rename: 'Rename',
+    moveToFolder: 'Move to Folder',
+    deleteFile: 'Delete Document',
+    deleteFolder: 'Delete Folder',
+    deleteFolderConfirm: 'This folder contains documents. Delete anyway?',
+    renamePrompt: 'New name',
+    confirmDelete: 'Delete',
   },
 
   zh: {
     // Toolbar
     theme: '主題',
+    settings: '設定',
     open: '開啟',
     save: '儲存',
     saving: '儲存中…',
@@ -286,6 +360,8 @@ export const strings: Record<Lang, StringsShape> = {
 
     // Toolbar toasts
     toastSaved: '已儲存',
+    saved: '已儲存',
+    unsaved: '尚未儲存',
     toastSaveFailed: '儲存失敗',
     toastOpened: '已開啟',
     toastOpenFailed: '開啟失敗',
@@ -425,5 +501,41 @@ export const strings: Record<Lang, StringsShape> = {
 
     // renderer
     imagePlaceholder: '[圖片]',
+
+    // Home page
+    homeTitle: '我的文件',
+    recentFiles: '最近開啟',
+    newDocument: '新增文件',
+    newDocumentTitle: '文件標題',
+    newFolder: '新增資料夾',
+    newFolderName: '資料夾名稱',
+    emptyWorkspace: '還沒有任何文件',
+    emptyWorkspaceHint: '點擊「新增文件」開始',
+    openFile: '開啟檔案',
+
+    // Settings page
+    settingsTitle: '設定',
+    themeMode: '外觀',
+    lightMode: '淺色',
+    darkMode: '深色',
+    workspacePath: '工作區路徑',
+    changeWorkspace: '變更',
+    language: '語言',
+    defaultThemeLabel: '預設主題',
+    github: 'GitHub',
+    themeGalleryLabel: '主題商城',
+    back: '返回',
+    unsavedChanges: '有未儲存的變更，確定要離開？',
+    homeGuide1: '點擊文件開啟編輯',
+    homeGuide2: '點擊「新增文件」建立講義或筆記',
+    homeGuide3: '點擊「新增資料夾」整理文件',
+    
+    rename: '重新命名',
+    moveToFolder: '移至資料夾',
+    deleteFile: '刪除文件',
+    deleteFolder: '刪除資料夾',
+    deleteFolderConfirm: '此資料夾內有文件，確定要一併刪除？',
+    renamePrompt: '新名稱',
+    confirmDelete: '確定刪除',
   },
 }

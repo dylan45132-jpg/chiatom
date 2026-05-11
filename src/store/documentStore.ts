@@ -52,6 +52,9 @@ interface DocumentStore {
   // 狀態
   document: Document
   activePageId: string
+  savePath: string | null
+  tempPath: string | null
+  isDirty: boolean
 
   // 頁面操作
   addPage: () => void
@@ -66,10 +69,14 @@ interface DocumentStore {
 
   // 文件操作
   setDocumentTitle: (title: string) => void
+  setSavePath: (path: string | null) => void
+  setTempPath: (path: string | null) => void
+  setDirty: (dirty: boolean) => void
 
   // 主題操作
   setTheme: (theme: ThemeConfig) => void
-  loadFromDocument: (doc: Document) => void
+  loadFromDocument: (doc: Document, savePath?: string) => void
+  createNewDocument: () => void
 }
 
 export const useDocumentStore = create<DocumentStore>()((set) => {
@@ -106,6 +113,9 @@ export const useDocumentStore = create<DocumentStore>()((set) => {
   return {
     document: createNewDocument(),
     activePageId: '', // 初始化後在 App 層設定
+    savePath: null,
+    tempPath: null,
+    isDirty: false,
 
     // ── 頁面操作 ──────────────────────────────
 
@@ -119,6 +129,7 @@ export const useDocumentStore = create<DocumentStore>()((set) => {
           updatedAt: new Date().toISOString(),
         },
         activePageId: newPage.id,
+        isDirty: true,
       }
     }),
 
@@ -139,6 +150,7 @@ export const useDocumentStore = create<DocumentStore>()((set) => {
           updatedAt: new Date().toISOString(),
         },
         activePageId: nextActive.id,
+        isDirty: true,
       }
     }),
 
@@ -164,6 +176,7 @@ export const useDocumentStore = create<DocumentStore>()((set) => {
           updatedAt: new Date().toISOString(),
         },
         activePageId: duplicate.id,
+        isDirty: true,
       }
     }),
 
@@ -178,6 +191,7 @@ export const useDocumentStore = create<DocumentStore>()((set) => {
           pages,
           updatedAt: new Date().toISOString(),
         },
+        isDirty: true,
       }
     }),
 
@@ -193,6 +207,7 @@ export const useDocumentStore = create<DocumentStore>()((set) => {
         ),
         updatedAt: new Date().toISOString(),
       },
+      isDirty: true,
     })),
 
     updatePageTitle: (id, title) => set((state) => ({
@@ -203,6 +218,7 @@ export const useDocumentStore = create<DocumentStore>()((set) => {
         ),
         updatedAt: new Date().toISOString(),
       },
+      isDirty: true,
     })),
 
     // ── 文件操作 ──────────────────────────────
@@ -213,7 +229,12 @@ export const useDocumentStore = create<DocumentStore>()((set) => {
         title,
         updatedAt: new Date().toISOString(),
       },
+      isDirty: true,
     })),
+
+    setSavePath: (path) => set({ savePath: path }),
+    setTempPath: (path) => set({ tempPath: path }),
+    setDirty: (dirty) => set({ isDirty: dirty }),
 
     // ── 主題操作 ──────────────────────────────
 
@@ -223,11 +244,26 @@ export const useDocumentStore = create<DocumentStore>()((set) => {
         theme,
         updatedAt: new Date().toISOString(),
       },
+      isDirty: true,
     })),
 
-    loadFromDocument: (doc) => set(() => ({
+    loadFromDocument: (doc, savePath) => set(() => ({
       document: doc,
       activePageId: doc.pages[0]?.id ?? '',
+      savePath: savePath ?? null,
+      tempPath: null,
+      isDirty: false,
     })),
+
+    createNewDocument: () => set(() => {
+      const newDoc = createNewDocument()
+      return {
+        document: newDoc,
+        activePageId: '',
+        savePath: null,
+        tempPath: null,
+        isDirty: false,
+      }
+    }),
   }
 })

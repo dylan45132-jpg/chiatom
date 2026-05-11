@@ -11,9 +11,13 @@
     "fs:allow-write-text-file",
     "fs:allow-read-file",
     "fs:allow-write-file",
+    "fs:allow-rename",
     "dialog:default",
     "dialog:allow-save",
     "dialog:allow-open",
+    "core:window:allow-close",
+    "core:window:allow-destroy",
+    "store:default",
     {
       "identifier": "fs:scope",
       "allow": [

@@ -1,46 +1,38 @@
 import { useState } from 'react'
 import { useDocumentStore } from '../store/documentStore'
-import { saveHandout, loadHandout, resolveImageSrcs } from '../utils/handoutPackage'
+import { saveHandout, resolveImageSrcs } from '../utils/handoutPackage'
 import { exportToHtml } from '../editor/renderer'
 import { save } from '@tauri-apps/plugin-dialog'
 import { writeTextFile } from '@tauri-apps/plugin-fs'
 import { toast } from '../store/toastStore'
 import ThemeImporter from './ThemeImporter'
-import { openUrl } from '@tauri-apps/plugin-opener'
 import { useLangStore } from '../store/langStore'
 
-export default function Toolbar() {
-  const { document, setDocumentTitle, loadFromDocument } = useDocumentStore()
-  const { t, toggleLang, lang } = useLangStore()
-  const [savePath, setSavePath] = useState<string | null>(null)
+interface ToolbarProps {
+  onGoHome: () => void
+  onGoSettings: () => void
+}
+
+export default function Toolbar({ onGoHome, onGoSettings }: ToolbarProps) {
+  const { document, setDocumentTitle, savePath, setSavePath, isDirty, setDirty } = useDocumentStore()
+  const { t } = useLangStore()
   const [saving, setSaving] = useState(false)
   const [showTheme, setShowTheme] = useState(false)
 
   const handleSave = async () => {
+    if (saving || (!isDirty && savePath)) return
     setSaving(true)
     try {
-      const path = await saveHandout(document, savePath ?? undefined)
-      if (path) {
-        setSavePath(path)
+      const returnedPath = await saveHandout(document, savePath ?? undefined)
+      if (returnedPath) {
+        setSavePath(returnedPath)
+        setDirty(false)
         toast.success(t.toastSaved)
       }
     } catch {
       toast.error(t.toastSaveFailed)
     } finally {
       setSaving(false)
-    }
-  }
-
-  const handleOpen = async () => {
-    try {
-      const result = await loadHandout()
-      if (result) {
-        loadFromDocument(result.doc)
-        setSavePath(null)
-        toast.success(t.toastOpened)
-      }
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : t.toastOpenFailed)
     }
   }
 
@@ -60,21 +52,34 @@ export default function Toolbar() {
     }
   }
 
-  const handleOpenThemes = () => {
-    openUrl('https://dylan45132-jpg.github.io/chiatom-themes/')
-  }
-
-  const handleOpenGitHub = () => {
-    openUrl('https://github.com/dylan45132-jpg/chiatom')
+  const renderSaveStatus = () => {
+    if (saving) {
+      return <span className="toolbar-text">{t.saving}...</span>
+    }
+    if (!savePath) {
+      return (
+        <>
+                    <button className="toolbar-btn" onClick={handleSave}>{t.save}</button>
+          <span className="toolbar-text secondary">{t.unsaved}</span>
+        </>
+      )
+    }
+    if (isDirty) {
+      return (
+                <button className="toolbar-btn quiet dark" onClick={handleSave}>
+          ● {t.save}
+        </button>
+      )
+    }
+        return <span className="toolbar-text secondary">{t.saved}</span>
   }
 
   return (
     <>
-      <div className="toolbar">
+            <div className="toolbar">
         <div className="toolbar-left">
-          <span className="toolbar-brand">Chiatom</span>
+          <button className="toolbar-btn icon-btn" onClick={onGoHome} title="Home">⌂</button>
         </div>
-
         <div className="toolbar-center">
           <input
             className="toolbar-title"
@@ -84,32 +89,13 @@ export default function Toolbar() {
             spellCheck={false}
           />
         </div>
-
         <div className="toolbar-right">
-          <button className="toolbar-btn" onClick={() => setShowTheme(true)}>
-            {t.theme}
-          </button>
-          <button className="toolbar-btn" onClick={handleOpen}>
-            {t.open}
-          </button>
-          <button className="toolbar-btn" onClick={handleSave} disabled={saving}>
-            {saving ? t.saving : t.save}
-          </button>
-          <button className="toolbar-btn" onClick={handleExport}>
-            {t.exportHtml}
-          </button>
-          <button className="toolbar-btn" onClick={handleOpenThemes}>
-            {t.themeGallery}
-          </button>
-          <button className="toolbar-btn" onClick={handleOpenGitHub}>
-            GitHub
-          </button>
-          <button className="toolbar-btn" onClick={toggleLang}>
-            {lang === 'en' ? '中文' : 'EN'}
-          </button>
+          {renderSaveStatus()}
+          <button className="toolbar-btn" onClick={() => setShowTheme(true)}>{t.theme}</button>
+          <button className="toolbar-btn" onClick={handleExport}>{t.exportHtml}</button>
+          <button className="toolbar-btn icon-btn" onClick={onGoSettings} title="Settings">⚙</button>
         </div>
       </div>
-
       {showTheme && <ThemeImporter onClose={() => setShowTheme(false)} />}
     </>
   )
