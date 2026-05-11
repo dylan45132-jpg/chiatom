@@ -156,6 +156,8 @@ type StringsShape = {
   alignCenter: string
   alignRight: string
   alignJustify: string
+  renamePage: string
+  renamePagePlaceholder: string
 }
 
 export const strings: Record<Lang, StringsShape> = {
@@ -353,6 +355,8 @@ export const strings: Record<Lang, StringsShape> = {
     alignCenter: 'Align Center',
     alignRight: 'Align Right',
     alignJustify: 'Justify',
+    renamePage: 'Rename page',
+    renamePagePlaceholder: 'Page name',
   },
 
   zh: {
@@ -549,5 +553,7 @@ export const strings: Record<Lang, StringsShape> = {
     alignCenter: '置中對齊',
     alignRight: '靠右對齊',
     alignJustify: '兩端對齊',
+    renamePage: '重新命名頁面',
+    renamePagePlaceholder: '頁面名稱',
   },
 }

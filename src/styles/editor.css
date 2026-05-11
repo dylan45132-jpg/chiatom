@@ -75,13 +75,14 @@
 /* ── Sidebar ───────────────────────────── */
 
 .sidebar {
-  width: var(--ui-sidebar-width);
+  position: relative;
   background: var(--ui-bg-surface);
   border-right: 1px solid var(--ui-border);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
   overflow: hidden;
+  transition: width var(--ui-transition);
 }
 
 .sidebar-header {
@@ -168,6 +169,67 @@
 .sidebar-page-item:hover .sidebar-delete-btn { opacity: 1; }
 .sidebar-delete-btn:hover { color: var(--ui-danger); }
 
+/* Sidebar resize handle */
+.sidebar-resize-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 10;
+}
+.sidebar-resize-handle:hover,
+.sidebar-resize-handle:active {
+  background: var(--ui-accent);
+  opacity: 0.5;
+}
+
+/* Sidebar collapsed */
+.sidebar-collapsed {
+  width: 0 !important;
+  border-right: none;
+  overflow: hidden;
+}
+
+/* Sidebar toggle button */
+.sidebar-toggle-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 40px;
+  background: var(--ui-bg-surface);
+  border: 1px solid var(--ui-border);
+  border-left: none;
+  border-radius: 0 var(--ui-radius-sm) var(--ui-radius-sm) 0;
+  color: var(--ui-text-tertiary);
+  font-size: 12px;
+  cursor: pointer;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--ui-transition), background var(--ui-transition), left var(--ui-transition);
+}
+.sidebar-toggle-btn:hover {
+  color: var(--ui-text-primary);
+  background: var(--ui-bg-elevated);
+}
+
+/* Sidebar inline rename input */
+.sidebar-rename-input {
+  flex: 1;
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-primary);
+  background: var(--ui-bg-base);
+  border: 1px solid var(--ui-accent);
+  border-radius: var(--ui-radius-sm);
+  padding: 1px 4px;
+  outline: none;
+  min-width: 0;
+}
+
 /* ── Canvas ───────────────────────────── */
 
 .canvas {
@@ -191,6 +253,20 @@
   color: var(--ui-text-tertiary);
   font-size: var(--ui-font-size-md);
   margin-top: 80px;
+}
+
+.canvas-scale-indicator {
+  position: absolute;
+  bottom: var(--ui-spacing-md);
+  right: var(--ui-spacing-md);
+  background: var(--ui-bg-elevated);
+  border: 1px solid var(--ui-border);
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-size-sm);
+  padding: 2px 8px;
+  border-radius: var(--ui-radius-sm);
+  pointer-events: none;
+  z-index: 10;
 }
 
 /* ── Page（A4）───────────────────────── */

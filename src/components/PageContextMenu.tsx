@@ -34,9 +34,10 @@ export function usePageContextMenu() {
 interface PageContextMenuProps {
   menu: MenuState
   onClose: () => void
+  onRename?: (pageId: string) => void
 }
 
-export default function PageContextMenu({ menu, onClose }: PageContextMenuProps) {
+export default function PageContextMenu({ menu, onClose, onRename }: PageContextMenuProps) {
   const { t } = useLangStore()
   const menuRef = useRef<HTMLDivElement>(null)
   const [pos, setPos] = useState({ x: menu.x, y: menu.y })
@@ -129,12 +130,21 @@ export default function PageContextMenu({ menu, onClose }: PageContextMenuProps)
     onClose()
   }
 
+  const handleRename = () => {
+    onRename?.(menu.pageId)
+    onClose()
+  }
+
   return (
     <div
       ref={menuRef}
       className="context-menu"
       style={{ left: pos.x, top: pos.y }}
     >
+      <button className='context-menu-item' onClick={handleRename}>
+        {t.renamePage}
+      </button>
+      <div className='context-menu-divider' />
       <button className="context-menu-item" onClick={handleInsertBefore}>
         {t.insertAbove}
       </button>

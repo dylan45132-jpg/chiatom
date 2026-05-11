@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react'
 import { useDocumentStore } from '../store/documentStore'
 import {
   DndContext,
@@ -13,26 +14,32 @@ import { CSS } from '@dnd-kit/utilities'
 import PageContextMenu, { usePageContextMenu } from './PageContextMenu'
 import { useLangStore } from '../store/langStore'
 
-// ── 單一頁面項目 ──────────────────────────
+const SIDEBAR_MIN = 160
+const SIDEBAR_MAX = 360
+const SIDEBAR_DEFAULT = 220
 
 interface PageItemProps {
   id: string
   title: string
   isActive: boolean
+  isRenaming: boolean
   onClick: () => void
   onDelete: () => void
   onContextMenu: (e: React.MouseEvent) => void
+  onRenameSubmit: (id: string, newTitle: string) => void
+  onRenameCancel: () => void
 }
 
-function PageItem({ id, title, isActive, onClick, onDelete, onContextMenu }: PageItemProps) {
+function PageItem({
+  id, title, isActive, isRenaming,
+  onClick, onDelete, onContextMenu,
+  onRenameSubmit, onRenameCancel,
+}: PageItemProps) {
   const { t } = useLangStore()
+  const inputRef = useRef<HTMLInputElement>(null)
   const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
+    attributes, listeners, setNodeRef,
+    transform, transition, isDragging,
   } = useSortable({ id })
 
   const style = {
@@ -41,35 +48,61 @@ function PageItem({ id, title, isActive, onClick, onDelete, onContextMenu }: Pag
     opacity: isDragging ? 0.4 : 1,
   }
 
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      const val = inputRef.current?.value.trim()
+      onRenameSubmit(id, val || title)
+    } else if (e.key === 'Escape') {
+      onRenameCancel()
+    }
+  }
+
+  const handleInputBlur = () => {
+    const val = inputRef.current?.value.trim()
+    onRenameSubmit(id, val || title)
+  }
+
   return (
     <div
       ref={setNodeRef}
       style={style}
       className={`sidebar-page-item ${isActive ? 'is-active' : ''}`}
-      onClick={onClick}
-      onContextMenu={onContextMenu}
+      onClick={isRenaming ? undefined : onClick}
+      onContextMenu={isRenaming ? undefined : onContextMenu}
     >
-      <span
-        className="sidebar-drag-handle"
-        {...attributes}
-        {...listeners}
-        title={t.dragToSort}
-      >
-        ⠿
-      </span>
-      <span className="sidebar-page-title">{title}</span>
-      <button
-        className="sidebar-delete-btn"
-        onClick={e => { e.stopPropagation(); onDelete() }}
-        title={t.deletePage}
-      >
-        ×
-      </button>
+      {isRenaming ? (
+        <input
+          ref={inputRef}
+          className='sidebar-rename-input'
+          defaultValue={title}
+          autoFocus
+          onKeyDown={handleInputKeyDown}
+          onBlur={handleInputBlur}
+          onClick={e => e.stopPropagation()}
+        />
+      ) : (
+        <>
+          <span
+            className='sidebar-drag-handle'
+            {...attributes}
+            {...listeners}
+            title={t.dragToSort}
+          >
+            ⠿
+          </span>
+          <span className='sidebar-page-title'>{title}</span>
+          <button
+            className='sidebar-delete-btn'
+            onClick={e => { e.stopPropagation(); onDelete() }}
+            title={t.deletePage}
+          >
+            ×
+          </button>
+        </>
+      )}
     </div>
   )
 }
-
-// ── Sidebar 主體 ──────────────────────────
 
 export default function Sidebar() {
   const { t } = useLangStore()
@@ -80,10 +113,56 @@ export default function Sidebar() {
     addPage,
     deletePage,
     reorderPages,
+    updatePageTitle,
   } = useDocumentStore()
 
   const { menu, openMenu, closeMenu } = usePageContextMenu()
 
+  // ── Resize ──────────────────────────────
+  const [sidebarWidth, setSidebarWidth] = useState(SIDEBAR_DEFAULT)
+  const [collapsed, setCollapsed] = useState(false)
+  const isResizing = useRef(false)
+  const startX = useRef(0)
+  const startWidth = useRef(0)
+
+  const handleResizeMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault()
+    isResizing.current = true
+    startX.current = e.clientX
+    startWidth.current = sidebarWidth
+
+    const onMouseMove = (ev: MouseEvent) => {
+      if (!isResizing.current) return
+      const delta = ev.clientX - startX.current
+      const newWidth = Math.min(SIDEBAR_MAX, Math.max(SIDEBAR_MIN, startWidth.current + delta))
+      setSidebarWidth(newWidth)
+    }
+    const onMouseUp = () => {
+      isResizing.current = false
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('mouseup', onMouseUp)
+    }
+    window.addEventListener('mousemove', onMouseMove)
+    window.addEventListener('mouseup', onMouseUp)
+  }
+
+  // ── Rename ──────────────────────────────
+  const [renamingId, setRenamingId] = useState<string | null>(null)
+
+  const handleRenameStart = (pageId: string) => {
+    setRenamingId(pageId)
+  }
+
+  const handleRenameSubmit = (id: string, newTitle: string) => {
+    updatePageTitle(id, newTitle)
+    setRenamingId(null)
+  }
+
+  const handleRenameCancel = () => {
+    setRenamingId(null)
+  }
+
+  // ── DnD ─────────────────────────────────
   const pages = document.pages
   const pageIds = pages.map(p => p.id)
 
@@ -95,36 +174,63 @@ export default function Sidebar() {
     reorderPages(fromIndex, toIndex)
   }
 
+  // ── Render ───────────────────────────────
   return (
     <>
-      <div className="sidebar">
-        <div className="sidebar-header">
-          <span className="sidebar-label">{t.pages}</span>
-          <button className="sidebar-add-btn" onClick={addPage} title={t.addPage}>
-            +
-          </button>
-        </div>
+      <div
+        className={`sidebar ${collapsed ? 'sidebar-collapsed' : ''}`}
+        style={{ width: collapsed ? 0 : sidebarWidth }}
+      >
+        {!collapsed && (
+          <>
+            <div className='sidebar-header'>
+              <span className='sidebar-label'>{t.pages}</span>
+              <button className='sidebar-add-btn' onClick={addPage} title={t.addPage}>
+                +
+              </button>
+            </div>
 
-        <div className="sidebar-pages">
-          <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <SortableContext items={pageIds} strategy={verticalListSortingStrategy}>
-              {pages.map(page => (
-                <PageItem
-                  key={page.id}
-                  id={page.id}
-                  title={page.title}
-                  isActive={page.id === activePageId}
-                  onClick={() => setActivePage(page.id)}
-                  onDelete={() => deletePage(page.id)}
-                  onContextMenu={e => openMenu(e, page.id)}
-                />
-              ))}
-            </SortableContext>
-          </DndContext>
-        </div>
+            <div className='sidebar-pages'>
+              <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                <SortableContext items={pageIds} strategy={verticalListSortingStrategy}>
+                  {pages.map(page => (
+                    <PageItem
+                      key={page.id}
+                      id={page.id}
+                      title={page.title}
+                      isActive={page.id === activePageId}
+                      isRenaming={page.id === renamingId}
+                      onClick={() => setActivePage(page.id)}
+                      onDelete={() => deletePage(page.id)}
+                      onContextMenu={e => openMenu(e, page.id)}
+                      onRenameSubmit={handleRenameSubmit}
+                      onRenameCancel={handleRenameCancel}
+                    />
+                  ))}
+                </SortableContext>
+              </DndContext>
+            </div>
+          </>
+        )}
+
+        {!collapsed && (
+          <div
+            className='sidebar-resize-handle'
+            onMouseDown={handleResizeMouseDown}
+          />
+        )}
       </div>
 
-      <PageContextMenu menu={menu} onClose={closeMenu} />
+      <button
+        className='sidebar-toggle-btn'
+        onClick={() => setCollapsed(c => !c)}
+        title={collapsed ? 'Show sidebar' : 'Hide sidebar'}
+        style={{ left: collapsed ? 0 : sidebarWidth }}
+      >
+        {collapsed ? '›' : '‹'}
+      </button>
+
+      <PageContextMenu menu={menu} onClose={closeMenu} onRename={handleRenameStart} />
     </>
   )
 }
