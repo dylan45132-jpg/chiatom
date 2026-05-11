@@ -2,6 +2,8 @@ English | [繁體中文 ↓](#繁體中文)
 
 # Chiatom
 
+![Demo](demo.gif)
+
 A block-based structured content editor built around A4 pages. What you edit is what you output.
 
 ---
@@ -136,6 +138,8 @@ See [chiatom-themes](https://github.com/dylan45132-jpg/chiatom-themes).
 [English ↑](#chiatom) | 繁體中文
 
 # Chiatom
+
+![Demo](demo.gif)
 
 以 A4 頁面為單位的區塊式結構化內容編輯器。你編輯的就是你輸出的。
 
