@@ -152,6 +152,10 @@ type StringsShape = {
   deleteFolderConfirm: string
   renamePrompt: string
   confirmDelete: string
+  alignLeft: string
+  alignCenter: string
+  alignRight: string
+  alignJustify: string
 }
 
 export const strings: Record<Lang, StringsShape> = {
@@ -345,6 +349,10 @@ export const strings: Record<Lang, StringsShape> = {
     deleteFolderConfirm: 'This folder contains documents. Delete anyway?',
     renamePrompt: 'New name',
     confirmDelete: 'Delete',
+    alignLeft: 'Align Left',
+    alignCenter: 'Align Center',
+    alignRight: 'Align Right',
+    alignJustify: 'Justify',
   },
 
   zh: {
@@ -537,5 +545,9 @@ export const strings: Record<Lang, StringsShape> = {
     deleteFolderConfirm: '此資料夾內有文件，確定要一併刪除？',
     renamePrompt: '新名稱',
     confirmDelete: '確定刪除',
+    alignLeft: '靠左對齊',
+    alignCenter: '置中對齊',
+    alignRight: '靠右對齊',
+    alignJustify: '兩端對齊',
   },
 }

@@ -15,6 +15,7 @@ import { Mathematics } from '@tiptap/extension-mathematics'
 import 'katex/dist/katex.min.css'
 import { MathModal } from './MathModal'
 import { useLangStore } from '../store/langStore'
+import TextAlign from '@tiptap/extension-text-align'
 
 // A4 @ 96dpi，扣掉 padding（上下各 72px）
 const A4_CONTENT_HEIGHT = 1123 - 72 * 2
@@ -38,6 +39,10 @@ export default function PageEditor({ page }: PageEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+        alignments: ['left', 'center', 'right', 'justify'],
+      }),
       SlashCommand,
       Table.configure({ resizable: false }),
       ImagePlaceholder,

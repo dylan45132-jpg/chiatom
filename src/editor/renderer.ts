@@ -40,12 +40,16 @@ function renderNode(node: JSONContent, t: any): string {
 
     case 'paragraph': {
       const inner = renderChildren(node, t)
-      return `<p>${inner || '&nbsp;'}</p>`
+      const align = node.attrs?.textAlign
+      const style = align && align !== 'left' ? ` style="text-align:${align}"` : ''
+      return `<p${style}>${inner || '&nbsp;'}</p>`
     }
 
     case 'heading': {
       const level = node.attrs?.level ?? 1
-      return `<h${level}>${renderChildren(node, t)}</h${level}>`
+      const align = node.attrs?.textAlign
+      const style = align && align !== 'left' ? ` style="text-align:${align}"` : ''
+      return `<h${level}${style}>${renderChildren(node, t)}</h${level}>`
     }
 
     case 'bulletList':
@@ -77,7 +81,8 @@ function renderNode(node: JSONContent, t: any): string {
     case 'imagePlaceholder': {
       if (node.attrs?.src) {
         const alt = node.attrs?.alt ?? ''
-        return `<img src="${node.attrs.src}" alt="${alt}" style="max-width:100%;display:block;margin:0.75em 0;">`
+        const width = node.attrs?.width ?? 100
+        return `<img src="${node.attrs.src}" alt="${alt}" style="width:${width}%;display:block;margin:0.75em 0;">`
       }
       return `<div style="padding:16px;border:2px dashed #ccc;text-align:center;color:#999;margin:0.75em 0;">${t.imagePlaceholder}</div>`
     }
@@ -182,10 +187,11 @@ export function exportToHtml(
     .page table { border-collapse: collapse; width: 100%; margin-bottom: 0.75em; }
     .page th, .page td { border: 1px solid #d1d5db; padding: 8px 10px; vertical-align: top; min-width: 80px; }
     .page th { background: #f3f4f6; font-weight: 600; text-align: left; }
-    .page table p { margin: 0; }\r\n    .page th p { color: inherit !important; }
+    .page table p { margin: 0; }\r
+    .page th p { color: inherit !important; }
 
     /* ── Theme CSS ── */
-${theme.css ? theme.css.split('\n').map(l => '    ' + l).join('\n') : ''}
+    ${theme.css ? theme.css.split('\n').map(l => '    ' + l).join('\n') : ''}
 
     /* ── Print ── */
     @media print {

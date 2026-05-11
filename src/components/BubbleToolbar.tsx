@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Editor } from '@tiptap/react'
 import { useLangStore } from '../store/langStore'
+import { AlignLeft, AlignCenter, AlignRight, AlignJustify } from 'lucide-react'
 
 interface BubbleToolbarProps {
   editor: Editor
@@ -121,6 +122,27 @@ export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
             onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleOrderedList().run() }}
             title={t.orderedList}
           >1.</button>
+          <div className='bubble-divider' />
+<button
+  className={editor.isActive({ textAlign: 'left' }) ? 'bubble-btn is-active' : 'bubble-btn'}
+  onMouseDown={e => { e.preventDefault(); editor.chain().focus().setTextAlign('left').run() }}
+  title={t.alignLeft}
+><AlignLeft size={13} /></button>
+<button
+  className={editor.isActive({ textAlign: 'center' }) ? 'bubble-btn is-active' : 'bubble-btn'}
+  onMouseDown={e => { e.preventDefault(); editor.chain().focus().setTextAlign('center').run() }}
+  title={t.alignCenter}
+><AlignCenter size={13} /></button>
+<button
+  className={editor.isActive({ textAlign: 'right' }) ? 'bubble-btn is-active' : 'bubble-btn'}
+  onMouseDown={e => { e.preventDefault(); editor.chain().focus().setTextAlign('right').run() }}
+  title={t.alignRight}
+><AlignRight size={13} /></button>
+<button
+  className={editor.isActive({ textAlign: 'justify' }) ? 'bubble-btn is-active' : 'bubble-btn'}
+  onMouseDown={e => { e.preventDefault(); editor.chain().focus().setTextAlign('justify').run() }}
+  title={t.alignJustify}
+><AlignJustify size={13} /></button>
         </>
       )}
 

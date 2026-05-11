@@ -14,6 +14,7 @@ export const ImagePlaceholder = Node.create({
       src:      { default: null },
       alt:      { default: '' },
       filePath: { default: '' },
+      width: { default: 100 },
     }
   },
 
@@ -21,10 +22,11 @@ export const ImagePlaceholder = Node.create({
     return [{ tag: 'image-placeholder' }]
   },
 
-  renderHTML({ HTMLAttributes }) {
+  renderHTML({ HTMLAttributes, node }) {
     // 匯出時：有圖片就輸出 <img>，否則輸出佔位
     if (HTMLAttributes.src) {
-      return ['img', mergeAttributes({ alt: HTMLAttributes.alt ?? '' }, { src: HTMLAttributes.src })]
+      const { attrs } = node
+      return ['img', mergeAttributes({ alt: HTMLAttributes.alt ?? '' }, { src: HTMLAttributes.src, style: `width: ${attrs.width}%` })]
     }
     return ['div', mergeAttributes(HTMLAttributes, { class: 'image-placeholder-export' }), '[圖片]']
   },
