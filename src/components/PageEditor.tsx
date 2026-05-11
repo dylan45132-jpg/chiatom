@@ -44,7 +44,7 @@ export default function PageEditor({ page }: PageEditorProps) {
         alignments: ['left', 'center', 'right', 'justify'],
       }),
       SlashCommand,
-      Table.configure({ resizable: false }),
+      Table.configure({ resizable: true }),
       ImagePlaceholder,
       CompoundBlock,
       Mathematics.configure({

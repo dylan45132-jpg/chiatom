@@ -107,17 +107,37 @@ function renderNode(node: JSONContent, t: any): string {
         return `<div>${node.attrs?.latex || ''}</div>`
       }
 
-    case 'table':
-      return `<table>${renderChildren(node, t)}</table>`
+    case 'table': {
+      const firstRow = node.content?.[0]
+      const cells = firstRow?.content ?? []
+      const DEFAULT_COL_WIDTH = 120
+      const colWidths = cells.map(c => c.attrs?.colwidth?.[0] ?? DEFAULT_COL_WIDTH)
+      const hasAnyColwidth = cells.some(c => c.attrs?.colwidth?.[0])
+      const colgroup = hasAnyColwidth
+        ? `<colgroup>${colWidths.map(w => `<col style="width:${w}px">`).join('')}</colgroup>`
+        : ''
+      const tableWidth = hasAnyColwidth
+        ? `style="width:${colWidths.reduce((a, b) => a + b, 0)}px;table-layout:fixed"`
+        : ''
+      return `<table ${tableWidth}>${colgroup}${renderChildren(node, t)}</table>`
+    }
 
     case 'tableRow':
       return `<tr>${renderChildren(node, t)}</tr>`
 
-    case 'tableHeader':
-      return `<th>${renderChildren(node, t)}</th>`
+    case 'tableHeader': {
+      const colspan = (node.attrs?.colspan ?? 1) > 1 ? ` colspan="${node.attrs!.colspan}"` : ''
+      const rowspan = (node.attrs?.rowspan ?? 1) > 1 ? ` rowspan="${node.attrs!.rowspan}"` : ''
+      const inner = renderChildren(node, t)
+      return `<th${colspan}${rowspan}>${inner || '&nbsp;'}</th>`
+    }
 
-    case 'tableCell':
-      return `<td>${renderChildren(node, t)}</td>`
+    case 'tableCell': {
+      const colspan = (node.attrs?.colspan ?? 1) > 1 ? ` colspan="${node.attrs!.colspan}"` : ''
+      const rowspan = (node.attrs?.rowspan ?? 1) > 1 ? ` rowspan="${node.attrs!.rowspan}"` : ''
+      const inner = renderChildren(node, t)
+      return `<td${colspan}${rowspan}>${inner || '&nbsp;'}</td>`
+    }
 
     default:
       return renderChildren(node, t)
@@ -184,10 +204,10 @@ export function exportToHtml(
     .page code { font-family: monospace; font-size: 0.9em; }
 
     /* ── Table ── */
-    .page table { border-collapse: collapse; width: 100%; margin-bottom: 0.75em; }
+    .page table { border-collapse: collapse; width: 100%; margin-bottom: 0.75em; table-layout: fixed; }
     .page th, .page td { border: 1px solid #d1d5db; padding: 8px 10px; vertical-align: top; min-width: 80px; }
     .page th { background: #f3f4f6; font-weight: 600; text-align: left; }
-    .page table p { margin: 0; }\r
+    .page table p { margin: 0; }
     .page th p { color: inherit !important; }
 
     /* ── Theme CSS ── */
