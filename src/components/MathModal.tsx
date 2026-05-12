@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import katex from 'katex'
 import { useLangStore } from '../store/langStore'
 
@@ -6,15 +7,24 @@ interface MathModalProps {
   isOpen: boolean
   initialLatex: string
   mode: 'inline' | 'block'
+  clientX: number
+  clientY: number
   onConfirm: (latex: string) => void
   onClose: () => void
 }
 
-export function MathModal({ isOpen, initialLatex, mode, onConfirm, onClose }: MathModalProps) {
+export function MathModal({ isOpen, initialLatex, mode, clientX, clientY, onConfirm, onClose }: MathModalProps) {
   const { t } = useLangStore()
   const [latex, setLatex] = useState(initialLatex)
   const [preview, setPreview] = useState('')
   const [error, setError] = useState('')
+
+  const [pos, setPos] = useState({
+    x: Math.min(clientX, window.innerWidth - 440),
+    y: Math.min(clientY + 12, window.innerHeight - 300),
+  })
+  const dragging = useRef(false)
+  const dragOffset = useRef({ x: 0, y: 0 })
 
   const SNIPPETS = [
     { label: t.mathSnippets.fraction, latex: '\\frac{a}{b}' },
@@ -46,12 +56,43 @@ export function MathModal({ isOpen, initialLatex, mode, onConfirm, onClose }: Ma
     }
   }, [latex, mode])
 
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    dragging.current = true
+    dragOffset.current = { x: e.clientX - pos.x, y: e.clientY - pos.y }
+    e.preventDefault()
+  }, [pos])
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!dragging.current) return
+    setPos({
+      x: Math.min(Math.max(0, e.clientX - dragOffset.current.x), window.innerWidth - 440),
+      y: Math.min(Math.max(0, e.clientY - dragOffset.current.y), window.innerHeight - 100),
+    })
+  }, [])
+
+  const handleMouseUp = useCallback(() => {
+    dragging.current = false
+  }, [])
+
+  useEffect(() => {
+    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mouseup', handleMouseUp)
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [handleMouseMove, handleMouseUp])
+
   if (!isOpen) return null
 
-  return (
+  return createPortal(
     <div className="math-modal-overlay" onClick={onClose}>
-      <div className="math-modal" onClick={e => e.stopPropagation()}>
-        <div className="math-modal-header">
+      <div
+        className="math-modal"
+        style={{ position: 'fixed', left: pos.x, top: pos.y, transform: 'none' }}
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="math-modal-header" onMouseDown={handleMouseDown} style={{ cursor: 'grab' }}>
           <span className="math-modal-title">
             {mode === 'inline' ? t.inlineEquation : t.blockEquation}
           </span>
@@ -106,6 +147,7 @@ export function MathModal({ isOpen, initialLatex, mode, onConfirm, onClose }: Ma
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }

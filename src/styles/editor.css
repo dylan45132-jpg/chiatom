@@ -243,6 +243,7 @@
 .canvas-scroll {
   flex: 1;
   overflow-y: auto;
+  overflow-anchor: none;
   padding: var(--ui-spacing-lg) var(--ui-spacing-lg) 80px;
   display: flex;
   flex-direction: column;
@@ -1055,11 +1056,8 @@
 .math-modal-overlay {
   position: fixed;
   inset: 0;
-  background: var(--ui-overlay);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+  background: transparent;
+  z-index: 9999;
 }
 
 .math-modal {

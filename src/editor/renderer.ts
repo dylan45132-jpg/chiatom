@@ -42,14 +42,14 @@ function renderNode(node: JSONContent, t: any): string {
       const inner = renderChildren(node, t)
       const align = node.attrs?.textAlign
       const style = align && align !== 'left' ? ` style="text-align:${align}"` : ''
-      return `<p${style}>${inner || '&nbsp;'}</p>`
+      return `<p class="paragraph"${style}>${inner || '&nbsp;'}</p>`
     }
 
     case 'heading': {
       const level = node.attrs?.level ?? 1
       const align = node.attrs?.textAlign
       const style = align && align !== 'left' ? ` style="text-align:${align}"` : ''
-      return `<h${level}${style}>${renderChildren(node, t)}</h${level}>`
+      return `<h${level} class="heading-${level}"${style}>${renderChildren(node, t)}</h${level}>`
     }
 
     case 'bulletList':

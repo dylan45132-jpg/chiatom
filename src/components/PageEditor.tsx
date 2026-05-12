@@ -1,4 +1,5 @@
 import { useEditor, EditorContent } from '@tiptap/react'
+import { Plugin, PluginKey, Transaction } from 'prosemirror-state'
 import { StarterKit } from '@tiptap/starter-kit'
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { useDocumentStore, Page } from '../store/documentStore'
@@ -17,6 +18,18 @@ import { MathModal } from './MathModal'
 import { useLangStore } from '../store/langStore'
 import TextAlign from '@tiptap/extension-text-align'
 
+const suppressMathScrollKey = new PluginKey<boolean>('suppress-math-scroll')
+
+const suppressMathScrollPlugin = new Plugin({
+  key: suppressMathScrollKey,
+  state: {
+    init: () => false,
+    apply(tr: Transaction) {
+      return tr.getMeta(suppressMathScrollKey) === true
+    },
+  },
+})
+
 // A4 @ 96dpi，扣掉 padding（上下各 72px）
 const A4_CONTENT_HEIGHT = 1123 - 72 * 2
 
@@ -34,7 +47,9 @@ export default function PageEditor({ page }: PageEditorProps) {
     initialLatex: string
     mode: 'inline' | 'block'
     pos: number
-  }>({ isOpen: false, initialLatex: '', mode: 'inline', pos: 0 })
+    clientX: number
+    clientY: number
+  }>({ isOpen: false, initialLatex: '', mode: 'inline', pos: 0, clientX: 0, clientY: 0 })
 
   const editor = useEditor({
     extensions: [
@@ -51,16 +66,6 @@ export default function PageEditor({ page }: PageEditorProps) {
         katexOptions: {
           throwOnError: false,
         },
-        inlineOptions: {
-          onClick: (node, pos) => {
-            setMathModal({ isOpen: true, initialLatex: node.attrs.latex, mode: 'inline', pos })
-          },
-        },
-        blockOptions: {
-          onClick: (node, pos) => {
-            setMathModal({ isOpen: true, initialLatex: node.attrs.latex, mode: 'block', pos })
-          },
-        },
       }),
       TableRow,
       TableHeader,
@@ -76,6 +81,38 @@ export default function PageEditor({ page }: PageEditorProps) {
     ],
     content: page.content,
     immediatelyRender: false,
+    editorProps: {
+      handleScrollToSelection(view) {
+        return suppressMathScrollKey.getState(view.state) === true
+      },
+      handleClickOn(_view, _pos, node, nodePos, event) {
+        if (node.type.name === 'inlineMath' || node.type.name === 'blockMath') {
+          const scrollEl = document.querySelector('.canvas-scroll')
+          const scrollTop = scrollEl?.scrollTop ?? 0
+          const clientX = event?.clientX ?? window.innerWidth / 2
+          const clientY = event?.clientY ?? window.innerHeight / 2
+          const mode = node.type.name === 'inlineMath' ? 'inline' : 'block'
+
+          setMathModal({
+            isOpen: true,
+            initialLatex: node.attrs.latex,
+            mode,
+            pos: nodePos,
+            clientX,
+            clientY,
+          })
+
+          requestAnimationFrame(() => {
+            if (scrollEl) (scrollEl as HTMLElement).scrollTop = scrollTop
+          })
+          return true // Prevent default click behavior
+        }
+        return false
+      },
+    },
+    onCreate({ editor }) {
+      editor.registerPlugin(suppressMathScrollPlugin)
+    },
     onUpdate: ({ editor }) => {
       const json = editor.getJSON()
       updatePageContent(page.id, json)
@@ -130,13 +167,18 @@ export default function PageEditor({ page }: PageEditorProps) {
         isOpen={mathModal.isOpen}
         initialLatex={mathModal.initialLatex}
         mode={mathModal.mode}
+        clientX={mathModal.clientX}
+        clientY={mathModal.clientY}
         onConfirm={(latex) => {
           if (editor) {
             if (mathModal.mode === 'inline') {
-              editor.chain().setNodeSelection(mathModal.pos).updateInlineMath({ latex }).focus().run()
+              editor.chain().setNodeSelection(mathModal.pos).updateInlineMath({ latex }).run()
             } else {
-              editor.chain().setNodeSelection(mathModal.pos).updateBlockMath({ latex }).focus().run()
+              editor.chain().setNodeSelection(mathModal.pos).updateBlockMath({ latex }).run()
             }
+            const suppressTr = editor.state.tr.setMeta(suppressMathScrollKey, true)
+            editor.view.dispatch(suppressTr)
+            ;(editor.view.dom as HTMLElement).focus({ preventScroll: true })
           }
           setMathModal(prev => ({ ...prev, isOpen: false }))
         }}
