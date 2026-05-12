@@ -216,7 +216,7 @@ export function exportToHtml(
     /* ── Print ── */
     @media print {
       body { background: none; }
-      .page { margin: 0; box-shadow: none; page-break-after: always; }
+      .page { margin: 0; box-shadow: none; page-break-after: always; height: 297mm; min-height: unset; overflow: hidden; }
       .page:last-child { page-break-after: avoid; }
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
