@@ -2,7 +2,7 @@ English | [繁體中文 ↓](#繁體中文)
 
 # Chiatom
 
-![Demo](demo.gif)
+![Demo](en-demo.gif)
 
 A block-based structured content editor built around A4 pages. What you edit is what you output.
 
@@ -24,6 +24,8 @@ Chiatom's approach: pages are first-class citizens. You edit directly on an A4 p
 ---
 
 ## Features
+
+![Demo](en-table-pic.gif)
 
 - **A4 page editing**: Each page is fixed to A4 size — true WYSIWYG
 - **Block system**: Headings, paragraphs, lists, tables, blockquotes, images, and math equations (KaTeX)

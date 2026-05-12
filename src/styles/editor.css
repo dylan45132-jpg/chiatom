@@ -901,6 +901,11 @@
   font-size: 1.1em;
 }
 
+@page {
+      size: A4;
+      margin: 0;
+}
+
 @media print {
   /* 隱藏所有編輯器 UI */
   .toolbar,
