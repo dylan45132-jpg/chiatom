@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDocumentStore } from '../store/documentStore'
 import { useLangStore } from '../store/langStore'
 import { readWorkspace, createWorkspaceFolder, WorkspaceStructure, WorkspaceFile, moveFile, renameFile, renameFolder, deleteFile, deleteFolder } from '../utils/workspace'
@@ -7,6 +7,8 @@ import { loadHandoutFromPath } from '../utils/handoutPackage'
 import { open, confirm } from '@tauri-apps/plugin-dialog'
 import { join } from '@tauri-apps/api/path'
 import { FileText, Folder, FolderOpen } from 'lucide-react'
+import { readZoteroIndex, ZoteroIndex } from '../plugins/zotero/zoteroIndex'
+import { usePluginStore } from '../store/pluginStore'
 
 interface HomePageProps {
   workspacePath: string | null
@@ -37,6 +39,24 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings }
   const [renameType, setRenameType] = useState<'file' | 'folder'>('file')
   const [dragOverFolder, setDragOverFolder] = useState<string | null>(null)
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set())
+  const [zoteroIndex, setZoteroIndex] = useState<ZoteroIndex>({})
+  const { enabledPlugins } = usePluginStore()
+  const [activeTag, setActiveTag] = useState<string | null>(null)
+  const [showTagMenu, setShowTagMenu] = useState(false)
+
+  const allTags = useMemo(() => {
+    const tags = new Set<string>()
+    Object.values(zoteroIndex).forEach(entry => {
+      entry.tags.forEach(tag => tags.add(tag))
+    })
+    return Array.from(tags).sort()
+  }, [zoteroIndex])
+
+  function fileMatchesTag(file: WorkspaceFile): boolean {
+    if (!activeTag) return true
+    const entry = zoteroIndex[file.path]
+    return entry?.tags?.includes(activeTag) ?? false
+  }
 
   const toggleFolder = (folderPath: string) => {
     setExpandedFolders(prev => {
@@ -65,6 +85,10 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings }
     } catch (e) {
     } finally {
       setLoading(false)
+      if (usePluginStore.getState().enabledPlugins.includes('zotero')) {
+        const index = await readZoteroIndex(workspacePath)
+        setZoteroIndex(index)
+      }
     }
   }
 
@@ -212,6 +236,18 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings }
     >
       <FileText size={14} className='home-file-icon' />
       <span className='home-file-name'>{file.name}</span>
+      {enabledPlugins.includes('zotero') && zoteroIndex[file.path] && (
+        <div className='home-file-zotero'>
+  <div className='home-file-citekey'>{zoteroIndex[file.path].citekey}</div>
+  {zoteroIndex[file.path].tags.length > 0 && (
+    <div className='home-file-tags'>
+      {zoteroIndex[file.path].tags.map(tag => (
+        <span key={tag} className='home-file-tag'>{tag}</span>
+      ))}
+    </div>
+  )}
+</div>
+      )}
     </div>
   )
 
@@ -256,6 +292,38 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings }
 
         {!loading && !hasContent && renderEmpty()}
 
+{enabledPlugins.includes('zotero') && allTags.length > 0 && (
+  <div className='tag-filter-bar'>
+    <div className='tag-filter-wrap'>
+      <button
+        className={activeTag ? 'tag-filter-btn active' : 'tag-filter-btn'}
+        onClick={() => setShowTagMenu(v => !v)}
+      >
+        {activeTag ?? t.filterByTag} ▾
+      </button>
+      {showTagMenu && (
+        <div className='tag-filter-menu'>
+          <div
+            className='tag-filter-item'
+            onClick={() => { setActiveTag(null); setShowTagMenu(false) }}
+          >
+            全部
+          </div>
+          {allTags.map(tag => (
+            <div
+              key={tag}
+              className={activeTag === tag ? 'tag-filter-item active' : 'tag-filter-item'}
+              onClick={() => { setActiveTag(tag); setShowTagMenu(false) }}
+            >
+              {tag}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+)}
+
         {!loading && hasContent && (
           <div
             className='home-file-list'
@@ -291,12 +359,12 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings }
                 </div>
                 {expandedFolders.has(folder.path) && (
                   <div className='home-folder-files'>
-                    {folder.files.map(renderFileItem)}
+                    {folder.files.filter(fileMatchesTag).map(renderFileItem)}
                   </div>
                 )}
               </div>
             ))}
-            {workspace!.rootFiles.map(renderFileItem)}
+            {workspace!.rootFiles.filter(fileMatchesTag).map(renderFileItem)}
           </div>
         )}
       </div>

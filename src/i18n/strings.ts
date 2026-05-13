@@ -158,6 +158,7 @@ type StringsShape = {
   alignJustify: string
   renamePage: string
   renamePagePlaceholder: string
+  filterByTag: string
 }
 
 export const strings: Record<Lang, StringsShape> = {
@@ -357,6 +358,7 @@ export const strings: Record<Lang, StringsShape> = {
     alignJustify: 'Justify',
     renamePage: 'Rename page',
     renamePagePlaceholder: 'Page name',
+    filterByTag: 'Filter',
   },
 
   zh: {
@@ -555,5 +557,6 @@ export const strings: Record<Lang, StringsShape> = {
     alignJustify: '兩端對齊',
     renamePage: '重新命名頁面',
     renamePagePlaceholder: '頁面名稱',
+    filterByTag: '篩選',
   },
 }

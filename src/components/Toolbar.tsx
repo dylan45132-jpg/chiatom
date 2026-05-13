@@ -7,6 +7,8 @@ import { writeTextFile } from '@tauri-apps/plugin-fs'
 import { toast } from '../store/toastStore'
 import ThemeImporter from './ThemeImporter'
 import { useLangStore } from '../store/langStore'
+import { usePluginStore } from '../store/pluginStore'
+import ZoteroToolbar from '../plugins/zotero/ZoteroToolbar'
 
 interface ToolbarProps {
   onGoHome: () => void
@@ -16,6 +18,7 @@ interface ToolbarProps {
 export default function Toolbar({ onGoHome, onGoSettings }: ToolbarProps) {
   const { document, setDocumentTitle, savePath, setSavePath, isDirty, setDirty } = useDocumentStore()
   const { t } = useLangStore()
+  const { enabledPlugins } = usePluginStore()
   const [saving, setSaving] = useState(false)
   const [showTheme, setShowTheme] = useState(false)
 
@@ -88,6 +91,7 @@ export default function Toolbar({ onGoHome, onGoSettings }: ToolbarProps) {
             placeholder={t.untitledDocument}
             spellCheck={false}
           />
+          {enabledPlugins.includes('zotero') && <ZoteroToolbar />}
         </div>
         <div className="toolbar-right">
           {renderSaveStatus()}

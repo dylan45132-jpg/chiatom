@@ -1571,3 +1571,236 @@
   outline: 1px solid var(--ui-accent);
   border-radius: 2px;
 }
+
+.zotero-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+}
+
+.zotero-paper-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.zotero-paper-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.zotero-paper-btn.linked {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.zotero-search-popup {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 100;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  min-width: 280px;
+  overflow: visible;
+}
+
+.zotero-search-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 13px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.zotero-search-results {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.zotero-search-item {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+  cursor: pointer;
+  gap: 2px;
+}
+
+.zotero-search-item:hover {
+  background: var(--bg-hover);
+}
+
+.zotero-search-citekey {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.zotero-search-title {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.zotero-search-empty {
+  padding: 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.zotero-tags {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.zotero-tag {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 6px;
+  background: var(--bg-hover);
+  border-radius: 3px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.zotero-tag-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  padding: 0;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.zotero-tag-remove:hover {
+  color: var(--text-primary);
+}
+
+.zotero-tag-input {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 11px;
+  outline: none;
+  width: 80px;
+}
+
+.zotero-tag-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+.home-file-zotero {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.home-file-citekey {
+  font-size: 11px;
+  color: var(--ui-accent);
+  padding: 1px 6px;
+  border-left: 2px solid var(--ui-accent);
+  white-space: nowrap;
+}
+
+.home-file-tags {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  padding-left: 6px;
+  border-left: 2px solid var(--ui-border);
+}
+
+.home-file-tag {
+  font-size: 10px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.tag-filter-bar {
+  padding: 0 var(--ui-spacing-md) 4px var(--ui-spacing-md);
+}
+
+.tag-filter-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.tag-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: var(--ui-spacing-xs) var(--ui-spacing-md);
+  border-radius: var(--ui-radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-size-sm);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.tag-filter-btn:hover {
+  background: var(--ui-bg-elevated);
+  color: var(--ui-text-primary);
+}
+
+.tag-filter-btn.active {
+  color: var(--ui-accent);
+}
+
+.tag-filter-menu {
+  position: static;
+  z-index: auto;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  min-width: unset;
+  overflow: hidden;
+  border-top: 1px solid var(--ui-border);
+  border-bottom: 1px solid var(--ui-border);
+  margin-bottom: 4px;
+}
+
+.tag-filter-item {
+  padding: 5px var(--ui-spacing-md);
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-secondary);
+  cursor: pointer;
+  border-radius: var(--ui-radius-sm);
+}
+
+.tag-filter-item:hover {
+  background: var(--ui-bg-elevated);
+  color: var(--ui-text-primary);
+}
+
+.tag-filter-item.active {
+  color: var(--ui-accent);
+}

@@ -5,6 +5,7 @@ export interface Settings {
   language: 'zh' | 'en'
   defaultThemeName: string
   theme: 'light' | 'dark'
+  enabledPlugins: string[]
 }
 
 const SETTINGS_FILE = 'chiatom-settings.json'
@@ -14,6 +15,7 @@ const defaultSettings: Settings = {
   language: 'zh',
   defaultThemeName: '',
   theme: 'light',
+  enabledPlugins: [],
 }
 
 let settingsCache: Settings = { ...defaultSettings }

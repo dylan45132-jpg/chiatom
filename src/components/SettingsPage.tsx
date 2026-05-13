@@ -3,6 +3,8 @@ import { useLangStore } from '../store/langStore'
 import { open } from '@tauri-apps/plugin-dialog'
 import { openUrl } from '@tauri-apps/plugin-opener'
 import { saveSettings } from '../store/settingsStore'
+import { getAllPlugins } from '../plugins/registry'
+import { usePluginStore } from '../store/pluginStore'
 
 interface SettingsPageProps {
   onBack: () => void
@@ -13,6 +15,8 @@ interface SettingsPageProps {
 
 export default function SettingsPage({ onBack, workspacePath, onWorkspaceChange, onThemeChange }: SettingsPageProps) {
   const { t, lang, setLang } = useLangStore()
+  const { enabledPlugins, togglePlugin } = usePluginStore()
+  const allPlugins = getAllPlugins()
 
   const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>(
     document.documentElement.getAttribute('data-theme') as 'light' | 'dark' ?? 'light'
@@ -102,6 +106,23 @@ export default function SettingsPage({ onBack, workspacePath, onWorkspaceChange,
             </div>
           </div>
         </div>
+
+        {allPlugins.length > 0 && allPlugins.map(plugin => (
+          <div key={plugin.id} className='settings-section'>
+            <div className='settings-row'>
+              <div className='settings-row-label'>
+                <span className='settings-label'>{plugin.name}</span>
+                <span className='settings-desc'>{plugin.description}</span>
+              </div>
+              <button
+                className={enabledPlugins.includes(plugin.id) ? 'toolbar-btn active' : 'toolbar-btn'}
+                onClick={() => togglePlugin(plugin.id)}
+              >
+                {enabledPlugins.includes(plugin.id) ? 'ON' : 'OFF'}
+              </button>
+            </div>
+          </div>
+        ))}
 
         <div className='settings-section'>
           <div className='settings-row'>

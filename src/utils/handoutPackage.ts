@@ -5,6 +5,8 @@ import { join, tempDir } from '@tauri-apps/api/path'
 import { convertFileSrc } from '@tauri-apps/api/core'
 import { Document, Page } from '../store/documentStore'
 import { useLangStore } from '../store/langStore'
+import { getSettings } from '../store/settingsStore'
+import { updateZoteroIndex } from '../plugins/zotero/zoteroIndex'
 
 // ... (resolveImageSrcs and other utils remain the same)
 
@@ -108,6 +110,24 @@ export async function saveHandout(
   if (!targetPath) return null
   const finalPath = targetPath.endsWith('.handout') ? targetPath : `${targetPath}.handout`
   await writeFile(finalPath, bytes)
+
+  // 更新 Zotero index
+  try {
+    const settings = getSettings()
+    if (settings.workspacePath && targetPath) {
+      const zoteroData = doc.pluginData?.['zotero'] as { citekey?: string; paperTitle?: string; tags?: string[] } | undefined
+      if (zoteroData?.citekey) {
+        await updateZoteroIndex(settings.workspacePath, targetPath, {
+          citekey: zoteroData.citekey,
+          paperTitle: zoteroData.paperTitle ?? '',
+          tags: zoteroData.tags ?? [],
+        })
+      }
+    }
+  } catch {
+    // index 更新失敗不影響主流程
+  }
+
   return finalPath
 }
 

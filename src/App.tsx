@@ -14,6 +14,7 @@ import SettingsPage from './components/SettingsPage'
 import { getCurrentWindow } from '@tauri-apps/api/window'
 import { useLangStore } from './store/langStore'
 import { confirm } from '@tauri-apps/plugin-dialog'
+import { usePluginStore } from './store/pluginStore'
 
 export default function App() {
   const { document, activePageId, setActivePage, isDirty, savePath } = useDocumentStore()
@@ -33,6 +34,7 @@ export default function App() {
     const initialize = async () => {
       const loadedSettings = await loadSettings()
       setSettings(loadedSettings)
+      usePluginStore.getState().syncFromSettings()
 
       if (loadedSettings.theme) {
         window.document.documentElement.setAttribute('data-theme', loadedSettings.theme)

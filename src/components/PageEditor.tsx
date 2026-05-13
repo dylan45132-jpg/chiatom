@@ -17,6 +17,8 @@ import 'katex/dist/katex.min.css'
 import { MathModal } from './MathModal'
 import { useLangStore } from '../store/langStore'
 import TextAlign from '@tiptap/extension-text-align'
+import { getEnabledExtensions } from '../plugins/registry'
+import { getSettings } from '../store/settingsStore'
 
 const suppressMathScrollKey = new PluginKey<boolean>('suppress-math-scroll')
 
@@ -51,6 +53,8 @@ export default function PageEditor({ page }: PageEditorProps) {
     clientY: number
   }>({ isOpen: false, initialLatex: '', mode: 'inline', pos: 0, clientX: 0, clientY: 0 })
 
+  const enabledExtensions = getEnabledExtensions(getSettings().enabledPlugins)
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -78,6 +82,7 @@ export default function PageEditor({ page }: PageEditorProps) {
         },
         showOnlyCurrent: true,
       }),
+      ...enabledExtensions,
     ],
     content: page.content,
     immediatelyRender: false,

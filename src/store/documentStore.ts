@@ -42,6 +42,7 @@ export interface Document {
   pages: Page[]
   createdAt: string
   updatedAt: string
+  pluginData?: Record<string, unknown>
 }
 
 // ============================================
@@ -72,6 +73,7 @@ interface DocumentStore {
   setSavePath: (path: string | null) => void
   setTempPath: (path: string | null) => void
   setDirty: (dirty: boolean) => void
+  setPluginData: (pluginId: string, data: unknown) => void
 
   // 主題操作
   setTheme: (theme: ThemeConfig) => void
@@ -235,6 +237,18 @@ export const useDocumentStore = create<DocumentStore>()((set) => {
     setSavePath: (path) => set({ savePath: path }),
     setTempPath: (path) => set({ tempPath: path }),
     setDirty: (dirty) => set({ isDirty: dirty }),
+
+    setPluginData: (pluginId, data) => set(state => ({
+      document: state.document ? {
+        ...state.document,
+        pluginData: {
+          ...state.document.pluginData,
+          [pluginId]: data,
+        },
+        updatedAt: new Date().toISOString(),
+      } : state.document,
+      isDirty: true,
+    })),
 
     // ── 主題操作 ──────────────────────────────
 
