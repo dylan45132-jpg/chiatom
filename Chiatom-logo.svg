@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 240 240"
+   width="100%"
+   height="100%"
+   version="1.1"
+   id="svg2"
+   sodipodi:docname="gemini-svg (4).svg"
+   inkscape:export-filename="logo.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview2"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="4.5791667"
+     inkscape:cx="130.48226"
+     inkscape:cy="125.67789"
+     inkscape:window-width="2560"
+     inkscape:window-height="1334"
+     inkscape:window-x="1909"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <defs
+     id="defs1">
+    <filter
+       id="roughA"
+       x="-0.010714286"
+       y="-0.009375"
+       width="1.0214286"
+       height="1.01875">
+      <feTurbulence
+         type="fractalNoise"
+         baseFrequency="0.04"
+         numOctaves="3"
+         result="noise"
+         id="feTurbulence1" />
+      <feDisplacementMap
+         in="SourceGraphic"
+         in2="noise"
+         scale="4"
+         xChannelSelector="R"
+         yChannelSelector="G"
+         id="feDisplacementMap1" />
+    </filter>
+    <filter
+       id="pencilB"
+       x="-0.0111627"
+       y="-0.0111627"
+       width="1.0223254"
+       height="1.0223254">
+      <feTurbulence
+         type="fractalNoise"
+         baseFrequency="0.05"
+         numOctaves="3"
+         result="noise"
+         id="feTurbulence1-8" />
+      <feDisplacementMap
+         in="SourceGraphic"
+         in2="noise"
+         scale="2"
+         xChannelSelector="R"
+         yChannelSelector="G"
+         id="feDisplacementMap1-2" />
+    </filter>
+  </defs>
+  <rect
+     x="31.543221"
+     y="35.196541"
+     width="180"
+     height="180"
+     rx="40"
+     fill="#FAFAF8"
+     stroke="rgba(0,0,0,0.05)"
+     stroke-width="1"
+     id="rect1-9"
+     style="fill:#f5f4f0;fill-opacity:1" />
+  <g
+     id="g1"
+     transform="matrix(3.545211,0,0,3.3876457,-116.81269,-103.46955)"
+     style="stroke-width:0.288556">
+    <path
+       d="m 82.009626,50.486098 a 19.846153,17.013908 0 1 0 0,34.027805 h 1.98461 v -5.10416 h -1.98461 a 13.892311,11.90974 0 1 1 0,-23.819479 h 1.98461 v -5.104166 z"
+       fill="#5c8f6a"
+       stroke="#5c8f6a"
+       stroke-width="0.432831"
+       stroke-linejoin="round"
+       stroke-linecap="round"
+       id="path9" />
+    <rect
+       x="50.255768"
+       y="60.694439"
+       width="3.5723076"
+       height="13.611126"
+       rx="0.99230766"
+       fill="#5c8f6a"
+       id="rect9"
+       style="stroke-width:0.288556" />
+    <rect
+       x="52.240387"
+       y="66.138901"
+       width="11.907692"
+       height="2.7222254"
+       rx="0.79384613"
+       fill="#5c8f6a"
+       id="rect11"
+       style="stroke-width:0.288556" />
+    <rect
+       x="71.292671"
+       y="60.694439"
+       width="3.5723076"
+       height="13.611126"
+       rx="0.99230766"
+       fill="#5c8f6a"
+       id="rect12"
+       style="stroke-width:0.288556" />
+  </g>
+</svg>

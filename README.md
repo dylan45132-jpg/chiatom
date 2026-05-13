@@ -1,25 +1,45 @@
 English | [繁體中文 ↓](#繁體中文)
 
 # Chiatom
+![Chiatom - logo](Chiatom-logo.svg)
+![Demo](en-editor.gif)
 
-![Demo](en-demo.gif)
-
-A block-based structured content editor built around A4 pages. What you edit is what you output.
-
+> The A4 page is part of the design itself — a WYSIWYG document editor built around the feeling of boundaries.
+ 
 ---
-
-## What is this
-
-Chiatom is a desktop application for anyone who needs structured content creation with precise page output — teachers making handouts, knowledge workers who think better within boundaries, or anyone who wants to design a theme once and keep filling it with content.
-
-Most tools don't solve a real problem: **whether you're making handouts or taking notes, existing tools are either too fluid (Notion's infinite canvas), too heavy (Word), or can't control final output (Typora).**
-
-- Typora is a great Markdown editor, but you can't control where content appears on the page
-- Notion's page feel is an illusion — print results are unpredictable
-- Word can't apply custom HTML layouts
-- For many people, a bounded page isn't a constraint — it's what makes focus possible
-
-Chiatom's approach: pages are first-class citizens. You edit directly on an A4 page, and what you see is exactly what you get.
+ 
+## Why I built this
+ 
+The starting point was simple: I noticed that the "infinite free canvas" of mainstream document editors was slowly killing my ability to think.
+ 
+I'm not much of a layout person, but I care deeply about how things look — both when I'm writing and when I finally print or share them. That tension kept me drifting between note-taking apps for years. Eventually I cobbled together a clunky workflow: ask AI to build me a nice HTML template, fill in the content, and whenever things changed significantly, throw the whole file back to AI to reformat. It worked, but it was slow, token-hungry, and honestly — the logic was completely backwards.
+ 
+*Fitting content into a beautiful layout should be the tool's job, not mine.*
+ 
+Beyond that, there was a deeper problem it took me a long time to name: I just can't seem to think inside the kind of infinitely scrollable space that Notion or Obsidian offers. I focus better with boundaries. When a page ends, it ends — and that gives me a way to think about how each page should be shaped.
+ 
+That feeling of "when a page ends, it's done" — I don't think an endlessly scrolling canvas can ever give you that.
+ 
+So I built Chiatom around a singular, almost regressive idea: **the A4 page is a first-class citizen.**
+ 
+---
+ 
+## The philosophy
+ 
+I named this project after diatoms — single-celled organisms that construct incredibly precise, geometric silica shells in nature. Each shell is independent and complete. Chiatom follows the same logic: **your content goes into the container, and what comes out is a finished, standalone work.**
+ 
+In Chiatom, what you see is exactly what you print. I deliberately removed the infinite scroll and gave you a single page with clear edges. When your text overflows the bottom, it doesn't automatically reflow to the next page — a red warning line appears instead. That is a design decision I feel strongly about.
+ 
+Because that red line forces you to stop and ask yourself: *Is this page too crowded? Does this thought really belong here?*
+ 
+When a page has a clear boundary and an ending, it means this stage of thinking is complete.
+ 
+On the technical side, I made themes (CSS + JSON) completely decoupled from content. You can ask AI to design a layout on a whim, then spend all your future time just writing. Documents are saved as `.handout` files — ZIP packages that bundle your text and images together neatly. When you need to share your ideas, one click exports a single self-contained HTML file that prints perfectly in any browser.
+ 
+I know Chiatom isn't for everyone. But if you're an educator who makes handouts, if you're tired of getting lost in boundless windows, or if you've ever spent a whole beautiful afternoon on layout and forgotten to actually write — this tool is for you.
+ 
+Chiatom is for people who have realized: sometimes, drawing a box around yourself isn't a cage that limits your freedom — it's the steel frame that holds your thinking steady.
+ 
 
 ---
 
@@ -27,9 +47,12 @@ Chiatom's approach: pages are first-class citizens. You edit directly on an A4 p
 
 ![Demo](en-table-pic.gif)
 
-- **A4 page editing**: Each page is fixed to A4 size — true WYSIWYG
+- **A4 page editing**: Each page is fixed to A4 size — true WYSIWYG. A red boundary line appears when content overflows, by design.
 - **Block system**: Headings, paragraphs, lists, tables, blockquotes, images, and math equations (KaTeX)
-- **Theme system**: Import custom theme packages (theme.css + theme.json), or use one of the three built-in themes
+- **Theme system**: Import custom theme packages (theme.css + theme.json), or use one of the three built-in themes (Slate / Washi / Moss)
+
+![Demo](en-theme.gif)
+
 - **Compound blocks**: Custom blocks defined by the theme, inserted via the `/` command menu
 - **Math support**: Inline and block LaTeX with live preview
 - **HTML export**: A single self-contained HTML file with inline CSS and base64 images, ready to print as PDF in any browser
@@ -46,32 +69,7 @@ Chiatom's approach: pages are first-class citizens. You edit directly on an A4 p
 
 Download the latest installer from [GitHub Releases](https://github.com/dylan45132-jpg/chiatom/releases):
 
-- `chiatom_0.2.0_x64-setup.exe` — Windows 10 / 11 (64-bit)
-
-### Requirements
-
-- Node.js 24.x
-- pnpm 10.x
-- Rust (required for Tauri builds)
-
-### Build from source
-
-```bash
-# Clone the repository
-git clone https://github.com/dylan45132-jpg/chiatom.git
-cd chiatom
-
-# Install dependencies
-pnpm install
-
-# Start in development mode
-pnpm tauri dev
-
-# Build for production
-pnpm tauri build
-```
-
-The built installer will be in `src-tauri/target/release/bundle/`.
+- `chiatom_0.2.1_x64-setup.exe` — Windows 10 / 11 (64-bit)
 
 ---
 
@@ -116,16 +114,6 @@ For details on creating your own theme, see [docs/en/theme-guide.md](docs/en/the
 
 ---
 
-## Project status
-
-- Phase 1 MVP ✅
-- Phase 2 Full editing experience ✅
-- Phase 3 Polish ✅
-- Phase 4 Open source preparation ✅
-- Phase 5 Home screen & workspace ✅
-
----
-
 ## License
 
 Chiatom is open source under the [GNU General Public License v3.0](LICENSE).
@@ -141,32 +129,57 @@ See [chiatom-themes](https://github.com/dylan45132-jpg/chiatom-themes).
 
 # Chiatom
 
-![Demo](demo.gif)
+![Chiatom - logo](Chiatom-logo.svg)
+![Demo](en-editor.gif)
 
-以 A4 頁面為單位的區塊式結構化內容編輯器。你編輯的就是你輸出的。
+> A4 頁面本身也是設計的一部分——具備「邊界感」的所見即所得文件編輯器。
 
 ---
 
-## 這是什麼
+## 為什麼我做了這個
 
-Chiatom 是一個桌面應用，適合任何需要「邊界感 + 精確輸出」的結構化內容創作場景——製作講義的老師、用有框架感的方式記筆記的知識工作者，或任何想要「設計一次主題，長期填內容，最終輸出精美文件」的人。
+開發 Chiatom 的起點其實很單純：我發現主流文件編輯軟體的「無限自由畫布」，似乎正在慢慢扼殺我思考的能力。
 
-現有工具都沒有解決一個真實問題：**無論是製作講義還是整理筆記，現有工具要麼太自由（Notion 的無限畫布）、要麼太重（Word）、要麼無法控制最終輸出（Typora）。**
+我不是很會排版的人，但偏偏我又很在乎寫出來、印出來的東西到底好不好看。這種糾結讓我在各種筆記軟體間流浪了好幾年。後來，我妥協出了一套有點笨的工作流：先請 AI 幫我刻出漂亮的 HTML 版型，接著填入文字；一旦內容要大改，就把整份檔案丟回 AI 重新排版。這方法確實能運作，但實在太慢、也太消耗Token，而且講真的，這樣的邏輯根本不對。
 
-- Typora 是最好的 Markdown 編輯器，但無法控制內容出現在頁面的哪個位置
-- Notion 的頁面感是假的，列印結果不可預測
-- Word 無法套用自訂 HTML 排版
-- 對很多人來說，有邊界的頁面不是限制，而是專注的條件
+*「把內容放進漂亮的排版」，應該是工具的工作，不是我的。*
 
-Chiatom 的做法：頁面是一等公民。你在 A4 頁面上直接編輯，看到的就是最終輸出的樣子。
+除此之外，最深層的問題如開頭所述，我花了很長一段時間才終於釐清：自己好像一直沒辦法在Notion / Obsidian這種可以無限下滑的空間中思考，反而在有邊界的空間裡比較能專注，寫到一頁結束就是結束，我也能適時知道每一頁怎麼安排。
+
+這種「一頁結束就是結束」的踏實感，我想應該是無限往下滾動的空間給不了的。
+
+所以我圍繞著一個近乎復古的想法製作了 Chiatom：**A4 頁面是一等公民。**
+
+---
+
+## 設計哲學
+
+這個專案的名字來自矽藻（diatom）——一種大自然中極度精確、幾何形矽殼的單細胞生物。每個殼都是獨立且完整的。Chiatom 遵循同樣的邏輯：**你的內容進入容器，出來的是一個完整的、獨立的作品。**
+
+在 Chiatom 裡，你看到的東西就是你印出來的樣子。我刻意拿掉了無限滾動的視窗，只給你一個界線分明的頁面。當你的文字超出頁面底部時，它不會自動地幫你自動換到下一頁，而是出現紅色警告線提示。這是我非常堅持的設計決策。
+
+因為這條紅線會強迫你停下來，問問自己：*這一頁是不是太擠了？這個想法真的適合塞在這裡嗎？*
+
+當一頁有了明確的邊界與結尾，也就表示這個思考階段算是大功告成了。
+
+在技術上，我讓主題（CSS + JSON）和內容徹底脫鉤。你可以心血來潮請 AI 幫你設計一次版型，然後在未來的日子裡，只要專心寫字就好。文件儲存為 `.handout` 格式（把文字和圖片妥善打包好的 ZIP 檔）。當你需要把想法傳遞給別人時，只要一鍵匯出成單一自給自足的 HTML 檔案，對方用任何瀏覽器打開，都能完美列印。
+
+我知道，Chiatom 不會適合所有人。但如果你是需要編寫講義的教育工作者，如果你也厭倦了在無邊無際的視窗中迷失方向，又或者，你跟我一樣，曾經為了排版浪費掉整個美好的下午而忘記了寫作的初衷……那這款工具就是為你準備的。
+
+Chiatom 是獻給那些意識到這件事的人：有時候，給自己畫一個框框，並不會成為限制自由的牢籠——而是成為穩定你思考的鋼架。
 
 ---
 
 ## 功能
 
-- **A4 頁面編輯**：每個頁面固定 A4 尺寸，所見即所得
+![Demo](en-table-pic.gif)
+
+- **A4 頁面編輯**：每個頁面固定 A4 尺寸，所見即所得。內容超出頁面時出現紅色邊界線，這是刻意的設計。
 - **區塊系統**：標題、段落、清單、表格、引用、圖片、方程式（KaTeX）
-- **主題系統**：匯入自訂主題包（theme.css + theme.json），或使用內建三套主題
+- **主題系統**：匯入自訂主題包（theme.css + theme.json），或使用內建三套主題（Slate / Washi / Moss）
+
+![Demo](en-theme.gif)
+
 - **複合區塊**：由主題定義的自訂區塊，透過 `/` 指令插入
 - **方程式支援**：inline 和 block LaTeX，即時預覽
 - **匯出 HTML**：單一自給自足的 HTML 檔案，圖片 base64 inline，可直接瀏覽器列印為 PDF
@@ -183,32 +196,7 @@ Chiatom 的做法：頁面是一等公民。你在 A4 頁面上直接編輯，�
 
 從 [GitHub Releases](https://github.com/dylan45132-jpg/chiatom/releases) 下載最新安裝檔：
 
-- `chiatom_0.2.0_x64-setup.exe` — Windows 10 / 11（64 位元）
-
-### 系統需求
-
-- Node.js 24.x
-- pnpm 10.x
-- Rust（Tauri 建置需要）
-
-### 從原始碼建置
-
-```bash
-# clone 專案
-git clone https://github.com/dylan45132-jpg/chiatom.git
-cd chiatom
-
-# 安裝相依套件
-pnpm install
-
-# 開發模式啟動
-pnpm tauri dev
-
-# 建置正式版本
-pnpm tauri build
-```
-
-建置完成後，安裝檔位於 `src-tauri/target/release/bundle/`。
+- `chiatom_0.2.1_x64-setup.exe` — Windows 10 / 11（64 位元）
 
 ---
 
@@ -252,16 +240,6 @@ my-theme/
 | 編輯器引擎 | Tiptap 3.23.x |
 | 狀態管理 | Zustand 5.x |
 | 存檔格式 | JSZip（.handout） |
-
----
-
-## 專案狀態
-
-- Phase 1 MVP ✅
-- Phase 2 完整編輯體驗 ✅
-- Phase 3 打磨 ✅
-- Phase 4 開源準備 ✅
-- Phase 5 主頁與工作區 ✅
 
 ---
 
