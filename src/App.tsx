@@ -15,12 +15,15 @@ import { getCurrentWindow } from '@tauri-apps/api/window'
 import { useLangStore } from './store/langStore'
 import { confirm } from '@tauri-apps/plugin-dialog'
 import { usePluginStore } from './store/pluginStore'
+import { checkForUpdates, UpdateInfo } from './utils/updater'
+import UpdateNotice from './components/UpdateNotice'
 
 export default function App() {
   const { document, activePageId, setActivePage, isDirty, savePath } = useDocumentStore()
   const [currentView, setCurrentView] = useState<'home' | 'editor' | 'settings'>('home')
   const [workspacePath, setWorkspacePath] = useState<string | null>(null)
   const [settings, setSettings] = useState<Settings>(getSettings())
+  const [updateInfo, setUpdateInfo] = useState<UpdateInfo | null>(null)
   const isAskingRef = useRef(false)
 
   const setThemeMode = (mode: 'light' | 'dark') => {
@@ -56,6 +59,9 @@ export default function App() {
         await saveSettings(newSettings)
         setSettings(newSettings)
       }
+      checkForUpdates().then(info => {
+        if (info) setUpdateInfo(info)
+      })
     }
     initialize()
   }, [])
@@ -162,6 +168,12 @@ export default function App() {
     <>
       {renderContent()}
       <Toast />
+      {updateInfo && (
+        <UpdateNotice
+          update={updateInfo}
+          onDismiss={() => setUpdateInfo(null)}
+        />
+      )}
     </>
   )
 }

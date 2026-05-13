@@ -31,6 +31,7 @@
   "bundle": {
     "active": true,
     "targets": "all",
+    "createUpdaterArtifacts": true,
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -58,6 +59,12 @@
   "plugins": {
     "fs": {
       "requireLiteralLeadingDot": false
+    },
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEVGOUU0RDY4Q0QzNTZCRTgKUldUb2F6WE5hRTJlNy9TOXR5eThKUlVlak5FMGdDT0VpU1k2RzBhdTU2a1BSaS9hS2hwOTRZeXMK",
+      "endpoints": [
+        "https://github.com/dylan45132-jpg/chiatom/releases/latest/download/latest.json"
+      ]
     }
   }
 }

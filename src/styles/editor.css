@@ -1804,3 +1804,37 @@
 .tag-filter-item.active {
   color: var(--ui-accent);
 }
+
+.update-notice {
+  position: fixed;
+  bottom: 48px;
+  right: 16px;
+  z-index: 300;
+  background: var(--ui-bg-panel);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-md);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 10px 14px;
+}
+
+.update-notice-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.update-notice-text {
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-primary);
+  white-space: nowrap;
+}
+
+.update-notice-progress {
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-secondary);
+}
+
+.update-notice-actions {
+  display: flex;
+  gap: 6px;
+}
