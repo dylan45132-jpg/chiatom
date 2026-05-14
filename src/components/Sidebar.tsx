@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDocumentStore } from '../store/documentStore'
 import {
   DndContext,
@@ -41,6 +41,12 @@ function PageItem({
     attributes, listeners, setNodeRef,
     transform, transition, isDragging,
   } = useSortable({ id })
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.select()
+    }
+  }, [isRenaming])
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -109,6 +115,7 @@ export default function Sidebar() {
   const {
     document,
     activePageId,
+    savePath,
     setActivePage,
     addPage,
     deletePage,
@@ -230,7 +237,7 @@ export default function Sidebar() {
         {collapsed ? '›' : '‹'}
       </button>
 
-      <PageContextMenu menu={menu} onClose={closeMenu} onRename={handleRenameStart} />
+      <PageContextMenu menu={menu} onClose={closeMenu} onRename={handleRenameStart} docId={savePath ?? document.id} />
     </>
   )
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useDocumentStore } from '../store/documentStore'
+import { useNavigationStore } from '../store/navigationStore'
 import { saveHandout, resolveImageSrcs } from '../utils/handoutPackage'
 import { exportToHtml } from '../editor/renderer'
 import { save } from '@tauri-apps/plugin-dialog'
@@ -9,6 +10,7 @@ import ThemeImporter from './ThemeImporter'
 import { useLangStore } from '../store/langStore'
 import { usePluginStore } from '../store/pluginStore'
 import ZoteroToolbar from '../plugins/zotero/ZoteroToolbar'
+import { ArrowLeft } from 'lucide-react'
 
 interface ToolbarProps {
   onGoHome: () => void
@@ -18,6 +20,7 @@ interface ToolbarProps {
 export default function Toolbar({ onGoHome, onGoSettings }: ToolbarProps) {
   const { document, setDocumentTitle, savePath, setSavePath, isDirty, setDirty } = useDocumentStore()
   const { t } = useLangStore()
+  const { goBack, canGoBack } = useNavigationStore()
   const { enabledPlugins } = usePluginStore()
   const [saving, setSaving] = useState(false)
   const [showTheme, setShowTheme] = useState(false)
@@ -81,6 +84,9 @@ export default function Toolbar({ onGoHome, onGoSettings }: ToolbarProps) {
     <>
             <div className="toolbar">
         <div className="toolbar-left">
+          <button className="toolbar-btn icon-btn" onClick={goBack} disabled={!canGoBack()} title="Back">
+            <ArrowLeft size={8} />
+          </button>
           <button className="toolbar-btn icon-btn" onClick={onGoHome} title="Home">⌂</button>
         </div>
         <div className="toolbar-center">

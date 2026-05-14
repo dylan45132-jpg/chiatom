@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './styles/tokens.css'
 import './styles/base.css'
 import './styles/editor.css'
@@ -7,8 +7,8 @@ import Sidebar from './components/Sidebar'
 import Canvas from './components/Canvas'
 import Toast from './components/Toast'
 import { useDocumentStore } from './store/documentStore'
-import { loadSettings, saveSettings, getSettings, Settings } from './store/settingsStore'
-import { getDefaultWorkspacePath, ensureWorkspaceExists } from './utils/workspace'
+import { getSettings, loadSettings, saveSettings, Settings } from './store/settingsStore'
+import { ensureWorkspaceExists, getDefaultWorkspacePath } from './utils/workspace'
 import HomePage from './components/HomePage'
 import SettingsPage from './components/SettingsPage'
 import { getCurrentWindow } from '@tauri-apps/api/window'
@@ -17,10 +17,13 @@ import { confirm } from '@tauri-apps/plugin-dialog'
 import { usePluginStore } from './store/pluginStore'
 import { checkForUpdates, UpdateInfo } from './utils/updater'
 import UpdateNotice from './components/UpdateNotice'
+import ZoteroProjectsPage from './plugins/zotero/ZoteroProjectsPage'
+import { useZoteroProjectStore } from './plugins/zotero/zoteroProjectStore'
+import { useNavigationStore } from './store/navigationStore'
 
 export default function App() {
   const { document, activePageId, setActivePage, isDirty, savePath } = useDocumentStore()
-  const [currentView, setCurrentView] = useState<'home' | 'editor' | 'settings'>('home')
+  const { currentView, navigate } = useNavigationStore()
   const [workspacePath, setWorkspacePath] = useState<string | null>(null)
   const [settings, setSettings] = useState<Settings>(getSettings())
   const [updateInfo, setUpdateInfo] = useState<UpdateInfo | null>(null)
@@ -59,6 +62,12 @@ export default function App() {
         await saveSettings(newSettings)
         setSettings(newSettings)
       }
+
+      // 載入 Zotero 專案資料
+      if (usePluginStore.getState().isEnabled('zotero')) {
+        await useZoteroProjectStore.getState().loadProjects()
+      }
+      
       checkForUpdates().then(info => {
         if (info) setUpdateInfo(info)
       })
@@ -128,14 +137,15 @@ export default function App() {
         return (
           <HomePage
             workspacePath={workspacePath}
-            onOpenEditor={() => setCurrentView('editor')}
-            onOpenSettings={() => setCurrentView('settings')}
+            onOpenEditor={() => navigate('editor')}
+            onOpenSettings={() => navigate('settings')}
+            onOpenProjects={() => navigate('zotero-projects')}
           />
         )
       case 'editor':
         return (
           <div className='app-shell'>
-            <Toolbar onGoHome={() => setCurrentView('home')} onGoSettings={() => setCurrentView('settings')} />
+            <Toolbar onGoHome={() => navigate('home')} onGoSettings={() => navigate('settings')} />
             <div className='app-body'>
               <Sidebar />
               <Canvas />
@@ -145,7 +155,6 @@ export default function App() {
       case 'settings':
         return (
           <SettingsPage
-            onBack={() => setCurrentView('home')}
             workspacePath={workspacePath}
             onWorkspaceChange={(p: string) => {
               if (p) {
@@ -157,6 +166,12 @@ export default function App() {
             }}
             onThemeChange={setThemeMode}
 
+          />
+        )
+      case 'zotero-projects':
+        return (
+          <ZoteroProjectsPage
+            workspacePath={workspacePath}
           />
         )
       default:

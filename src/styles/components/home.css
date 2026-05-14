@@ -1,0 +1,345 @@
+/* ── Home Page ─────────────────────────── */
+
+.home-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--ui-bg-base);
+  color: var(--ui-text-primary);
+}
+
+.home-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--ui-spacing-lg);
+  height: 48px;
+  border-bottom: 1px solid var(--ui-border);
+  flex-shrink: 0;
+}
+
+.home-logo {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ui-text-primary);
+  letter-spacing: 0.02em;
+}
+
+.home-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-sm);
+}
+
+.home-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--ui-spacing-lg);
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.home-guide {
+  display: flex;
+  gap: var(--ui-spacing-lg);
+  padding: var(--ui-spacing-lg) 0;
+  border-bottom: 1px solid var(--ui-border);
+  margin-bottom: var(--ui-spacing-lg);
+}
+
+.home-guide-step {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ui-spacing-sm);
+  flex: 1;
+}
+
+.home-guide-num {
+  font-size: 11px;
+  color: var(--ui-accent);
+  font-weight: 600;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.home-guide-text {
+  font-size: 12px;
+  color: var(--ui-text-tertiary);
+  line-height: 1.5;
+}
+
+.home-loading {
+  color: var(--ui-text-tertiary);
+  font-size: 13px;
+  padding: var(--ui-spacing-lg) 0;
+}
+
+.home-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ui-spacing-sm);
+  padding: 80px 0;
+}
+
+.home-empty-title {
+  font-size: 15px;
+  color: var(--ui-text-secondary);
+  margin: 0;
+}
+
+.home-empty-hint {
+  font-size: 13px;
+  color: var(--ui-text-tertiary);
+  margin: 0;
+}
+
+.home-file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.home-file-item {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-sm);
+  padding: var(--ui-spacing-sm) var(--ui-spacing-md);
+  border-radius: var(--ui-radius-sm);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.home-file-item:hover {
+  background: var(--ui-bg-elevated);
+}
+
+.home-file-icon {
+  font-size: 14px;
+  color: var(--ui-text-tertiary);
+  flex-shrink: 0;
+  width: 16px;
+}
+
+.home-file-name {
+  font-size: 13px;
+  color: var(--ui-text-primary);
+  flex: 1;
+  min-width: 0;
+}
+
+.home-file-citekey {
+  font-size: 12px;
+  color: var(--ui-text-tertiary);
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: auto;
+  padding-left: var(--ui-spacing-md);
+}
+
+.home-folder {
+  margin-top: var(--ui-spacing-md);
+}
+
+.home-folder-header {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-xs);
+  padding: var(--ui-spacing-xs) var(--ui-spacing-md);
+  cursor: pointer;
+  border-radius: var(--ui-radius-sm);
+  transition: background 0.1s;
+}
+
+.home-folder-header:hover {
+  background: var(--ui-bg-elevated);
+}
+
+.home-folder-icon {
+  font-size: 12px;
+  color: var(--ui-accent);
+  width: 16px;
+  flex-shrink: 0;
+}
+
+.home-folder-name {
+  font-size: 12px;
+  color: var(--ui-text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.home-folder-files {
+  margin-left: var(--ui-spacing-md);
+  margin-top: 2px;
+}
+
+/* ── Settings Page ─────────────────────── */
+
+.settings-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--ui-bg-base);
+  color: var(--ui-text-primary);
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-md);
+  padding: 0 var(--ui-spacing-lg);
+  height: 48px;
+  border-bottom: 1px solid var(--ui-border);
+  flex-shrink: 0;
+}
+
+.settings-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.settings-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--ui-spacing-lg);
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-spacing-lg);
+}
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-bottom: 1px solid var(--ui-border);
+  padding-bottom: var(--ui-spacing-lg);
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--ui-spacing-sm) 0;
+  gap: var(--ui-spacing-md);
+}
+
+.settings-row-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.settings-label {
+  font-size: 14px;
+  color: var(--ui-text-primary);
+}
+
+.settings-desc {
+  font-size: 12px;
+  color: var(--ui-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.settings-toggle {
+  display: flex;
+  gap: 4px;
+}
+
+/* ── Toolbar 補充 ───────────────────────── */
+
+.toolbar-text {
+  font-size: 12px;
+  color: var(--ui-text-secondary);
+  padding: 0 var(--ui-spacing-xs);
+}
+
+.toolbar-text.secondary {
+  color: var(--ui-text-tertiary);
+}
+
+.toolbar-btn.primary {
+  background: var(--ui-accent);
+  color: var(--ui-bg-base);
+}
+
+.toolbar-btn.primary:hover {
+  background: var(--ui-accent-hover);
+}
+
+.toolbar-btn.quiet {
+  background: transparent;
+  color: var(--ui-text-secondary);
+  border: 1px solid var(--ui-border);
+}
+
+.toolbar-btn.quiet:hover {
+  background: var(--ui-bg-elevated);
+}
+
+.toolbar-btn.active {
+  background: var(--ui-bg-elevated);
+  color: var(--ui-text-primary);
+}
+
+/* ── Home Context Menu ─────────────────── */
+
+.home-context-menu {
+  background: var(--ui-bg-elevated);
+  border: 1px solid var(--ui-border-strong);
+  border-radius: var(--ui-radius-md);
+  padding: var(--ui-spacing-xs);
+  min-width: 160px;
+  z-index: 1000;
+  box-shadow: 0 4px 16px var(--ui-shadow);
+}
+
+.home-context-item {
+  padding: var(--ui-spacing-sm) var(--ui-spacing-md);
+  font-size: 13px;
+  color: var(--ui-text-primary);
+  border-radius: var(--ui-radius-sm);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.home-context-item:hover {
+  background: var(--ui-bg-surface);
+}
+
+.home-context-item.danger {
+  color: var(--ui-danger);
+}
+
+.home-context-item.danger:hover {
+  background: var(--ui-danger-bg);
+}
+
+/* ── Drag Over State ───────────────────── */
+
+.home-folder.drag-over {
+  background: var(--ui-bg-elevated);
+  outline: 1px solid var(--ui-accent);
+  border-radius: var(--ui-radius-sm);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--ui-spacing-sm);
+  margin-top: var(--ui-spacing-md);
+}

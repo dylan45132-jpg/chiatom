@@ -8,7 +8,6 @@ export default function ZoteroToolbar() {
   const [searching, setSearching] = useState(false)
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<ZoteroMeta[]>([])
-  const [newTag, setNewTag] = useState('')
   const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
@@ -30,19 +29,6 @@ export default function ZoteroToolbar() {
     setSearching(false)
     setQuery('')
     setResults([])
-  }
-
-  function handleAddTag() {
-    if (!newTag.trim()) return
-    const current = meta?.tags ?? []
-    if (current.includes(newTag.trim())) return
-    setZoteroMeta({ tags: [...current, newTag.trim()] })
-    setNewTag('')
-  }
-
-  function handleRemoveTag(tag: string) {
-    const current = meta?.tags ?? []
-    setZoteroMeta({ tags: current.filter(t => t !== tag) })
   }
 
   if (!document) return null
@@ -95,23 +81,6 @@ export default function ZoteroToolbar() {
             )}
           </div>
         )}
-      </div>
-      <div className='zotero-tags'>
-        {(meta?.tags ?? []).map(tag => (
-          <span key={tag} className='zotero-tag'>
-            {tag}
-            <button className='zotero-tag-remove' onClick={() => handleRemoveTag(tag)}>×</button>
-          </span>
-        ))}
-        <div className='zotero-tag-input-wrap'>
-          <input
-            className='zotero-tag-input'
-            placeholder='+ 新增標記'
-            value={newTag}
-            onChange={e => setNewTag(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleAddTag()}
-          />
-        </div>
       </div>
     </div>
   )

@@ -2,6 +2,9 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useDocumentStore } from '../store/documentStore'
 import { toast } from '../store/toastStore'
 import { useLangStore } from '../store/langStore'
+import { useZoteroProjectStore } from '../plugins/zotero/zoteroProjectStore'
+import { usePluginStore } from '../store/pluginStore'
+import AddToProjectPanel from '../plugins/zotero/AddToProjectPanel'
 
 const GAP = 8
 
@@ -35,9 +38,10 @@ interface PageContextMenuProps {
   menu: MenuState
   onClose: () => void
   onRename?: (pageId: string) => void
+  docId: string
 }
 
-export default function PageContextMenu({ menu, onClose, onRename }: PageContextMenuProps) {
+export default function PageContextMenu({ menu, onClose, onRename, docId }: PageContextMenuProps) {
   const { t } = useLangStore()
   const menuRef = useRef<HTMLDivElement>(null)
   const [pos, setPos] = useState({ x: menu.x, y: menu.y })
@@ -47,6 +51,12 @@ export default function PageContextMenu({ menu, onClose, onRename }: PageContext
     deletePage,
     duplicatePage,
   } = useDocumentStore()
+
+  const { isEnabled } = usePluginStore()
+  const zoteroEnabled = isEnabled('zotero')
+  const { getLinksForPage } = useZoteroProjectStore()
+  const linkedProjects = zoteroEnabled ? getLinksForPage(docId, menu.pageId) : []
+  const [showProjectPanel, setShowProjectPanel] = useState(false)
 
   // 位置修正：避免超出視窗
   useLayoutEffect(() => {
@@ -65,8 +75,12 @@ export default function PageContextMenu({ menu, onClose, onRename }: PageContext
   useEffect(() => {
     if (!menu.open) return
     const handlePointerDown = (e: PointerEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node))
+      if (
+        menuRef.current && !menuRef.current.contains(e.target as Node) &&
+        !(e.target as Element).closest?.('.zotero-project-panel')
+      ) {
         onClose()
+      }
     }
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
@@ -136,32 +150,58 @@ export default function PageContextMenu({ menu, onClose, onRename }: PageContext
   }
 
   return (
-    <div
-      ref={menuRef}
-      className="context-menu"
-      style={{ left: pos.x, top: pos.y }}
-    >
-      <button className='context-menu-item' onClick={handleRename}>
-        {t.renamePage}
-      </button>
-      <div className='context-menu-divider' />
-      <button className="context-menu-item" onClick={handleInsertBefore}>
-        {t.insertAbove}
-      </button>
-      <button className="context-menu-item" onClick={handleInsertAfter}>
-        {t.insertBelow}
-      </button>
-      <div className="context-menu-divider" />
-      <button className="context-menu-item" onClick={handleDuplicate}>
-        {t.duplicatePage}
-      </button>
-      <div className="context-menu-divider" />
-      <button
-        className="context-menu-item context-menu-danger"
-        onClick={handleDelete}
+    <>
+      <div
+        ref={menuRef}
+        className="context-menu"
+        style={{ left: pos.x, top: pos.y }}
       >
-        {t.deletePageMenu}
-      </button>
-    </div>
+        <button className='context-menu-item' onClick={handleRename}>
+          {t.renamePage}
+        </button>
+        {zoteroEnabled && (
+          <>
+            <div className='context-menu-divider' />
+            <button
+              className='context-menu-item'
+              onClick={() => { setShowProjectPanel(true) }}
+            >
+              {t.zoteroAddToProject}
+              {linkedProjects.length > 0 && (
+                <span className='context-menu-badge'>{linkedProjects.length}</span>
+              )}
+            </button>
+          </>
+        )}
+        <div className='context-menu-divider' />
+        <button className="context-menu-item" onClick={handleInsertBefore}>
+          {t.insertAbove}
+        </button>
+        <button className="context-menu-item" onClick={handleInsertAfter}>
+          {t.insertBelow}
+        </button>
+        <div className="context-menu-divider" />
+        <button className="context-menu-item" onClick={handleDuplicate}>
+          {t.duplicatePage}
+        </button>
+        <div className="context-menu-divider" />
+        <button
+          className="context-menu-item context-menu-danger"
+          onClick={handleDelete}
+        >
+          {t.deletePageMenu}
+        </button>
+      </div>
+
+      {showProjectPanel && zoteroEnabled && (
+        <AddToProjectPanel
+          docId={docId}
+          pageId={menu.pageId}
+          anchorX={pos.x + 200}
+          anchorY={pos.y}
+          onClose={() => setShowProjectPanel(false)}
+        />
+      )}
+    </>
   )
 }

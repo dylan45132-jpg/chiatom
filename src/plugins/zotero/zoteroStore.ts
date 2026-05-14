@@ -4,7 +4,6 @@ import { useDocumentStore } from '../../store/documentStore'
 export interface ZoteroMeta {
   citekey: string
   paperTitle: string
-  tags: string[]
 }
 
 const PLUGIN_ID = 'zotero'

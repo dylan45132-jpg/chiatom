@@ -1,0 +1,646 @@
+.zotero-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+}
+
+.zotero-paper-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.zotero-paper-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.zotero-paper-btn.linked {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.zotero-search-popup {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 100;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  min-width: 280px;
+  overflow: visible;
+}
+
+.zotero-search-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 13px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.zotero-search-results {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.zotero-search-item {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+  cursor: pointer;
+  gap: 2px;
+}
+
+.zotero-search-item:hover {
+  background: var(--bg-hover);
+}
+
+.zotero-search-citekey {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.zotero-search-title {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.zotero-search-empty {
+  padding: 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+
+.home-file-citekey {
+  font-size: 11px;
+  color: var(--ui-accent);
+  padding: 1px 6px;
+  border-left: 2px solid var(--ui-accent);
+  white-space: nowrap;
+}
+
+.update-notice {
+  position: fixed;
+  bottom: 48px;
+  right: 16px;
+  z-index: 300;
+  background: var(--ui-bg-panel);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-md);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 10px 14px;
+}
+
+.update-notice-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.update-notice-text {
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-primary);
+  white-space: nowrap;
+}
+
+.update-notice-progress {
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-secondary);
+}
+
+.update-notice-actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* ============================================
+   Zotero Projects Page
+   ============================================ */
+
+.zp-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--ui-bg-base);
+  font-family: var(--ui-font-sans);
+}
+
+.zp-header {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-md);
+  padding: 0 var(--ui-spacing-lg);
+  height: var(--ui-toolbar-height);
+  border-bottom: 1px solid var(--ui-border);
+  background: var(--ui-bg-surface);
+  flex-shrink: 0;
+}
+
+.zp-title {
+  font-size: var(--ui-font-size-md);
+  font-weight: 600;
+  color: var(--ui-text-primary);
+}
+
+.zp-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── 左側專案列表 ── */
+
+.zp-sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--ui-border);
+  background: var(--ui-bg-surface);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.zp-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--ui-spacing-sm) var(--ui-spacing-md);
+  border-bottom: 1px solid var(--ui-border);
+}
+
+.zp-sidebar-label {
+  font-size: var(--ui-font-size-sm);
+  font-weight: 600;
+  color: var(--ui-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.zp-add-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ui-text-secondary);
+  font-size: 18px;
+  line-height: 1;
+  padding: 0 2px;
+  border-radius: var(--ui-radius-sm);
+  transition: color var(--ui-transition);
+}
+
+.zp-add-btn:hover {
+  color: var(--ui-accent);
+}
+
+.zp-project-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--ui-spacing-xs) 0;
+}
+
+.zp-project-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--ui-spacing-xs) var(--ui-spacing-md);
+  cursor: pointer;
+  border-radius: 0;
+  transition: background var(--ui-transition);
+  gap: var(--ui-spacing-sm);
+  font-size: var(--ui-font-size-md);
+  font-family: var(--ui-font-sans);
+}
+
+.zp-project-item:hover {
+  background: var(--ui-bg-elevated);
+}
+
+.zp-project-item.is-active {
+  background: var(--ui-bg-elevated);
+  border-left: 2px solid var(--ui-accent);
+  padding-left: calc(var(--ui-spacing-md) - 2px);
+}
+
+.zp-project-name {
+  font-size: var(--ui-font-size-md);
+  color: var(--ui-text-primary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zp-project-count {
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-tertiary);
+  flex-shrink: 0;
+}
+
+.zp-project-delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ui-text-tertiary);
+  font-size: 14px;
+  padding: 0 2px;
+  border-radius: var(--ui-radius-sm);
+  transition: color var(--ui-transition);
+  opacity: 0;
+  flex-shrink: 0;
+}
+
+.zp-project-item:hover .zp-project-delete-btn {
+  opacity: 1;
+}
+
+.zp-project-delete-btn:hover {
+  color: var(--ui-danger);
+}
+
+.zp-rename-input {
+  width: 100%;
+  background: var(--ui-bg-elevated);
+  border: 1px solid var(--ui-accent);
+  border-radius: var(--ui-radius-sm);
+  padding: 2px var(--ui-spacing-xs);
+  font-size: var(--ui-font-size-md);
+  color: var(--ui-text-primary);
+  outline: none;
+}
+
+.zp-new-project {
+  padding: var(--ui-spacing-sm) var(--ui-spacing-md);
+  border-top: 1px solid var(--ui-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-spacing-xs);
+}
+
+.zp-new-project-input {
+  width: 100%;
+  background: var(--ui-bg-elevated);
+  border: 1px solid var(--ui-border-strong);
+  border-radius: var(--ui-radius-sm);
+  padding: var(--ui-spacing-xs) var(--ui-spacing-sm);
+  font-size: var(--ui-font-size-md);
+  color: var(--ui-text-primary);
+  outline: none;
+  box-sizing: border-box;
+  font-family: var(--ui-font-sans);
+}
+
+.zp-new-project-input:focus {
+  border-color: var(--ui-accent);
+}
+
+.zp-new-project-actions {
+  display: flex;
+  gap: var(--ui-spacing-xs);
+  justify-content: flex-end;
+}
+
+/* ── 主區域 ── */
+
+.zp-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--ui-spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-spacing-md);
+}
+
+.zp-main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.zp-main-title {
+  font-size: var(--ui-font-size-lg);
+  font-weight: 600;
+  color: var(--ui-text-primary);
+}
+
+
+/* ── 結構視圖 ── */
+
+.zp-structure,
+.zp-literature {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-spacing-md);
+}
+
+.zp-doc-group {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-md);
+  overflow: hidden;
+  background: var(--ui-bg-surface);
+}
+
+.zp-doc-label {
+  padding: var(--ui-spacing-sm) var(--ui-spacing-md);
+  font-size: var(--ui-font-size-sm);
+  font-weight: 600;
+  color: var(--ui-text-secondary);
+  background: var(--ui-bg-elevated);
+  border-bottom: 1px solid var(--ui-border);
+  cursor: pointer;
+  transition: color var(--ui-transition);
+}
+
+.zp-doc-label:hover {
+  color: var(--ui-accent);
+}
+
+.zp-page-links {
+  display: flex;
+  flex-direction: column;
+}
+
+.zp-page-link {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-sm);
+  padding: var(--ui-spacing-sm) var(--ui-spacing-md);
+  border-bottom: 1px solid var(--ui-border);
+  font-size: var(--ui-font-size-sm);
+}
+
+.zp-page-link:last-child {
+  border-bottom: none;
+}
+
+.zp-page-id {
+  color: var(--ui-text-secondary);
+  font-family: var(--ui-font-mono);
+  font-size: 11px;
+}
+
+.zp-role-badge {
+  background: var(--ui-bg-elevated);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  padding: 1px var(--ui-spacing-xs);
+  font-size: 11px;
+  color: var(--ui-text-secondary);
+  white-space: nowrap;
+}
+
+.zp-note {
+  color: var(--ui-text-tertiary);
+  font-size: 11px;
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── AddToProjectPanel ── */
+
+.zotero-project-panel {
+  position: fixed;
+  z-index: 9999;
+  background: var(--ui-bg-elevated);
+  border: 1px solid var(--ui-border-strong);
+  border-radius: var(--ui-radius-md);
+  box-shadow: 0 4px 16px var(--ui-shadow);
+  padding: var(--ui-spacing-md);
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-spacing-sm);
+}
+
+.zotero-panel-section-label {
+  font-size: var(--ui-font-size-sm);
+  font-weight: 600;
+  color: var(--ui-text-secondary);
+}
+
+.zotero-panel-empty {
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-tertiary);
+}
+
+.zotero-panel-linked-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-spacing-xs);
+}
+
+.zotero-panel-linked-item {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-xs);
+}
+
+.zotero-panel-linked-name {
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-primary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zotero-panel-divider {
+  height: 1px;
+  background: var(--ui-border);
+}
+
+.zotero-panel-select,
+.zotero-panel-input {
+  width: 100%;
+  background: var(--ui-bg-base);
+  border: 1px solid var(--ui-border-strong);
+  border-radius: var(--ui-radius-sm);
+  padding: var(--ui-spacing-xs) var(--ui-spacing-sm);
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-primary);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.zotero-panel-select:focus,
+.zotero-panel-input:focus {
+  border-color: var(--ui-accent);
+}
+
+.zotero-panel-role-select {
+  background: var(--ui-bg-base);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  padding: 1px var(--ui-spacing-xs);
+  font-size: 11px;
+  color: var(--ui-text-secondary);
+  outline: none;
+}
+
+.zotero-panel-remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ui-text-tertiary);
+  font-size: 14px;
+  padding: 0 2px;
+  transition: color var(--ui-transition);
+}
+
+.zotero-panel-remove-btn:hover {
+  color: var(--ui-danger);
+}
+
+.zotero-panel-custom-role-row {
+  display: flex;
+  gap: var(--ui-spacing-xs);
+  align-items: center;
+}
+
+.zotero-panel-btn-small {
+  background: none;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  cursor: pointer;
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-size-sm);
+  padding: 2px var(--ui-spacing-xs);
+  transition: all var(--ui-transition);
+}
+
+.zotero-panel-btn-small:hover {
+  border-color: var(--ui-accent);
+  color: var(--ui-accent);
+}
+
+.zotero-panel-add-role-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ui-text-tertiary);
+  font-size: var(--ui-font-size-sm);
+  padding: 0;
+  text-align: left;
+  transition: color var(--ui-transition);
+}
+
+.zotero-panel-add-role-btn:hover {
+  color: var(--ui-accent);
+}
+
+.zotero-panel-actions {
+  display: flex;
+  gap: var(--ui-spacing-xs);
+  justify-content: flex-end;
+  padding-top: var(--ui-spacing-xs);
+}
+
+.zotero-panel-btn-cancel {
+  background: none;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  cursor: pointer;
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-size-sm);
+  padding: var(--ui-spacing-xs) var(--ui-spacing-md);
+  transition: all var(--ui-transition);
+}
+
+.zotero-panel-btn-cancel:hover {
+  border-color: var(--ui-border-strong);
+  color: var(--ui-text-primary);
+}
+
+.zotero-panel-btn-confirm {
+  background: var(--ui-accent);
+  border: none;
+  border-radius: var(--ui-radius-sm);
+  cursor: pointer;
+  color: white;
+  font-size: var(--ui-font-size-sm);
+  padding: var(--ui-spacing-xs) var(--ui-spacing-md);
+  transition: background var(--ui-transition);
+}
+
+.zotero-panel-btn-confirm:hover:not(:disabled) {
+  background: var(--ui-accent-hover);
+}
+
+.zotero-panel-btn-confirm:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* context-menu badge */
+.context-menu-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ui-accent);
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 10px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  margin-left: auto;
+}
+
+/* empty state */
+.zp-empty {
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-tertiary);
+  padding: var(--ui-spacing-md);
+}
+
+.zp-hint {
+  font-size: 11px;
+  color: var(--ui-text-tertiary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.zp-missing-badge {
+  margin-left: var(--ui-spacing-sm);
+  font-size: 11px;
+  color: var(--ui-warning);
+  font-weight: normal;
+}
+
+.zp-page-id-link {
+  cursor: pointer;
+  transition: color var(--ui-transition);
+}
+
+.zp-page-id-link:hover {
+  color: var(--ui-accent);
+  text-decoration: underline;
+}
+
+.zp-page-link-empty {
+  opacity: 0.6;
+}

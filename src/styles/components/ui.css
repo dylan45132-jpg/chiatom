@@ -1,0 +1,106 @@
+/* ── Toast ─────────────────────────────── */
+
+.toast-container {
+  position: fixed;
+  bottom: var(--ui-spacing-lg);
+  right: var(--ui-spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-spacing-sm);
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.toast-item {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-sm);
+  padding: 10px var(--ui-spacing-md);
+  background: var(--ui-bg-elevated);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-md);
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-primary);
+  box-shadow: 0 4px 16px var(--ui-shadow);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 200ms ease, transform 200ms ease;
+  pointer-events: auto;
+}
+
+.toast-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.toast-success .toast-dot { background: var(--ui-success); }
+.toast-error   .toast-dot { background: var(--ui-danger); }
+.toast-info    .toast-dot { background: var(--ui-text-tertiary); }
+
+.toast-message { line-height: 1.4; }
+
+/* ── 頁面溢出警示 ───────────────────────── */
+
+.page-overflow {
+  outline: 1px solid var(--ui-danger);
+}
+
+.page-overflow-warning {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.page-overflow-line {
+  width: 100%;
+  height: 2px;
+  background: var(--ui-danger);
+}
+
+.page-overflow-label {
+  display: block;
+  text-align: center;
+  font-size: 11px;
+  color: var(--ui-danger);
+  padding: 4px 0 6px;
+  letter-spacing: 0.03em;
+}
+/* ── Compound Block ─────────────────────── */
+
+.compound-block-node {
+  display: block;
+  margin: 0.5em 0;
+}
+
+.compound-block-node.is-selected > div {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: 2px;
+}
+
+.compound-block-warning {
+  font-size: 11px;
+  color: var(--ui-warning);
+  background: var(--ui-warning-bg);
+  border: 1px solid var(--ui-warning);
+  border-radius: var(--ui-radius-sm);
+  padding: 3px var(--ui-spacing-sm);
+  margin-bottom: 4px;
+}
+
+.compound-block-unknown > div {
+  border: 1px dashed var(--ui-warning);
+  padding: var(--ui-spacing-sm);
+  border-radius: var(--ui-radius-sm);
+}
+
+.katex {
+  font-size: 1.1em;
+}

@@ -1,5 +1,5 @@
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDocumentStore } from '../store/documentStore'
 import { useLangStore } from '../store/langStore'
 import { readWorkspace, createWorkspaceFolder, WorkspaceStructure, WorkspaceFile, moveFile, renameFile, renameFolder, deleteFile, deleteFolder } from '../utils/workspace'
@@ -14,9 +14,10 @@ interface HomePageProps {
   workspacePath: string | null
   onOpenEditor: () => void
   onOpenSettings: () => void
+  onOpenProjects: () => void
 }
 
-export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings }: HomePageProps) {
+export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings, onOpenProjects }: HomePageProps) {
   const { loadFromDocument } = useDocumentStore()
   const { t } = useLangStore()
   const [workspace, setWorkspace] = useState<WorkspaceStructure | null>(null)
@@ -41,22 +42,9 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings }
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set())
   const [zoteroIndex, setZoteroIndex] = useState<ZoteroIndex>({})
   const { enabledPlugins } = usePluginStore()
-  const [activeTag, setActiveTag] = useState<string | null>(null)
-  const [showTagMenu, setShowTagMenu] = useState(false)
 
-  const allTags = useMemo(() => {
-    const tags = new Set<string>()
-    Object.values(zoteroIndex).forEach(entry => {
-      entry.tags.forEach(tag => tags.add(tag))
-    })
-    return Array.from(tags).sort()
-  }, [zoteroIndex])
 
-  function fileMatchesTag(file: WorkspaceFile): boolean {
-    if (!activeTag) return true
-    const entry = zoteroIndex[file.path]
-    return entry?.tags?.includes(activeTag) ?? false
-  }
+
 
   const toggleFolder = (folderPath: string) => {
     setExpandedFolders(prev => {
@@ -222,34 +210,30 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings }
     }
   }
 
-  const renderFileItem = (file: WorkspaceFile) => (
-    <div
-      key={file.path}
-      className='home-file-item'
-      onClick={() => handleOpenFile(file.path)}
-      onContextMenu={(e) => handleContextMenu(e, 'file', file.path, file.name)}
-      draggable
-      onDragStart={(e) => {
-        e.dataTransfer.effectAllowed = 'move'
-        handleDragStart(e, file.path)
-      }}
-    >
-      <FileText size={14} className='home-file-icon' />
-      <span className='home-file-name'>{file.name}</span>
-      {enabledPlugins.includes('zotero') && zoteroIndex[file.path] && (
-        <div className='home-file-zotero'>
-  <div className='home-file-citekey'>{zoteroIndex[file.path].citekey}</div>
-  {zoteroIndex[file.path].tags.length > 0 && (
-    <div className='home-file-tags'>
-      {zoteroIndex[file.path].tags.map(tag => (
-        <span key={tag} className='home-file-tag'>{tag}</span>
-      ))}
-    </div>
-  )}
-</div>
-      )}
-    </div>
-  )
+  const renderFileItem = (file: WorkspaceFile) => {
+    const entry = zoteroIndex[file.path]
+    return (
+      <div
+        key={file.path}
+        className='home-file-item'
+        onClick={() => handleOpenFile(file.path)}
+        onContextMenu={(e) => handleContextMenu(e, 'file', file.path, file.name)}
+        draggable
+        onDragStart={(e) => {
+          e.dataTransfer.effectAllowed = 'move'
+          handleDragStart(e, file.path)
+        }}
+      >
+        <FileText size={14} className='home-file-icon' />
+        <span className='home-file-name'>{file.name}</span>
+        {enabledPlugins.includes('zotero') && entry?.citekey && (
+          <span className='home-file-citekey' title={entry.citekey}>
+            {entry.paperTitle || entry.citekey}
+          </span>
+        )}
+      </div>
+    )
+  }
 
   const renderEmpty = () => (
     <div className='home-empty'>
@@ -265,6 +249,9 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings }
       <div className='home-header'>
         <span className='home-logo'>Chiatom</span>
         <div className='home-header-actions'>
+          {enabledPlugins.includes('zotero') && (
+            <button className='toolbar-btn' onClick={onOpenProjects}>{t.zoteroProjects}</button>
+          )}
           <button className='toolbar-btn' onClick={handleOpenDialog}>{t.openFile}</button>
           <button className='toolbar-btn' onClick={() => setShowNewFolder(true)}>{t.newFolder}</button>
           <button className='toolbar-btn primary' onClick={() => setShowNewDoc(true)}>{t.newDocument}</button>
@@ -273,56 +260,28 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings }
       </div>
 
       <div className='home-body'>
-                <div className='home-guide'>
-          <div className='home-guide-step'>
-            <span className='home-guide-num'>01</span>
-            <span className='home-guide-text'>{t.homeGuide1}</span>
+                {!hasContent && !loading && (
+          <div className='home-guide'>
+            <div className='home-guide-step'>
+              <span className='home-guide-num'>01</span>
+              <span className='home-guide-text'>{t.homeGuide1}</span>
+            </div>
+            <div className='home-guide-step'>
+              <span className='home-guide-num'>02</span>
+              <span className='home-guide-text'>{t.homeGuide2}</span>
+            </div>
+            <div className='home-guide-step'>
+              <span className='home-guide-num'>03</span>
+              <span className='home-guide-text'>{t.homeGuide3}</span>
+            </div>
           </div>
-          <div className='home-guide-step'>
-            <span className='home-guide-num'>02</span>
-            <span className='home-guide-text'>{t.homeGuide2}</span>
-          </div>
-          <div className='home-guide-step'>
-            <span className='home-guide-num'>03</span>
-            <span className='home-guide-text'>{t.homeGuide3}</span>
-          </div>
-        </div>
+        )}
 
         {loading && <div className='home-loading'>...</div>}
 
         {!loading && !hasContent && renderEmpty()}
 
-{enabledPlugins.includes('zotero') && allTags.length > 0 && (
-  <div className='tag-filter-bar'>
-    <div className='tag-filter-wrap'>
-      <button
-        className={activeTag ? 'tag-filter-btn active' : 'tag-filter-btn'}
-        onClick={() => setShowTagMenu(v => !v)}
-      >
-        {activeTag ?? t.filterByTag} ▾
-      </button>
-      {showTagMenu && (
-        <div className='tag-filter-menu'>
-          <div
-            className='tag-filter-item'
-            onClick={() => { setActiveTag(null); setShowTagMenu(false) }}
-          >
-            全部
-          </div>
-          {allTags.map(tag => (
-            <div
-              key={tag}
-              className={activeTag === tag ? 'tag-filter-item active' : 'tag-filter-item'}
-              onClick={() => { setActiveTag(tag); setShowTagMenu(false) }}
-            >
-              {tag}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  </div>
-)}
+
 
         {!loading && hasContent && (
           <div
@@ -359,12 +318,12 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings }
                 </div>
                 {expandedFolders.has(folder.path) && (
                   <div className='home-folder-files'>
-                    {folder.files.filter(fileMatchesTag).map(renderFileItem)}
+                    {folder.files.map(renderFileItem)}
                   </div>
                 )}
               </div>
             ))}
-            {workspace!.rootFiles.filter(fileMatchesTag).map(renderFileItem)}
+            {workspace!.rootFiles.map(renderFileItem)}
           </div>
         )}
       </div>

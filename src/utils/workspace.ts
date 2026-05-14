@@ -1,6 +1,10 @@
 import { readDir, mkdir, exists, rename, remove } from '@tauri-apps/plugin-fs'
 import { documentDir, join, basename, dirname } from '@tauri-apps/api/path'
 
+import { readZoteroIndex, updateZoteroIndex } from '../plugins/zotero/zoteroIndex'
+import { readProjects, writeProjects } from '../plugins/zotero/zoteroProjects'
+import { getSettings } from '../store/settingsStore'
+
 export interface WorkspaceFile {
   name: string
   path: string
@@ -97,6 +101,33 @@ export async function renameFile(filePath: string, newName: string): Promise<str
   const dir = await dirname(filePath)
   const newPath = await join(dir, newName + '.handout')
   await rename(filePath, newPath)
+
+  // 同步更新 zotero index
+  const workspacePath = getSettings().workspacePath
+  if (workspacePath) {
+    // 更新 zoteroIndex：把舊 key 搬到新 key
+    const index = await readZoteroIndex(workspacePath)
+    if (index[filePath]) {
+      await updateZoteroIndex(workspacePath, newPath, index[filePath])
+      await updateZoteroIndex(workspacePath, filePath, null)
+    }
+
+    // 更新 zoteroProjects：把所有 pageLinks 的舊 docId 換成新路徑
+    const projects = await readProjects(workspacePath)
+    let changed = false
+    for (const project of projects) {
+      for (const link of project.pageLinks) {
+        if (link.docId === filePath) {
+          link.docId = newPath
+          changed = true
+        }
+      }
+    }
+    if (changed) {
+      await writeProjects(workspacePath, projects)
+    }
+  }
+
   return newPath
 }
 

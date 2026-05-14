@@ -5,8 +5,8 @@ import { ZoteroPlugin } from './zotero/index'
 // Plugin 介面定義
 export interface ChiatomPlugin {
   id: string
-  name: string
-  description: string
+  name: () => string
+  description: () => string
   extensions?: () => Extensions
   slashItems?: () => unknown[]
 }

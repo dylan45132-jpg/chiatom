@@ -1,0 +1,180 @@
+/* ── Context Menu ───────────────────────── */
+
+.context-menu {
+  position: fixed;
+  width: 180px;
+  background: var(--ui-bg-elevated);
+  border: 1px solid var(--ui-border-strong);
+  border-radius: var(--ui-radius-md);
+  box-shadow: 0 8px 24px var(--ui-shadow);
+  padding: 4px;
+  z-index: 9000;
+}
+
+.context-menu-item {
+  display: block;
+  width: 100%;
+  padding: 7px var(--ui-spacing-sm);
+  text-align: left;
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-secondary);
+  border-radius: var(--ui-radius-sm);
+  transition: background var(--ui-transition), color var(--ui-transition);
+}
+
+.context-menu-item:hover {
+  background: var(--ui-bg-surface);
+  color: var(--ui-text-primary);
+}
+
+.context-menu-danger { color: var(--ui-danger); }
+.context-menu-danger:hover { background: var(--ui-danger-bg); color: var(--ui-danger); }
+
+.context-menu-divider {
+  height: 1px;
+  background: var(--ui-border);
+  margin: 3px 0;
+}
+/* ── Editor Toolbar ─────────────────────── */
+
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-xs);
+  padding: var(--ui-spacing-xs) var(--ui-spacing-sm);
+  margin-bottom: var(--ui-spacing-sm);
+  background: var(--ui-bg-surface);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-md);
+  width: 794px;
+}
+
+.editor-toolbar-btn {
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-secondary);
+  padding: 3px var(--ui-spacing-sm);
+  border-radius: var(--ui-radius-sm);
+  transition: background var(--ui-transition), color var(--ui-transition);
+}
+
+.editor-toolbar-btn:hover {
+  background: var(--ui-bg-elevated);
+  color: var(--ui-text-primary);
+}
+
+.editor-toolbar-btn.is-active {
+  background: var(--ui-bg-elevated);
+  color: var(--ui-accent);
+}
+
+/* ── Bubble Menu ────────────────────────── */
+
+.bubble-menu {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  background: var(--ui-bg-elevated);
+  border: 1px solid var(--ui-border-strong);
+  border-radius: var(--ui-radius-md);
+  box-shadow: 0 4px 16px var(--ui-shadow);
+}
+
+.bubble-btn {
+  font-size: var(--ui-font-size-sm);
+  font-weight: 500;
+  color: var(--ui-text-secondary);
+  padding: 4px 8px;
+  border-radius: var(--ui-radius-sm);
+  transition: background var(--ui-transition), color var(--ui-transition);
+  white-space: nowrap;
+}
+
+.bubble-btn:hover {
+  background: var(--ui-bg-surface);
+  color: var(--ui-text-primary);
+}
+
+.bubble-btn.is-active {
+  background: var(--ui-bg-surface);
+  color: var(--ui-accent);
+}
+
+.bubble-btn-danger { color: var(--ui-danger); }
+.bubble-btn-danger:hover { background: var(--ui-danger-bg); color: var(--ui-danger); }
+
+.bubble-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--ui-border-strong);
+  margin: 0 2px;
+}
+/* ── Slash Menu ─────────────────────────── */
+
+.slash-menu {
+  position: fixed;
+  z-index: 9999;
+  min-width: 200px;
+  padding: 4px;
+  background: var(--ui-bg-elevated);
+  border: 1px solid var(--ui-border-strong);
+  border-radius: var(--ui-radius-md);
+  box-shadow: 0 8px 24px var(--ui-shadow);
+}
+
+.slash-menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.slash-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-sm);
+  width: 100%;
+  padding: 7px var(--ui-spacing-sm);
+  border: none;
+  border-radius: var(--ui-radius-sm);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--ui-transition);
+}
+
+.slash-menu-item:hover,
+.slash-menu-item.is-selected {
+  background: var(--ui-bg-surface);
+}
+
+.slash-menu-icon {
+  width: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ui-text-secondary);
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.slash-menu-label {
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-primary);
+}
+
+.slash-menu-text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.slash-menu-description {
+  font-size: 11px;
+  color: var(--ui-text-muted);
+  line-height: 1.4;
+}
+
+.slash-menu-empty {
+  padding: 8px var(--ui-spacing-sm);
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-tertiary);
+}

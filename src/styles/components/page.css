@@ -1,0 +1,112 @@
+/* ── Canvas ───────────────────────────── */
+
+.canvas {
+  flex: 1;
+  background: var(--ui-canvas-bg);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.canvas-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-anchor: none;
+  padding: var(--ui-spacing-lg) var(--ui-spacing-lg) 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.canvas-empty {
+  color: var(--ui-text-tertiary);
+  font-size: var(--ui-font-size-md);
+  margin-top: 80px;
+}
+
+.canvas-scale-indicator {
+  position: absolute;
+  bottom: var(--ui-spacing-md);
+  right: var(--ui-spacing-md);
+  background: var(--ui-bg-elevated);
+  border: 1px solid var(--ui-border);
+  color: var(--ui-text-secondary);
+  font-size: var(--ui-font-size-sm);
+  padding: 2px 8px;
+  border-radius: var(--ui-radius-sm);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ── Page（A4）───────────────────────── */
+
+.page-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--ui-spacing-lg);
+}
+
+.page {
+  width: 794px;        /* A4 @ 96dpi */
+  min-height: 1123px;  /* A4 @ 96dpi */
+  background: #ffffff;
+  color: #1a1a1a;
+  padding: 72px 80px;
+  border-radius: var(--ui-radius-sm);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+@page {
+      size: A4;
+      margin: 0;
+}
+
+@media print {
+  /* 隱藏所有編輯器 UI */
+  .toolbar,
+  .sidebar,
+  .bubble-menu,
+  .slash-menu,
+  .page-context-menu,
+  .toast-container,
+  .page-overflow-warning {
+    display: none !important;
+  }
+
+  /* Canvas 重置：移除背景色與 padding */
+  .canvas {
+    background: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* page-wrapper：移除間距 */
+  .page-wrapper {
+    margin-bottom: 0;
+  }
+
+  /* 每個 .page 獨佔一頁，移除螢幕用的視覺裝飾 */
+  .page {
+    width: 100%;
+    min-height: unset;
+    padding: 0;
+    box-shadow: none;
+    border-radius: 0;
+    border: none;
+    page-break-after: always;
+    break-after: page;
+  }
+
+  /* 最後一頁不需要強制分頁 */
+  .page-wrapper:last-child .page {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  /* A4 頁面設定，margin 交給主題 theme.css 的 .page padding 控制 */
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}

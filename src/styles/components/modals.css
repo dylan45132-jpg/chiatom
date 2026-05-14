@@ -1,0 +1,318 @@
+/* ── Modal ──────────────────────────────── */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--ui-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9500;
+}
+
+.modal {
+  background: var(--ui-bg-surface);
+  border: 1px solid var(--ui-border-strong);
+  border-radius: var(--ui-radius-lg);
+  width: 480px;
+  max-width: 90vw;
+  box-shadow: 0 16px 48px var(--ui-shadow);
+  display: flex;
+  flex-direction: column;
+  padding: var(--ui-spacing-lg);
+  gap: var(--ui-spacing-md);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-sm);
+  padding: var(--ui-spacing-md) var(--ui-spacing-lg);
+  border-bottom: 1px solid var(--ui-border);
+}
+
+.modal-title {
+  font-size: var(--ui-font-size-md);
+  font-weight: 600;
+  color: var(--ui-text-primary);
+  flex: 1;
+}
+
+.modal-current {
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-tertiary);
+}
+
+.modal-close {
+  color: var(--ui-text-tertiary);
+  font-size: 18px;
+  padding: 0 4px;
+  border-radius: var(--ui-radius-sm);
+  transition: color var(--ui-transition);
+}
+
+.modal-close:hover { color: var(--ui-text-primary); }
+
+.modal-tabs {
+  display: flex;
+  gap: 2px;
+  padding: var(--ui-spacing-sm) var(--ui-spacing-lg) 0;
+  border-bottom: 1px solid var(--ui-border);
+}
+
+.modal-tab {
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-tertiary);
+  padding: 6px var(--ui-spacing-md);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--ui-transition), border-color var(--ui-transition);
+}
+
+.modal-tab:hover { color: var(--ui-text-secondary); }
+.modal-tab.is-active {
+  color: var(--ui-text-primary);
+  border-bottom-color: var(--ui-accent);
+}
+
+.modal-body {
+  padding: var(--ui-spacing-lg);
+}
+
+.modal-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-spacing-md);
+}
+
+.modal-desc {
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-secondary);
+  line-height: 1.6;
+}
+
+.modal-desc code {
+  background: var(--ui-bg-elevated);
+  padding: 1px 5px;
+  border-radius: var(--ui-radius-sm);
+  font-family: var(--ui-font-mono);
+  font-size: 12px;
+  color: var(--ui-accent);
+}
+
+.modal-input {
+  background: var(--ui-bg-elevated);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-md);
+  padding: 8px var(--ui-spacing-sm);
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-primary);
+  width: 100%;
+  transition: border-color var(--ui-transition);
+}
+
+.modal-input:focus { border-color: var(--ui-border-strong); outline: none; }
+
+.modal-textarea {
+  background: var(--ui-bg-elevated);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-md);
+  padding: var(--ui-spacing-sm);
+  font-size: 12px;
+  font-family: var(--ui-font-mono);
+  color: var(--ui-text-primary);
+  width: 100%;
+  resize: vertical;
+  transition: border-color var(--ui-transition);
+}
+
+.modal-textarea:focus { border-color: var(--ui-border-strong); outline: none; }
+
+.modal-btn-primary {
+  background: var(--ui-accent);
+  color: #1a1a1a;
+  font-size: var(--ui-font-size-sm);
+  font-weight: 600;
+  padding: 8px var(--ui-spacing-md);
+  border-radius: var(--ui-radius-md);
+  transition: background var(--ui-transition);
+  align-self: flex-start;
+}
+
+.modal-btn-primary:hover { background: var(--ui-accent-hover); }
+.modal-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.modal-footer {
+  padding: var(--ui-spacing-md) var(--ui-spacing-lg);
+  border-top: 1px solid var(--ui-border);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-btn-ghost {
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-tertiary);
+  padding: 6px var(--ui-spacing-sm);
+  border-radius: var(--ui-radius-sm);
+  transition: color var(--ui-transition);
+}
+
+.modal-btn-ghost:hover { color: var(--ui-danger); }
+/* Math Modal */
+.math-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  z-index: 9999;
+}
+
+.math-modal {
+  background: var(--ui-bg-elevated);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  width: 420px;
+  max-width: 90vw;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.math-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ui-border);
+}
+
+.math-modal-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ui-text-primary);
+}
+
+.math-modal-close {
+  background: none;
+  border: none;
+  color: var(--ui-text-muted);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 6px;
+}
+
+.math-modal-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.math-preview-label,
+.math-input-label,
+.math-snippets-label {
+  font-size: 11px;
+  color: var(--ui-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.math-preview {
+  min-height: 48px;
+  padding: 10px 12px;
+  background: var(--ui-bg-base);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.math-preview-empty {
+  font-size: 12px;
+  color: var(--ui-text-muted);
+  font-style: italic;
+}
+
+.math-input {
+  width: 100%;
+  padding: 8px 10px;
+  background: var(--ui-bg-base);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  color: var(--ui-text-primary);
+  font-family: monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  resize: vertical;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}
+
+.math-input:focus {
+  outline: none;
+  border-color: var(--ui-text-muted);
+}
+
+.math-snippets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.math-snippet-btn {
+  padding: 3px 8px;
+  font-size: 11px;
+  background: var(--ui-bg-base);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  color: var(--ui-text-secondary);
+  cursor: pointer;
+}
+
+.math-snippet-btn:hover {
+  background: var(--ui-bg-hover);
+  color: var(--ui-text-primary);
+}
+
+.math-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--ui-border);
+}
+
+.math-btn-cancel {
+  padding: 5px 14px;
+  font-size: 12px;
+  background: none;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  color: var(--ui-text-secondary);
+  cursor: pointer;
+}
+
+.math-btn-cancel:hover {
+  background: var(--ui-bg-hover);
+}
+
+.math-btn-confirm {
+  padding: 5px 14px;
+  font-size: 12px;
+  background: var(--ui-text-primary);
+  border: 1px solid transparent;
+  border-radius: var(--ui-radius-sm);
+  color: var(--ui-bg-base);
+  cursor: pointer;
+}
+
+.math-btn-confirm:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.math-btn-confirm:not(:disabled):hover {
+  opacity: 0.85;
+}

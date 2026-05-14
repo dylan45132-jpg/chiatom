@@ -188,3 +188,23 @@ export async function loadHandout(): Promise<{ doc: Document; tempPath: string }
 
   return null
 }
+
+// ── 輕量讀取：只取 document.json，不處理圖片 ─────────────
+
+export async function readHandoutMeta(path: string): Promise<{ id: string; title: string; pages: { id: string; title: string }[] } | null> {
+  try {
+    const bytes = await readFile(path)
+    const zip = await JSZip.loadAsync(bytes)
+    const docEntry = zip.file('document.json')
+    if (!docEntry) return null
+    const docText = await docEntry.async('string')
+    const doc = JSON.parse(docText) as { id: string; title: string; pages: { id: string; title: string }[] }
+    return {
+      id: doc.id,
+      title: doc.title,
+      pages: doc.pages.map(p => ({ id: p.id, title: p.title })),
+    }
+  } catch {
+    return null
+  }
+}

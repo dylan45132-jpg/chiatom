@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useLangStore } from '../store/langStore'
+import { useNavigationStore } from '../store/navigationStore'
 import { open } from '@tauri-apps/plugin-dialog'
 import { openUrl } from '@tauri-apps/plugin-opener'
 import { saveSettings } from '../store/settingsStore'
@@ -7,15 +8,15 @@ import { getAllPlugins } from '../plugins/registry'
 import { usePluginStore } from '../store/pluginStore'
 
 interface SettingsPageProps {
-  onBack: () => void
   workspacePath: string | null
   onWorkspaceChange: (path: string) => void
   onThemeChange: (mode: 'light' | 'dark') => void
 }
 
-export default function SettingsPage({ onBack, workspacePath, onWorkspaceChange, onThemeChange }: SettingsPageProps) {
+export default function SettingsPage({ workspacePath, onWorkspaceChange, onThemeChange }: SettingsPageProps) {
   const { t, lang, setLang } = useLangStore()
   const { enabledPlugins, togglePlugin } = usePluginStore()
+  const { goBack } = useNavigationStore()
   const allPlugins = getAllPlugins()
 
   const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>(
@@ -49,7 +50,7 @@ export default function SettingsPage({ onBack, workspacePath, onWorkspaceChange,
   return (
     <div className='settings-shell'>
       <div className='settings-header'>
-        <button className='toolbar-btn icon-btn' onClick={onBack}>←</button>
+        <button className='toolbar-btn icon-btn' onClick={goBack}>←</button>
         <span className='settings-title'>{t.settingsTitle}</span>
       </div>
 
@@ -111,8 +112,8 @@ export default function SettingsPage({ onBack, workspacePath, onWorkspaceChange,
           <div key={plugin.id} className='settings-section'>
             <div className='settings-row'>
               <div className='settings-row-label'>
-                <span className='settings-label'>{plugin.name}</span>
-                <span className='settings-desc'>{plugin.description}</span>
+                <span className='settings-label'>{plugin.name()}</span>
+                <span className='settings-desc'>{plugin.description()}</span>
               </div>
               <button
                 className={enabledPlugins.includes(plugin.id) ? 'toolbar-btn active' : 'toolbar-btn'}

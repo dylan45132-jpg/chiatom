@@ -159,6 +159,35 @@ type StringsShape = {
   renamePage: string
   renamePagePlaceholder: string
   filterByTag: string
+
+  // Zotero Project
+  zoteroProjects: string
+  zoteroNewProject: string
+  zoteroProjectName: string
+  zoteroAddToProject: string
+  zoteroLinkedProjects: string
+  zoteroNoLinkedProjects: string
+  zoteroSelectProject: string
+  zoteroSelectRole: string
+  zoteroNoteOptional: string
+  zoteroSelectNote: string
+  zoteroSelectNoteHint: string
+  zoteroRoleTheory: string
+  zoteroRoleMethod: string
+  zoteroRoleData: string
+  zoteroRoleResult: string
+  zoteroRoleBackground: string
+  zoteroRoleCritique: string
+  zoteroCustomRole: string
+  zoteroAddCustomRole: string
+  zoteroStructureView: string
+  zoteroLiteratureView: string
+  zoteroNoLinks: string
+  zoteroMissingLink: string
+  zoteroDeleteProject: string
+  zoteroRenameProject: string
+  zoteroPluginName: string
+  zoteroPluginDesc: string
 }
 
 export const strings: Record<Lang, StringsShape> = {
@@ -359,6 +388,37 @@ export const strings: Record<Lang, StringsShape> = {
     renamePage: 'Rename page',
     renamePagePlaceholder: 'Page name',
     filterByTag: 'Filter',
+
+    // Zotero Project
+    zoteroProjects: 'Projects',
+    zoteroNewProject: 'New Project',
+    zoteroProjectName: 'Project name',
+    zoteroAddToProject: 'Add to Project',
+    zoteroLinkedProjects: 'Linked projects',
+    zoteroNoLinkedProjects: 'Not linked to any project',
+    zoteroSelectProject: 'Select project',
+    zoteroSelectRole: 'Select role',
+    zoteroNoteOptional: 'Note (optional)',
+    zoteroSelectNote: 'Select project note (optional)',
+    zoteroSelectNoteHint: 'The main writing document for this project. Its pages will be used as the structure backbone.',
+    zoteroRoleTheory: 'Theory / Framework',
+    zoteroRoleMethod: 'Method / Model',
+    zoteroRoleData: 'Data / Parameters',
+    zoteroRoleResult: 'Result Comparison',
+    zoteroRoleBackground: 'Background / Review',
+    zoteroRoleCritique: 'Critique / Limitations',
+    zoteroCustomRole: 'Custom role',
+    zoteroAddCustomRole: 'Add custom role',
+    zoteroStructureView: 'Structure',
+    zoteroLiteratureView: 'Literature',
+    zoteroNoLinks: 'No pages linked yet',
+    zoteroMissingLink: 'No literature linked',
+    zoteroDeleteProject: 'Delete project',
+    zoteroRenameProject: 'Rename project',
+
+    // Plugin
+    zoteroPluginName: 'Zotero · Project Management',
+    zoteroPluginDesc: 'Link Zotero references and manage research projects',
   },
 
   zh: {
@@ -558,5 +618,36 @@ export const strings: Record<Lang, StringsShape> = {
     renamePage: '重新命名頁面',
     renamePagePlaceholder: '頁面名稱',
     filterByTag: '篩選',
+
+    // Zotero Project
+    zoteroProjects: '專案',
+    zoteroNewProject: '新增專案',
+    zoteroProjectName: '專案名稱',
+    zoteroAddToProject: '加入專案',
+    zoteroLinkedProjects: '已連結的專案',
+    zoteroNoLinkedProjects: '尚未連結任何專案',
+    zoteroSelectProject: '選擇專案',
+    zoteroSelectRole: '選擇角色',
+    zoteroNoteOptional: '備注（選填）',
+    zoteroSelectNote: '選擇專案筆記（選填）',
+    zoteroSelectNoteHint: '此專案的主要寫作文件，其頁面將作為結構視圖的骨架。',
+    zoteroRoleTheory: '理論依據／概念框架',
+    zoteroRoleMethod: '研究方法／模型',
+    zoteroRoleData: '數據／參數來源',
+    zoteroRoleResult: '結果比較／驗證',
+    zoteroRoleBackground: '背景與文獻回顧',
+    zoteroRoleCritique: '批判／侷限性',
+    zoteroCustomRole: '自定義角色',
+    zoteroAddCustomRole: '新增自定義角色',
+    zoteroStructureView: '結構視圖',
+    zoteroLiteratureView: '文獻視圖',
+    zoteroNoLinks: '尚無連結頁面',
+    zoteroMissingLink: '尚無文獻連結',
+    zoteroDeleteProject: '刪除專案',
+    zoteroRenameProject: '重新命名專案',
+
+    // Plugin
+    zoteroPluginName: 'Zotero · 專案管理',
+    zoteroPluginDesc: '連結 Zotero 文獻，管理研究專案與閱讀視角',
   },
 }

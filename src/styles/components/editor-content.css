@@ -1,0 +1,186 @@
+/* ── Tiptap 編輯器內樣式 ────────────── */
+
+.page .ProseMirror {
+  outline: none;
+  min-height: 100%;
+}
+
+.page .ProseMirror p { margin-bottom: 0.75em; line-height: 1.7; }
+.page .ProseMirror h1 { font-size: 1.8em; font-weight: 700; margin-bottom: 0.5em; }
+.page .ProseMirror h2 { font-size: 1.4em; font-weight: 600; margin-bottom: 0.4em; }
+.page .ProseMirror h3 { font-size: 1.15em; font-weight: 600; margin-bottom: 0.35em; }
+.page .ProseMirror ul, .page .ProseMirror ol { padding-left: 1.5em; margin-bottom: 0.75em; }
+.page .ProseMirror li { margin-bottom: 0.25em; line-height: 1.6; }
+.page .ProseMirror blockquote {
+  border-left: 3px solid #ccc;
+  padding-left: 1em;
+  color: #555;
+  margin: 0.75em 0;
+}
+.page .ProseMirror hr { border: none; border-top: 1px solid #e0e0e0; margin: 1em 0; }
+
+/* Placeholder */
+.page .ProseMirror p.is-empty::before,
+.page .ProseMirror h1.is-empty::before,
+.page .ProseMirror h2.is-empty::before,
+.page .ProseMirror h3.is-empty::before {
+  content: attr(data-placeholder);
+  color: #bbb;
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
+/* ── 表格 ───────────────────────────────── */
+
+:where(.page .ProseMirror) table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 0.75em;
+}
+
+:where(.page .ProseMirror) th,
+:where(.page .ProseMirror) td {
+  border: 1px solid #d1d5db;
+  padding: 8px 10px;
+  vertical-align: top;
+  min-width: 80px;
+  position: relative;
+}
+
+:where(.page .ProseMirror) th {
+  text-align: left;
+}
+
+:where(.page .ProseMirror) .tableWrapper {
+  overflow-x: auto;
+  margin-bottom: 0.75em;
+}
+
+:where(.page .ProseMirror) table p {
+  margin: 0;
+}
+
+/* Column resize handle */
+.column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--ui-accent);
+  opacity: 0;
+  cursor: col-resize;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+.tableWrapper:hover .column-resize-handle,
+.column-resize-handle:hover {
+  opacity: 1;
+}
+
+:where(.page .ProseMirror) th p {
+  color: inherit !important;
+}
+
+/* 選取中的 cell */
+.page .ProseMirror .selectedCell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(168, 197, 160, 0.2);
+  pointer-events: none;
+}
+/* ── Image Placeholder ──────────────────── */
+
+.image-placeholder-node {
+  display: block;
+  margin: 0.75em 0;
+}
+
+.image-placeholder-node.is-selected .image-placeholder-empty,
+.image-placeholder-node.is-selected img {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: 2px;
+}
+
+.image-placeholder-empty {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-sm);
+  width: 100%;
+  padding: var(--ui-spacing-lg);
+  border: 2px dashed #d0d0d0;
+  border-radius: var(--ui-radius-md);
+  background: #fafafa;
+  color: #999;
+  font-size: var(--ui-font-size-md);
+  cursor: pointer;
+  transition: border-color 150ms, background 150ms;
+  justify-content: center;
+}
+
+.image-placeholder-empty:hover {
+  border-color: #aaa;
+  background: #f5f5f5;
+}
+
+.image-placeholder-icon { font-size: 20px; }
+
+.image-placeholder-loaded {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.image-placeholder-loaded img {
+  max-width: 100%;
+  display: block;
+  border-radius: var(--ui-radius-sm);
+}
+
+.image-placeholder-replace {
+  position: absolute;
+  top: var(--ui-spacing-sm);
+  right: var(--ui-spacing-sm);
+  font-size: var(--ui-font-size-sm);
+  color: white;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: var(--ui-radius-sm);
+  padding: 3px var(--ui-spacing-sm);
+  opacity: 0;
+  transition: opacity var(--ui-transition);
+  cursor: pointer;
+}
+
+.image-placeholder-loaded:hover .image-placeholder-replace { opacity: 1; }
+/* ── Image Resize Handle ───────────────── */
+
+.image-placeholder-loaded {
+  position: relative;
+  display: inline-block;
+}
+
+.image-resize-handle {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 12px;
+  height: 12px;
+  background: var(--ui-accent);
+  border-radius: 2px;
+  cursor: se-resize;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.image-placeholder-node:hover .image-resize-handle,
+.image-placeholder-node.is-selected .image-resize-handle {
+  opacity: 1;
+}
+
+.image-placeholder-node.is-selected .image-placeholder-loaded {
+  outline: 1px solid var(--ui-accent);
+  border-radius: 2px;
+}
