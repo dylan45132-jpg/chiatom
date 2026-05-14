@@ -69,7 +69,7 @@ Chiatom is for people who have realized: sometimes, drawing a box around yoursel
 
 Download the latest installer from [GitHub Releases](https://github.com/dylan45132-jpg/chiatom/releases):
 
-- `chiatom_0.2.1_x64-setup.exe` — Windows 10 / 11 (64-bit)
+- `chiatom_0.3.1_x64-setup.exe` — Windows 10 / 11 (64-bit)
 
 ---
 
@@ -196,7 +196,7 @@ Chiatom 是獻給那些意識到這件事的人：有時候，給自己畫一個
 
 從 [GitHub Releases](https://github.com/dylan45132-jpg/chiatom/releases) 下載最新安裝檔：
 
-- `chiatom_0.2.1_x64-setup.exe` — Windows 10 / 11（64 位元）
+- `chiatom_0.3.1_x64-setup.exe` — Windows 10 / 11（64 位元）
 
 ---
 
