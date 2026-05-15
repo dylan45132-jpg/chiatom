@@ -16,7 +16,7 @@ interface SettingsPageProps {
 export default function SettingsPage({ workspacePath, onWorkspaceChange, onThemeChange }: SettingsPageProps) {
   const { t, lang, setLang } = useLangStore()
   const { enabledPlugins, togglePlugin } = usePluginStore()
-  const { goBack } = useNavigationStore()
+  const { goBack, navigate } = useNavigationStore()
   const allPlugins = getAllPlugins()
 
   const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>(
@@ -133,6 +133,13 @@ export default function SettingsPage({ workspacePath, onWorkspaceChange, onTheme
           <div className='settings-row'>
             <span className='settings-label'>{t.themeGalleryLabel}</span>
             <button className='toolbar-btn' onClick={handleOpenThemeGallery}>↗</button>
+          </div>
+        </div>
+
+        <div className='settings-section'>
+          <div className='settings-row'>
+            <span className='settings-label'>關於 Chiatom</span>
+            <button className='toolbar-btn' onClick={() => navigate('about')}>→</button>
           </div>
         </div>
 

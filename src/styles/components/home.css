@@ -343,3 +343,39 @@
   gap: var(--ui-spacing-sm);
   margin-top: var(--ui-spacing-md);
 }
+
+/* ── About Page ─────────────────────────── */
+
+.about-update-notice {
+  font-size: 12px;
+  color: var(--ui-text-secondary);
+  padding: 6px 0 2px;
+}
+
+.about-releases {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.about-release-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.about-release-version {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ui-text);
+}
+
+.about-release-body {
+  font-size: 12px;
+  color: var(--ui-text-secondary);
+  white-space: pre-wrap;
+  font-family: inherit;
+  margin: 0;
+  line-height: 1.6;
+}

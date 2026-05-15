@@ -2,7 +2,7 @@ import { readDir, mkdir, exists, rename, remove } from '@tauri-apps/plugin-fs'
 import { documentDir, join, basename, dirname } from '@tauri-apps/api/path'
 
 import { readZoteroIndex, updateZoteroIndex } from '../plugins/zotero/zoteroIndex'
-import { readProjects, writeProjects } from '../plugins/zotero/zoteroProjects'
+import { readProjects, writeProjects } from '../store/projects'
 import { getSettings } from '../store/settingsStore'
 
 export interface WorkspaceFile {

@@ -19,6 +19,7 @@
     "core:window:allow-close",
     "core:window:allow-destroy",
     "store:default",
+    "updater:default",
     {
       "identifier": "fs:scope",
       "allow": [

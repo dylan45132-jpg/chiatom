@@ -17,9 +17,11 @@ import { confirm } from '@tauri-apps/plugin-dialog'
 import { usePluginStore } from './store/pluginStore'
 import { checkForUpdates, UpdateInfo } from './utils/updater'
 import UpdateNotice from './components/UpdateNotice'
-import ZoteroProjectsPage from './plugins/zotero/ZoteroProjectsPage'
-import { useZoteroProjectStore } from './plugins/zotero/zoteroProjectStore'
+import ProjectsPage from './components/ProjectsPage'
+import { useProjectStore } from './store/projectStore'
 import { useNavigationStore } from './store/navigationStore'
+import { clearPageReferenceCache } from './editor/extensions/PageReferenceSuggestion'
+import AboutPage from './components/AboutPage'
 
 export default function App() {
   const { document, activePageId, setActivePage, isDirty, savePath } = useDocumentStore()
@@ -63,10 +65,8 @@ export default function App() {
         setSettings(newSettings)
       }
 
-      // 載入 Zotero 專案資料
-      if (usePluginStore.getState().isEnabled('zotero')) {
-        await useZoteroProjectStore.getState().loadProjects()
-      }
+      // 載入專案資料（主程式核心功能，永遠載入）
+      await useProjectStore.getState().loadProjects()
       
       checkForUpdates().then(info => {
         if (info) setUpdateInfo(info)
@@ -92,6 +92,7 @@ export default function App() {
         if (returnedPath) {
           setSavePath(returnedPath)
           setDirty(false)
+          clearPageReferenceCache()
         }
       } catch (e) {
         console.error('Autosave failed:', e)
@@ -169,11 +170,9 @@ export default function App() {
           />
         )
       case 'zotero-projects':
-        return (
-          <ZoteroProjectsPage
-            workspacePath={workspacePath}
-          />
-        )
+        return <ProjectsPage />
+      case 'about':
+        return <AboutPage />
       default:
         return null
     }

@@ -9,6 +9,7 @@ import { join } from '@tauri-apps/api/path'
 import { FileText, Folder, FolderOpen } from 'lucide-react'
 import { readZoteroIndex, ZoteroIndex } from '../plugins/zotero/zoteroIndex'
 import { usePluginStore } from '../store/pluginStore'
+import AddToProjectFromFilePanel from './AddToProjectFromFilePanel'
 
 interface HomePageProps {
   workspacePath: string | null
@@ -34,6 +35,7 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings, 
     path: string
     name: string
   } | null>(null)
+  const [projectPanel, setProjectPanel] = useState<{ x: number; y: number; docId: string } | null>(null)
   const [showRename, setShowRename] = useState(false)
   const [renameValue, setRenameValue] = useState('')
   const [renamePath, setRenamePath] = useState('')
@@ -42,9 +44,6 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings, 
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set())
   const [zoteroIndex, setZoteroIndex] = useState<ZoteroIndex>({})
   const { enabledPlugins } = usePluginStore()
-
-
-
 
   const toggleFolder = (folderPath: string) => {
     setExpandedFolders(prev => {
@@ -249,9 +248,7 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings, 
       <div className='home-header'>
         <span className='home-logo'>Chiatom</span>
         <div className='home-header-actions'>
-          {enabledPlugins.includes('zotero') && (
-            <button className='toolbar-btn' onClick={onOpenProjects}>{t.zoteroProjects}</button>
-          )}
+          <button className='toolbar-btn' onClick={onOpenProjects}>{t.zoteroProjects}</button>
           <button className='toolbar-btn' onClick={handleOpenDialog}>{t.openFile}</button>
           <button className='toolbar-btn' onClick={() => setShowNewFolder(true)}>{t.newFolder}</button>
           <button className='toolbar-btn primary' onClick={() => setShowNewDoc(true)}>{t.newDocument}</button>
@@ -280,8 +277,6 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings, 
         {loading && <div className='home-loading'>...</div>}
 
         {!loading && !hasContent && renderEmpty()}
-
-
 
         {!loading && hasContent && (
           <div
@@ -387,9 +382,17 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings, 
             {t.rename}
           </div>
           {contextMenu.type === 'file' && (
-            <div className='home-context-item danger' onClick={() => handleDeleteFile(contextMenu.path)}>
-              {t.deleteFile}
-            </div>
+            <>
+              <div className='home-context-item' onClick={() => {
+                setProjectPanel({ x: contextMenu.x, y: contextMenu.y, docId: contextMenu.path })
+                closeContextMenu()
+              }}>
+                {t.zoteroAddToProject}
+              </div>
+              <div className='home-context-item danger' onClick={() => handleDeleteFile(contextMenu.path)}>
+                {t.deleteFile}
+              </div>
+            </>
           )}
           {contextMenu.type === 'folder' && (
             <div className='home-context-item danger' onClick={() => handleDeleteFolder(contextMenu.path, workspace?.folders.find(f => f.path === contextMenu.path)?.files.length ? true : false)}>
@@ -416,6 +419,15 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings, 
             </div>
           </div>
         </div>
+      )}
+
+      {projectPanel && (
+        <AddToProjectFromFilePanel
+          docId={projectPanel.docId}
+          anchorX={projectPanel.x}
+          anchorY={projectPanel.y}
+          onClose={() => setProjectPanel(null)}
+        />
       )}
     </div>
   )

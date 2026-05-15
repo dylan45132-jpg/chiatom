@@ -104,3 +104,21 @@
 .katex {
   font-size: 1.1em;
 }
+
+/* ── Sidebar Project Dot ────────────────── */
+
+.sidebar-project-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ui-accent);
+  margin-left: 5px;
+  flex-shrink: 0;
+  vertical-align: middle;
+  opacity: 0.7;
+}
+
+.sidebar-page-item:hover .sidebar-project-dot {
+  opacity: 1;
+}

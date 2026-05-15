@@ -14,21 +14,32 @@ export const ImagePlaceholder = Node.create({
       src:      { default: null },
       alt:      { default: '' },
       filePath: { default: '' },
-      width: { default: 100 },
+      width:    { default: 100 },
     }
   },
 
   parseHTML() {
-    return [{ tag: 'image-placeholder' }]
+    return [
+      { tag: 'image-placeholder' },
+      { tag: 'img[data-image-placeholder]' },
+    ]
   },
 
   renderHTML({ HTMLAttributes, node }) {
-    // 匯出時：有圖片就輸出 <img>，否則輸出佔位
+    // 匯出和 clipboard 序列化：輸出帶識別 attribute 的 img
     if (HTMLAttributes.src) {
-      const { attrs } = node
-      return ['img', mergeAttributes({ alt: HTMLAttributes.alt ?? '' }, { src: HTMLAttributes.src, style: `width: ${attrs.width}%` })]
+      return ['img', mergeAttributes(
+        { alt: HTMLAttributes.alt ?? '' },
+        {
+          'data-image-placeholder': '',
+          'data-file-path': HTMLAttributes.filePath ?? '',
+          'data-width': HTMLAttributes.width ?? 100,
+          src: HTMLAttributes.src,
+          style: `width: ${node.attrs.width}%`,
+        }
+      )]
     }
-    return ['div', mergeAttributes(HTMLAttributes, { class: 'image-placeholder-export' }), '[圖片]']
+    return ['image-placeholder', mergeAttributes(HTMLAttributes, { class: 'image-placeholder-export' }), '[圖片]']
   },
 
   addCommands() {

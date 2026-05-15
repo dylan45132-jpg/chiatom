@@ -1,12 +1,10 @@
-name: Release
-
 on:
   push:
     tags:
       - 'v*'
 
 jobs:
-  release:
+  release-windows:
     runs-on: windows-latest
     permissions:
       contents: write
@@ -35,10 +33,7 @@ jobs:
         with:
           workspaces: './src-tauri -> target'
 
-      - name: Install Python dependencies
-        run: pip install python-docx lxml
-
-      - name: Build Tauri app
+      - name: Build Tauri app (Windows)
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -47,8 +42,50 @@ jobs:
         with:
           tagName: ${{ github.ref_name }}
           releaseName: Chiatom ${{ github.ref_name }}
-          releaseBody: |
-            See the assets below to download this version of Chiatom.
+          releaseBody: ''
           releaseDraft: false
           prerelease: false
           includeUpdaterJson: true
+
+  release-macos:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    needs: release-windows
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install frontend dependencies
+        run: pnpm install
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+
+      - name: Build Tauri app (macOS, no sign)
+        run: pnpm tauri build --no-sign
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload DMG to existing release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: src-tauri/target/release/bundle/dmg/*.dmg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

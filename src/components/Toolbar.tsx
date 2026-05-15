@@ -1,3 +1,4 @@
+import { useProjectStore } from '../store/projectStore'
 import { useState } from 'react'
 import { useDocumentStore } from '../store/documentStore'
 import { useNavigationStore } from '../store/navigationStore'
@@ -21,9 +22,15 @@ export default function Toolbar({ onGoHome, onGoSettings }: ToolbarProps) {
   const { document, setDocumentTitle, savePath, setSavePath, isDirty, setDirty } = useDocumentStore()
   const { t } = useLangStore()
   const { goBack, canGoBack } = useNavigationStore()
-  const { enabledPlugins } = usePluginStore()
+    const { enabledPlugins } = usePluginStore()
+  const { projects } = useProjectStore()
+  const { navigate } = useNavigationStore()
   const [saving, setSaving] = useState(false)
-  const [showTheme, setShowTheme] = useState(false)
+    const [showTheme, setShowTheme] = useState(false)
+
+  const linkedPageCount = projects.reduce((count, project) => {
+    return count + project.pageLinks.filter(l => l.docId === (savePath ?? document.id)).length
+  }, 0)
 
   const handleSave = async () => {
     if (saving || (!isDirty && savePath)) return
@@ -97,7 +104,12 @@ export default function Toolbar({ onGoHome, onGoSettings }: ToolbarProps) {
             placeholder={t.untitledDocument}
             spellCheck={false}
           />
-          {enabledPlugins.includes('zotero') && <ZoteroToolbar />}
+                    {enabledPlugins.includes('zotero') && <ZoteroToolbar />}
+          {linkedPageCount > 0 && (
+            <button className='toolbar-btn quiet' onClick={() => navigate('zotero-projects')}>
+              ◈ {linkedPageCount}
+            </button>
+          )}
         </div>
         <div className="toolbar-right">
           {renderSaveStatus()}

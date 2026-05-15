@@ -184,3 +184,22 @@
   outline: 1px solid var(--ui-accent);
   border-radius: 2px;
 }
+
+/* ── Page Reference ─────────────────────── */
+
+.page-reference {
+  display: inline;
+  padding: 1px 5px;
+  border-radius: var(--ui-radius-sm);
+  background: var(--ui-accent-subtle, color-mix(in srgb, var(--ui-accent) 12%, transparent));
+  color: var(--ui-accent);
+  font-size: 0.9em;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background 0.1s;
+}
+
+.page-reference:hover {
+  background: var(--ui-accent-subtle-hover, color-mix(in srgb, var(--ui-accent) 20%, transparent));
+}

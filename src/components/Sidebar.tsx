@@ -1,3 +1,4 @@
+import { useProjectStore } from '../store/projectStore'
 import { useEffect, useRef, useState } from 'react'
 import { useDocumentStore } from '../store/documentStore'
 import {
@@ -23,6 +24,7 @@ interface PageItemProps {
   title: string
   isActive: boolean
   isRenaming: boolean
+  projectNames?: string[]
   onClick: () => void
   onDelete: () => void
   onContextMenu: (e: React.MouseEvent) => void
@@ -31,7 +33,7 @@ interface PageItemProps {
 }
 
 function PageItem({
-  id, title, isActive, isRenaming,
+  id, title, isActive, isRenaming, projectNames,
   onClick, onDelete, onContextMenu,
   onRenameSubmit, onRenameCancel,
 }: PageItemProps) {
@@ -96,7 +98,13 @@ function PageItem({
           >
             ⠿
           </span>
-          <span className='sidebar-page-title'>{title}</span>
+                    <span className='sidebar-page-title'>{title}</span>
+          {projectNames && projectNames.length > 0 && (
+            <span
+              className='sidebar-project-dot'
+              title={projectNames.join(', ')}
+            />
+          )}
           <button
             className='sidebar-delete-btn'
             onClick={e => { e.stopPropagation(); onDelete() }}
@@ -111,6 +119,7 @@ function PageItem({
 }
 
 export default function Sidebar() {
+  const { getLinksForPage } = useProjectStore()
   const { t } = useLangStore()
   const {
     document,
@@ -211,7 +220,9 @@ export default function Sidebar() {
                       onDelete={() => deletePage(page.id)}
                       onContextMenu={e => openMenu(e, page.id)}
                       onRenameSubmit={handleRenameSubmit}
-                      onRenameCancel={handleRenameCancel}
+                                            onRenameCancel={handleRenameCancel}
+                      projectNames={getLinksForPage(savePath ?? document.id, page.id).map(l => l.project.name)}
+
                     />
                   ))}
                 </SortableContext>

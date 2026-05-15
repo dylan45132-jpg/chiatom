@@ -10,6 +10,8 @@ import { TableHeader } from '@tiptap/extension-table/header'
 import { TableCell } from '@tiptap/extension-table/cell'
 import BubbleToolbar from './BubbleToolbar'
 import { SlashCommand } from '../editor/extensions/SlashCommand'
+import { PageReference } from '../editor/extensions/PageReference'
+import { PageReferenceSuggestion } from '../editor/extensions/PageReferenceSuggestion'
 import { ImagePlaceholder } from '../editor/extensions/ImagePlaceholder'
 import { CompoundBlock } from '../editor/extensions/CompoundBlock'
 import { Mathematics } from '@tiptap/extension-mathematics'
@@ -63,6 +65,8 @@ export default function PageEditor({ page }: PageEditorProps) {
         alignments: ['left', 'center', 'right', 'justify'],
       }),
       SlashCommand,
+      PageReference,
+      PageReferenceSuggestion,
       Table.configure({ resizable: true }),
       ImagePlaceholder,
       CompoundBlock,

@@ -1,68 +1,93 @@
 import { useState, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { getZoteroMeta, setZoteroMeta, searchZotero, ZoteroMeta } from './zoteroStore'
 import { useDocumentStore } from '../../store/documentStore'
 
 export default function ZoteroToolbar() {
-  const document = useDocumentStore(state => state.document)
+  const doc = useDocumentStore(state => state.document)
   const [meta, setMeta] = useState<ZoteroMeta | null>(null)
-  const [searching, setSearching] = useState(false)
+  const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<ZoteroMeta[]>([])
+  const [loading, setLoading] = useState(false)
   const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     setMeta(getZoteroMeta())
-  }, [document?.pluginData])
+  }, [doc?.pluginData])
+
+  useEffect(() => {
+    if (open) {
+      setTimeout(() => inputRef.current?.focus(), 50)
+    } else {
+      setQuery('')
+      setResults([])
+      setLoading(false)
+    }
+  }, [open])
 
   function handleSearch(q: string) {
     setQuery(q)
-    if (q.length < 2) { setResults([]); return }
+    if (q.length < 1) {
+      setResults([])
+      setLoading(false)
+      return
+    }
     if (searchTimer.current) clearTimeout(searchTimer.current)
+    setLoading(true)
     searchTimer.current = setTimeout(async () => {
-      const found = await searchZotero(q)
-      setResults(found)
+      try {
+        const found = await searchZotero(q)
+        setResults(found)
+        setLoading(false)
+      } catch {
+        setResults([])
+        setLoading(false)
+      }
     }, 300)
   }
 
   function handleSelectPaper(item: ZoteroMeta) {
-    setZoteroMeta({ citekey: item.citekey, paperTitle: item.paperTitle })
-    setSearching(false)
-    setQuery('')
-    setResults([])
+    setZoteroMeta({
+      citekey: item.citekey,
+      paperTitle: item.paperTitle,
+      firstAuthor: item.firstAuthor,
+      year: item.year,
+    })
+    setOpen(false)
   }
 
-  if (!document) return null
+  if (!doc) return null
 
   return (
-    <div className='zotero-toolbar'>
-      <div className='zotero-paper'>
-        {meta?.citekey ? (
-          <button
-            className='zotero-paper-btn linked'
-            onClick={() => setSearching(true)}
-            title={meta.paperTitle}
-          >
-            📎 {meta.citekey}
-          </button>
-        ) : (
-          <button
-            className='zotero-paper-btn'
-            onClick={() => setSearching(true)}
-          >
-            📎 連結文獻
-          </button>
-        )}
-        {searching && (
-          <div className='zotero-search-popup'>
+    <>
+      <button
+        className='zotero-paper-btn'
+        onClick={() => setOpen(true)}
+        title={meta ? `${meta.paperTitle}` : undefined}
+      >
+        📎 {meta
+          ? [meta.firstAuthor, meta.year].filter(Boolean).join(', ') || meta.paperTitle
+          : '連結文獻'}
+      </button>
+
+      {open && createPortal(
+        <div className='modal-overlay' onClick={() => setOpen(false)}>
+          <div className='modal' style={{ width: 420 }} onClick={e => e.stopPropagation()}>
+            <p className='modal-title'>連結 Zotero 文獻</p>
             <input
-              autoFocus
-              className='zotero-search-input'
+              ref={inputRef}
+              className='modal-input'
               placeholder='搜尋 citekey 或標題...'
               value={query}
               onChange={e => handleSearch(e.target.value)}
-              onKeyDown={e => e.key === 'Escape' && setSearching(false)}
+              onKeyDown={e => { if (e.key === 'Escape') setOpen(false) }}
             />
-            {results.length > 0 && (
+            {loading && (
+              <div className='zotero-search-empty'>搜尋中...</div>
+            )}
+            {!loading && results.length > 0 && (
               <div className='zotero-search-results'>
                 {results.map(item => (
                   <div
@@ -70,18 +95,24 @@ export default function ZoteroToolbar() {
                     className='zotero-search-item'
                     onClick={() => handleSelectPaper(item)}
                   >
-                    <span className='zotero-search-citekey'>{item.citekey}</span>
                     <span className='zotero-search-title'>{item.paperTitle}</span>
+                    <span className='zotero-search-meta'>
+                      {[item.firstAuthor, item.year, item.venue].filter(Boolean).join(' · ')}
+                    </span>
                   </div>
                 ))}
               </div>
             )}
-            {query.length >= 2 && results.length === 0 && (
+            {!loading && query.length >= 1 && results.length === 0 && (
               <div className='zotero-search-empty'>找不到結果，請確認 Zotero 已開啟</div>
             )}
+            <div className='modal-actions'>
+              <button className='toolbar-btn' onClick={() => setOpen(false)}>取消</button>
+            </div>
           </div>
-        )}
-      </div>
-    </div>
+        </div>,
+        window.document.body
+      )}
+    </>
   )
 }

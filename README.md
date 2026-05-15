@@ -1,3 +1,5 @@
+gemini -p "完整覆蓋 C:\chiatom\README.md，內容如下：
+
 English | [繁體中文 ↓](#繁體中文)
 
 # Chiatom
@@ -10,7 +12,7 @@ English | [繁體中文 ↓](#繁體中文)
  
 ## Why I built this
  
-The starting point was simple: I noticed that the "infinite free canvas" of mainstream document editors was slowly killing my ability to think.
+The starting point was simple: I noticed that the 'infinite free canvas' of mainstream document editors was slowly killing my ability to think.
  
 I'm not much of a layout person, but I care deeply about how things look — both when I'm writing and when I finally print or share them. That tension kept me drifting between note-taking apps for years. Eventually I cobbled together a clunky workflow: ask AI to build me a nice HTML template, fill in the content, and whenever things changed significantly, throw the whole file back to AI to reformat. It worked, but it was slow, token-hungry, and honestly — the logic was completely backwards.
  
@@ -18,7 +20,7 @@ I'm not much of a layout person, but I care deeply about how things look — bot
  
 Beyond that, there was a deeper problem it took me a long time to name: I just can't seem to think inside the kind of infinitely scrollable space that Notion or Obsidian offers. I focus better with boundaries. When a page ends, it ends — and that gives me a way to think about how each page should be shaped.
  
-That feeling of "when a page ends, it's done" — I don't think an endlessly scrolling canvas can ever give you that.
+That feeling of 'when a page ends, it's done' — I don't think an endlessly scrolling canvas can ever give you that.
  
 So I built Chiatom around a singular, almost regressive idea: **the A4 page is a first-class citizen.**
  
@@ -39,7 +41,6 @@ On the technical side, I made themes (CSS + JSON) completely decoupled from cont
 I know Chiatom isn't for everyone. But if you're an educator who makes handouts, if you're tired of getting lost in boundless windows, or if you've ever spent a whole beautiful afternoon on layout and forgotten to actually write — this tool is for you.
  
 Chiatom is for people who have realized: sometimes, drawing a box around yourself isn't a cage that limits your freedom — it's the steel frame that holds your thinking steady.
- 
 
 ---
 
@@ -53,10 +54,13 @@ Chiatom is for people who have realized: sometimes, drawing a box around yoursel
 
 ![Demo](en-theme.gif)
 
-- **Compound blocks**: Custom blocks defined by the theme, inserted via the `/` command menu
+- **Compound blocks**: Custom blocks defined by the theme, inserted via the \`/\` command menu
 - **Math support**: Inline and block LaTeX with live preview
+- **Project system**: Organize pages across documents into named projects. Add pages via right-click, view by document or literature (Zotero), and export a project as a single HTML file
+- **@ references**: Type \`@\` in the editor to search and insert inline links to any page or document in your workspace. Click to jump directly to the referenced page
+- **Zotero integration**: Link documents to papers via Better BibTeX, with author/year display and a literature view in the project console
 - **HTML export**: A single self-contained HTML file with inline CSS and base64 images, ready to print as PDF in any browser
-- **`.handout` format**: A packaged file format that bundles document data and image assets
+- **\`.handout\` format**: A packaged file format that bundles document data and image assets
 - **Home screen**: Workspace-based file management with folders, drag-and-drop, and right-click menu
 - **Auto-save**: 2-second debounce auto-save with unsaved changes protection on close
 - **Appearance**: Light and dark themes, language and theme settings persisted across sessions
@@ -69,18 +73,31 @@ Chiatom is for people who have realized: sometimes, drawing a box around yoursel
 
 Download the latest installer from [GitHub Releases](https://github.com/dylan45132-jpg/chiatom/releases):
 
-- `chiatom_0.3.1_x64-setup.exe` — Windows 10 / 11 (64-bit)
+- \`chiatom_0.4.0_x64-setup.exe\` — Windows 10 / 11 (64-bit)
+
+### Download (macOS)
+
+Download \`Chiatom_0.4.0_x64.dmg\` from [GitHub Releases](https://github.com/dylan45132-jpg/chiatom/releases).
+
+> **Note**: Chiatom for macOS is currently unsigned. To open it:
+> 1. Open the \`.dmg\` and drag Chiatom to Applications
+> 2. Double-click to open — when the warning appears, click **Cancel**
+> 3. In Terminal, run:
+>    \`\`\`
+>    sudo xattr -rd com.apple.quarantine /Applications/Chiatom.app
+>    \`\`\`
+> 4. Open Chiatom again normally
 
 ---
 
 ## Quick start
 
 1. Launch the app — you'll see the home screen
-2. Click "New Document" and enter a title to create your first document
-3. Click "Theme" in the toolbar and pick a built-in theme (Slate / Washi / Moss)
-4. Click "＋" in the left sidebar to add your first page
-5. Type directly on the page, or press `/` to insert a block
-6. When done, click "Export HTML" and open the file in a browser to print as PDF
+2. Click \"New Document\" and enter a title to create your first document
+3. Click \"Theme\" in the toolbar and pick a built-in theme (Slate / Washi / Moss)
+4. Click \"＋\" in the left sidebar to add your first page
+5. Type directly on the page, or press \`/\` to insert a block
+6. When done, click \"Export HTML\" and open the file in a browser to print as PDF
 
 ---
 
@@ -88,13 +105,13 @@ Download the latest installer from [GitHub Releases](https://github.com/dylan451
 
 The visual style of your document is entirely controlled by themes. A theme package contains two files:
 
-```
+\`\`\`
 my-theme/
 ├── theme.css    # Page styles
 └── theme.json   # Theme metadata and compound block definitions
-```
+\`\`\`
 
-To import: click "Theme" in the toolbar → "Import Folder", then select your theme folder.
+To import: click \"Theme\" in the toolbar → \"Import Folder\", then select your theme folder.
 
 Browse and download community themes at [chiatom-themes](https://dylan45132-jpg.github.io/chiatom-themes/).
 
@@ -180,10 +197,13 @@ Chiatom 是獻給那些意識到這件事的人：有時候，給自己畫一個
 
 ![Demo](en-theme.gif)
 
-- **複合區塊**：由主題定義的自訂區塊，透過 `/` 指令插入
+- **複合區塊**：由主題定義的自訂區塊，透過 \`/\` 指令插入
 - **方程式支援**：inline 和 block LaTeX，即時預覽
+- **專案系統**：跨文件的頁面脈絡組織工具。右鍵加入頁面、依文件或文獻分組瀏覽，並可將專案匯出為單一 HTML
+- **@ 引用**：在編輯器內輸入 \`@\` 搜尋 workspace 內的文件與頁面，插入行內連結，點擊直接跳轉
+- **Zotero 整合**：透過 Better BibTeX 連結文獻，顯示作者與年份，專案控制台提供文獻視圖
 - **匯出 HTML**：單一自給自足的 HTML 檔案，圖片 base64 inline，可直接瀏覽器列印為 PDF
-- **`.handout` 格式**：含圖片資產的打包存檔格式
+- **\`.handout\` 格式**：含圖片資產的打包存檔格式
 - **主頁**：以 workspace 為基礎的文件管理，支援資料夾、拖曳排列、右鍵選單
 - **自動儲存**：2 秒 debounce 自動儲存，關閉前未儲存變更保護
 - **外觀設定**：淺色/深色主題切換，語言與主題設定跨 session 持久化
@@ -196,7 +216,20 @@ Chiatom 是獻給那些意識到這件事的人：有時候，給自己畫一個
 
 從 [GitHub Releases](https://github.com/dylan45132-jpg/chiatom/releases) 下載最新安裝檔：
 
-- `chiatom_0.3.1_x64-setup.exe` — Windows 10 / 11（64 位元）
+- \`chiatom_0.4.0_x64-setup.exe\` — Windows 10 / 11（64 位元）
+
+### 下載（macOS）
+
+從 [GitHub Releases](https://github.com/dylan45132-jpg/chiatom/releases) 下載 \`Chiatom_0.4.0_x64.dmg\`。
+
+> **注意**：macOS 版本目前未簽名，首次開啟需要以下步驟：
+> 1. 開啟 \`.dmg\`，將 Chiatom 拖入 Applications
+> 2. 雙擊開啟，出現安全警告時點「取消」
+> 3. 在 Terminal 輸入：
+>    \`\`\`
+>    sudo xattr -rd com.apple.quarantine /Applications/Chiatom.app
+>    \`\`\`
+> 4. 重新開啟 Chiatom
 
 ---
 
@@ -206,7 +239,7 @@ Chiatom 是獻給那些意識到這件事的人：有時候，給自己畫一個
 2. 點擊「新增文件」，輸入標題建立第一份文件
 3. 點擊工具列的「主題」，選擇一套內建主題（Slate / Washi / Moss）
 4. 點擊左側面板的「＋」新增第一個頁面
-5. 在頁面上直接打字，或按 `/` 插入區塊
+5. 在頁面上直接打字，或按 \`/\` 插入區塊
 6. 完成後點擊「匯出 HTML」，用瀏覽器開啟後列印為 PDF
 
 詳細的使用手冊請參考 [docs/zh/使用手冊.md](docs/zh/使用手冊.md)。
@@ -217,11 +250,11 @@ Chiatom 是獻給那些意識到這件事的人：有時候，給自己畫一個
 
 Chiatom 的視覺風格完全由主題控制。主題包含兩個檔案：
 
-```
+\`\`\`
 my-theme/
 ├── theme.css    # 頁面樣式
 └── theme.json   # 主題資訊與複合區塊定義
-```
+\`\`\`
 
 匯入方式：點擊工具列「主題」→「資料夾匯入」，選取主題資料夾。
 
@@ -249,4 +282,4 @@ Chiatom 以 [GNU General Public License v3.0](LICENSE) 授權開源。
 
 主題包（theme.css + theme.json）以 MIT 授權獨立發布，
 社群可以自由製作、分享和販售主題，不受 GPL 限制。
-詳見 [chiatom-themes](https://github.com/dylan45132-jpg/chiatom-themes)。
+詳見 [chiatom-themes](https://github.com/dylan45132-jpg/chiatom-themes)。"
