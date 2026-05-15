@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getVersion } from '@tauri-apps/api/app'
+import { invoke } from '@tauri-apps/api/core'
 import { useNavigationStore } from '../store/navigationStore'
 import { checkForUpdates, UpdateInfo } from '../utils/updater'
 
@@ -25,14 +26,15 @@ export default function AboutPage() {
   const fetchReleases = async () => {
     setLoadingReleases(true)
     try {
-      const res = await fetch('https://api.github.com/repos/dylan45132-jpg/chiatom/releases?per_page=5')
-      const data = await res.json()
+      const raw = await invoke<string>('fetch_github_releases')
+      const data = JSON.parse(raw)
       const notes: ReleaseNote[] = data.map((r: { tag_name: string; body: string }) => ({
         version: r.tag_name,
         body: r.body ?? '',
       }))
       setReleases(notes)
-    } catch {
+    } catch (e) {
+      console.error('[About] fetchReleases failed:', e)
       setReleases([])
     } finally {
       setLoadingReleases(false)
