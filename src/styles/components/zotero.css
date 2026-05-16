@@ -1,8 +1,15 @@
+
 .zotero-toolbar {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 0 8px;
+}
+
+.zotero-widget {
+  display: flex;
+  align-items: center;
+  gap: 0;
 }
 
 .zotero-paper-btn {
@@ -19,7 +26,30 @@
   white-space: nowrap;
 }
 
+.zotero-widget .zotero-paper-btn {
+  border-radius: 4px 0 0 4px;
+}
+
 .zotero-paper-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.zotero-unlink-btn {
+  display: flex;
+  align-items: center;
+  padding: 2px 6px;
+  border-radius: 0 4px 4px 0;
+  border: 1px solid var(--border);
+  border-left: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.zotero-unlink-btn:hover {
   background: var(--bg-hover);
   color: var(--text-primary);
 }

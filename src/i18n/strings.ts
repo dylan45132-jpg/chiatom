@@ -188,6 +188,8 @@ type StringsShape = {
   zoteroRenameProject: string
   zoteroPluginName: string
   zoteroPluginDesc: string
+  zoteroAttach: string
+  zoteroUnlink: string
 }
 
 export const strings: Record<Lang, StringsShape> = {
@@ -419,6 +421,8 @@ export const strings: Record<Lang, StringsShape> = {
     // Plugin
     zoteroPluginName: 'Zotero · Project Management',
     zoteroPluginDesc: 'Link Zotero references and manage research projects',
+    zoteroAttach: 'Attach paper',
+    zoteroUnlink: 'Unlink paper',
   },
 
   zh: {
@@ -649,5 +653,7 @@ export const strings: Record<Lang, StringsShape> = {
     // Plugin
     zoteroPluginName: 'Zotero · 專案管理',
     zoteroPluginDesc: '連結 Zotero 文獻，管理研究專案與閱讀視角',
+    zoteroAttach: '連結文獻',
+    zoteroUnlink: '取消連結',
   },
 }

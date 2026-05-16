@@ -23,7 +23,12 @@ export async function resolveImageSrcs(pages: Page[]): Promise<Page[]> {
           const ext = realPath.split('.').pop()?.toLowerCase() || 'png'
           const mimeMap: Record<string, string> = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', webp: 'image/webp' }
           const mime = mimeMap[ext] || 'image/png'
-          const base64 = btoa(String.fromCharCode(...Array.from(bytes)))
+          let binary = ''
+          const chunkSize = 8192
+          for (let i = 0; i < bytes.length; i += chunkSize) {
+            binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize))
+          }
+          const base64 = btoa(binary)
           node.attrs.src = `data:${mime};base64,${base64}`
         } catch (e) {
           console.warn('圖片讀取失敗：', src, e)
@@ -122,6 +127,8 @@ export async function saveHandout(
           paperTitle: zoteroData.paperTitle ?? '',
           tags: zoteroData.tags ?? [],
         })
+      } else {
+        await updateZoteroIndex(settings.workspacePath, targetPath, null)
       }
     }
   } catch {

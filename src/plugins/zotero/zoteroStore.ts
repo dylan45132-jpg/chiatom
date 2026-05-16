@@ -26,6 +26,12 @@ export function setZoteroMeta(meta: Partial<ZoteroMeta>): void {
   store.setPluginData(PLUGIN_ID, updated)
 }
 
+export function clearZoteroMeta(): void {
+  const store = useDocumentStore.getState()
+  if (!store.document) return
+  store.setPluginData(PLUGIN_ID, null)
+}
+
 export async function searchZotero(query: string): Promise<ZoteroMeta[]> {
   try {
     const data = await invoke<{ result?: Record<string, unknown>[] }>('search_zotero', { query })

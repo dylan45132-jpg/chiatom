@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import { getZoteroMeta, setZoteroMeta, searchZotero, ZoteroMeta } from './zoteroStore'
+import { getZoteroMeta, setZoteroMeta, clearZoteroMeta, searchZotero, ZoteroMeta } from './zoteroStore'
 import { useDocumentStore } from '../../store/documentStore'
+import { useLangStore } from '../../store/langStore'
 
 export default function ZoteroToolbar() {
   const doc = useDocumentStore(state => state.document)
@@ -12,6 +13,7 @@ export default function ZoteroToolbar() {
   const [loading, setLoading] = useState(false)
   const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const t = useLangStore(state => state.t)
 
   useEffect(() => {
     setMeta(getZoteroMeta())
@@ -62,15 +64,22 @@ export default function ZoteroToolbar() {
 
   return (
     <>
-      <button
-        className='zotero-paper-btn'
-        onClick={() => setOpen(true)}
-        title={meta ? `${meta.paperTitle}` : undefined}
-      >
-        📎 {meta
-          ? [meta.firstAuthor, meta.year].filter(Boolean).join(', ') || meta.paperTitle
-          : '連結文獻'}
-      </button>
+      <div className='zotero-widget'>
+        <button
+          className='zotero-paper-btn'
+          onClick={() => setOpen(true)}
+          title={meta ? `${meta.paperTitle}` : undefined}
+        >
+          📎 {meta
+            ? [meta.firstAuthor, meta.year].filter(Boolean).join(', ') || meta.paperTitle
+            : t.zoteroAttach}
+        </button>
+        {meta && (
+          <button className='zotero-unlink-btn' onClick={clearZoteroMeta} title={t.zoteroUnlink}>
+            ×
+          </button>
+        )}
+      </div>
 
       {open && createPortal(
         <div className='modal-overlay' onClick={() => setOpen(false)}>
