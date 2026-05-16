@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useDocumentStore } from '../store/documentStore'
+import { useNavigationStore } from '../store/navigationStore'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { Mathematics } from '@tiptap/extension-mathematics'
@@ -9,6 +10,7 @@ import { ImagePlaceholder } from '../editor/extensions/ImagePlaceholder'
 
 export default function PresentationNotes() {
   const { document: doc, updateSpeakerNotes } = useDocumentStore()
+  const { currentView } = useNavigationStore()
   const [collapsed, setCollapsed] = useState(false)
   const [size, setSize] = useState({ width: 340, height: 280 })
   const [closed, setClosed] = useState(false)
@@ -34,9 +36,17 @@ export default function PresentationNotes() {
     if (!doc.speakerNotes) return
     const current = notesEditor.getJSON()
     if (JSON.stringify(current) !== JSON.stringify(doc.speakerNotes)) {
-      notesEditor.commands.setContent(doc.speakerNotes)
+      setTimeout(() => {
+        if (doc.speakerNotes) {
+          notesEditor.commands.setContent(doc.speakerNotes)
+        }
+      }, 0)
     }
   }, [notesEditor, doc.speakerNotes])
+
+  useEffect(() => {
+    setClosed(false)
+  }, [doc?.id])
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     dragging.current = true
@@ -79,7 +89,7 @@ export default function PresentationNotes() {
     }
   }, [handleMouseMove, handleMouseUp])
 
-  if (doc.mode !== 'presentation') return null
+  if (currentView !== 'editor' || doc.mode !== 'presentation') return null
 
   if (closed) return createPortal(
     <button

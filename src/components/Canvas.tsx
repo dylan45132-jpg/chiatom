@@ -5,6 +5,8 @@ import { useLangStore } from '../store/langStore'
 
 const PAGE_W = 1280
 const PAGE_H = 720
+const NOTE_W = 794
+const NOTE_H = 1123
 
 export default function Canvas() {
   const { t } = useLangStore()
@@ -20,8 +22,10 @@ export default function Canvas() {
   const isEditing = useRef(false)
   const canvasRef = useRef<HTMLDivElement>(null)
 
+  const [offsetX, setOffsetX] = useState(0)
+
   // Ctrl + 滾輪縮放
-  const handleWheel = useCallback((e: React.WheelEvent<HTMLDivElement>) => {
+  const handleWheel = useCallback((e: WheelEvent) => {
     if (!e.ctrlKey) return
     e.preventDefault()
     setScale(prev => {
@@ -29,6 +33,13 @@ export default function Canvas() {
       return Math.min(1.5, Math.max(0.5, Math.round((prev + delta) * 10) / 10))
     })
   }, [])
+
+  useEffect(() => {
+    const el = canvasRef.current
+    if (!el) return
+    el.addEventListener('wheel', handleWheel, { passive: false })
+    return () => el.removeEventListener('wheel', handleWheel)
+  }, [handleWheel])
 
   useEffect(() => {
     if (!canvasRef.current) return
@@ -80,8 +91,32 @@ export default function Canvas() {
     return () => observers.forEach(o => o.disconnect())
   }, [pages, setActivePage])
 
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    
+    const update = () => {
+      const containerW = el.clientWidth
+      const offset = Math.max(0, (containerW - NOTE_W) / 2)
+      setOffsetX(offset)
+    }
+    
+    // 監聽 transition 結束後再更新（處理 Sidebar 動畫）
+    const onTransitionEnd = () => update()
+    
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    el.addEventListener('transitionend', onTransitionEnd)
+    
+    return () => {
+      ro.disconnect()
+      el.removeEventListener('transitionend', onTransitionEnd)
+    }
+  }, [])
+
   return (
-    <div className="canvas" onWheel={handleWheel} ref={canvasRef} onFocusCapture={() => { isEditing.current = true }} onBlurCapture={() => { isEditing.current = false }}>
+    <div className="canvas" ref={canvasRef} onFocusCapture={() => { isEditing.current = true }} onBlurCapture={() => { isEditing.current = false }}>
       {themeCSS && <style>{themeCSS}</style>}
       {scale !== 1 && (
         <div className="canvas-scale-indicator">
@@ -92,7 +127,7 @@ export default function Canvas() {
         {pages.length > 0 ? (
           pages.map(page => {
             const slotW = isPresentation ? PAGE_W * scale : 794
-            return (
+            return isPresentation ? (
               <div
                 key={page.id}
                 ref={el => {
@@ -102,21 +137,41 @@ export default function Canvas() {
                 style={{
                   position: 'relative',
                   width: slotW,
-                  height: isPresentation ? PAGE_H * scale : undefined,
-                  minHeight: isPresentation ? PAGE_H * scale : undefined,
+                  height: PAGE_H * scale,
+                  minHeight: PAGE_H * scale,
                   flexShrink: 0,
                   marginBottom: 24,
                 }}
               >
-                <div style={isPresentation ? {
+                <div style={{
                   position: 'absolute',
                   top: 0,
                   left: 0,
                   width: PAGE_W,
                   height: PAGE_H,
-                  transformOrigin: 'top left',
                   transform: `scale(${scale})`,
-                } : undefined}>
+                  transformOrigin: 'top left',
+                }}>
+                  <PageEditor page={page} />
+                </div>
+              </div>
+            ) : (
+              <div
+                key={page.id}
+                style={{
+                  width: NOTE_W,
+                  height: NOTE_H * scale,
+                  marginLeft: offsetX,
+                  marginBottom: 'var(--ui-spacing-lg)',
+                  flexShrink: 0,
+                }}
+              >
+                <div style={{
+                  width: NOTE_W,
+                  height: NOTE_H,
+                  transform: `scale(${scale})`,
+                  transformOrigin: `${NOTE_W / 2}px top`,
+                }}>
                   <PageEditor page={page} />
                 </div>
               </div>
