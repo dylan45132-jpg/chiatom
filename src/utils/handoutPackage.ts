@@ -148,6 +148,9 @@ export async function loadHandoutFromPath(path: string): Promise<{ doc: Document
   if (!docEntry) throw new Error('Invalid .handout file')
   const docText = await docEntry.async('string')
   const doc = JSON.parse(docText) as Document
+  if (!doc.mode) {
+    doc.mode = 'handout'
+  }
 
   const tempPath = await getTempDir(doc.id)
 

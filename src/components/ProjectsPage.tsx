@@ -41,7 +41,8 @@ export default function ProjectsPage() {
   const [view, setView] = useState<'pages' | 'literature'>('pages')
   const [zoteroIndex, setZoteroIndex] = useState<Record<string, ZoteroIndexEntry>>({})
   const builtinThemes = getBuiltinThemes()
-  const [selectedThemeId, setSelectedThemeId] = useState('slate')
+    const [selectedThemeId, setSelectedThemeId] = useState('slate')
+  const [exportMode, setExportMode] = useState<'handout' | 'presentation'>('handout')
   const [exporting, setExporting] = useState(false)
 
   useEffect(() => {
@@ -164,7 +165,7 @@ export default function ProjectsPage() {
       const themeConfig = { name: theme.name, css: theme.css, json: theme.json }
 
       const resolvedPages = await resolveImageSrcs(pages as any)
-      const html = exportToHtml(resolvedPages, selectedProject.name, themeConfig)
+            const html = exportToHtml(resolvedPages, selectedProject.name, themeConfig, exportMode)
 
       const targetPath = await save({
         filters: [{ name: t.filterHtml, extensions: ['html'] }],
@@ -409,9 +410,16 @@ export default function ProjectsPage() {
                     value={selectedThemeId}
                     onChange={e => setSelectedThemeId(e.target.value)}
                   >
-                    {builtinThemes.map(th => (
+                                        {builtinThemes.map(th => (
                       <option key={th.id} value={th.id}>{th.name}</option>
                     ))}
+                  </select>
+                  <select
+                    value={exportMode}
+                    onChange={e => setExportMode(e.target.value as 'handout' | 'presentation')}
+                  >
+                    <option value="handout">{t.handoutMode ?? '講義'}</option>
+                    <option value="presentation">{t.presentationMode ?? '簡報'}</option>
                   </select>
                   <button
                     className='toolbar-btn'

@@ -1,0 +1,147 @@
+/* Field — 暖橘調，工作坊教學 */
+
+.page {
+  font-family: 'Inter', 'Helvetica Neue', 'Noto Sans TC', sans-serif;
+  font-size: 18px;
+  line-height: 1.7;
+  color: #2d2420;
+  background: #fdf8f2;
+  padding: 56px 72px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+
+.page h1 {
+  font-size: 40px;
+  font-weight: 700;
+  color: #1e1810;
+  margin: 0 0 24px 0;
+  line-height: 1.2;
+}
+
+.page h2 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #2d2420;
+  margin: 32px 0 16px 0;
+  border-left: 4px solid #d47c3a;
+  padding-left: 12px;
+}
+
+.page h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #b86020;
+  margin: 24px 0 10px 0;
+}
+
+.page p {
+  margin: 0 0 14px 0;
+  color: #3d3028;
+}
+
+.page ul,
+.page ol {
+  margin: 0 0 14px 0;
+  padding-left: 24px;
+  color: #3d3028;
+}
+
+.page li {
+  margin-bottom: 8px;
+}
+
+.page li::marker {
+  color: #d47c3a;
+}
+
+.page blockquote {
+  border-left: 4px solid #d47c3a;
+  background: #fdf0e0;
+  margin: 16px 0;
+  padding: 12px 20px;
+  color: #5a3820;
+  font-style: normal;
+  border-radius: 0 4px 4px 0;
+}
+
+.page table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 16px;
+}
+
+.page th {
+  background: #d47c3a;
+  color: #ffffff;
+  padding: 10px 14px;
+  text-align: left;
+}
+
+.page td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #e8d8c8;
+  color: #3d3028;
+}
+
+.page hr {
+  border: none;
+  border-top: 2px dashed #e0c8a8;
+  margin: 24px 0;
+}
+
+.page .block-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin: 16px 0;
+}
+
+.page .block-image-text {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.page .block-highlight {
+  border: 2px solid #d47c3a;
+  background: #fdf0e0;
+  border-radius: 6px;
+  padding: 20px 24px;
+  margin: 16px 0;
+  color: #3d2010;
+}
+
+.page .block-full-bleed {
+  background: #d47c3a;
+  margin: -56px -72px;
+  padding: 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 200px;
+  color: #ffffff;
+}
+
+.page .block-full-bleed h1,
+.page .block-full-bleed p {
+  color: #ffffff;
+}
+
+.page img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+}
+
+@media print {
+  .page {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

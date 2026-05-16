@@ -122,3 +122,115 @@
 .sidebar-page-item:hover .sidebar-project-dot {
   opacity: 1;
 }
+
+/* Presentation Notes 浮動面板 */
+.presentation-notes-panel {
+  width: 340px;
+  background: var(--ui-bg-base);
+  border: 1px solid var(--ui-border);
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.presentation-notes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--ui-bg-elevated);
+  border-bottom: 1px solid var(--ui-border);
+  cursor: grab;
+  user-select: none;
+}
+
+.presentation-notes-header:active {
+  cursor: grabbing;
+}
+
+.presentation-notes-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ui-text-secondary);
+  letter-spacing: 0.04em;
+}
+
+.presentation-notes-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ui-text-secondary);
+  font-size: 12px;
+  padding: 2px 4px;
+  line-height: 1;
+}
+
+.presentation-notes-toggle:hover {
+  color: var(--ui-text-primary);
+}
+
+.presentation-notes-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 12px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ui-text-primary);
+  background: var(--ui-bg-base);
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.presentation-notes-textarea .ProseMirror {
+  outline: none;
+  min-height: 60px;
+  padding: 0;
+}
+
+.presentation-notes-textarea .ProseMirror p {
+  margin: 0 0 8px 0;
+}
+
+.presentation-notes-textarea .ProseMirror h1 { font-size: 18px; font-weight: 700; margin: 0 0 8px 0; }
+.presentation-notes-textarea .ProseMirror h2 { font-size: 15px; font-weight: 600; margin: 0 0 6px 0; }
+.presentation-notes-textarea .ProseMirror h3 { font-size: 13px; font-weight: 600; margin: 0 0 4px 0; }
+.presentation-notes-textarea .ProseMirror ul,
+.presentation-notes-textarea .ProseMirror ol { padding-left: 20px; margin: 0 0 8px 0; }
+.presentation-notes-textarea .ProseMirror strong { font-weight: 700; }
+.presentation-notes-textarea .ProseMirror em { font-style: italic; }
+
+/* Notes 關閉後重開按鈕 */
+.presentation-notes-reopen {
+  background: var(--ui-bg-elevated);
+  border: 1px solid var(--ui-border);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ui-text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  bottom: 48px !important;
+  right: 24px;
+}
+
+.presentation-notes-reopen:hover {
+  color: var(--ui-text-primary);
+  background: var(--ui-bg-base);
+}
+
+/* Resize handle */
+.presentation-notes-resize {
+  height: 6px;
+  cursor: ns-resize;
+  background: transparent;
+  border-top: 1px solid var(--ui-border);
+  transition: background 0.1s;
+}
+
+.presentation-notes-resize:hover {
+  background: var(--ui-border);
+}

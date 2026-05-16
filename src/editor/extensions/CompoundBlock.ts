@@ -17,11 +17,11 @@ export const CompoundBlock = Node.create({
   },
 
   parseHTML() {
-    return [{ tag: 'compound-block' }]
+    return [{ tag: 'div[data-type="compound-block"]' }]
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['compound-block', mergeAttributes(HTMLAttributes)]
+    return ['div', mergeAttributes(HTMLAttributes, { 'data-type': 'compound-block' }), 0]
   },
 
   addNodeView() {

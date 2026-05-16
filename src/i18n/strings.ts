@@ -6,7 +6,9 @@ type StringsShape = {
   open: string
   save: string
   saving: string
-  exportHtml: string
+    exportHtml: string
+  handoutMode: string
+  presentationMode: string
   themeGallery: string
   untitledDocument: string
   toastSaved: string
@@ -120,6 +122,11 @@ type StringsShape = {
   slateDesc: string
   washiDesc: string
   mossDesc: string
+  chalkDesc: string
+  linenDesc: string
+  deckDesc: string
+  monoDesc: string
+  fieldDesc: string
   imagePlaceholder: string
   homeTitle: string
   recentFiles: string
@@ -147,6 +154,7 @@ type StringsShape = {
   homeGuide3: string
   rename: string
   moveToFolder: string
+  convertToPresentation: string
   deleteFile: string
   deleteFolder: string
   deleteFolderConfirm: string
@@ -159,6 +167,8 @@ type StringsShape = {
   renamePage: string
   renamePagePlaceholder: string
   filterByTag: string
+  notesPlaceholder: string
+
 
   // Zotero Project
   zoteroProjects: string
@@ -200,7 +210,9 @@ export const strings: Record<Lang, StringsShape> = {
     open: 'Open',
     save: 'Save',
     saving: 'Saving…',
-    exportHtml: 'Export HTML',
+        exportHtml: 'Export HTML',
+    handoutMode: 'Handout',
+    presentationMode: 'Presentation',
     themeGallery: 'Themes',
     untitledDocument: 'Untitled',
 
@@ -344,6 +356,12 @@ export const strings: Record<Lang, StringsShape> = {
     slateDesc: 'Slate gray, fine borders, technical',
     washiDesc: 'Warm white, washi texture, humanities',
     mossDesc: 'Low-saturation green accent, calm, general use',
+    chalkDesc: 'Chalkboard feel, academic lecture',
+    linenDesc: 'Warm off-white, humanities seminar',
+    deckDesc: 'Clean white, business presentation',
+    monoDesc: 'Terminal style, tech talk',
+    fieldDesc: 'Warm orange, workshop & teaching',
+
 
     // renderer
     imagePlaceholder: '[Image]',
@@ -378,6 +396,7 @@ export const strings: Record<Lang, StringsShape> = {
     
     rename: 'Rename',
     moveToFolder: 'Move to Folder',
+    convertToPresentation: 'Convert to Presentation',
     deleteFile: 'Delete Document',
     deleteFolder: 'Delete Folder',
     deleteFolderConfirm: 'This folder contains documents. Delete anyway?',
@@ -423,6 +442,7 @@ export const strings: Record<Lang, StringsShape> = {
     zoteroPluginDesc: 'Link Zotero references and manage research projects',
     zoteroAttach: 'Attach paper',
     zoteroUnlink: 'Unlink paper',
+    notesPlaceholder: 'What do you want to say on this slide...'
   },
 
   zh: {
@@ -432,7 +452,9 @@ export const strings: Record<Lang, StringsShape> = {
     open: '開啟',
     save: '儲存',
     saving: '儲存中…',
-    exportHtml: '匯出 HTML',
+        exportHtml: '匯出 HTML',
+    handoutMode: '講義',
+    presentationMode: '簡報',
     themeGallery: '主題庫',
     untitledDocument: '未命名文件',
 
@@ -576,6 +598,12 @@ export const strings: Record<Lang, StringsShape> = {
     slateDesc: '石板灰調，細邊線，理工教材',
     washiDesc: '暖米白，和紙質感，人文課程',
     mossDesc: '低飽和草綠 accent，自然沉穩，通用型',
+    chalkDesc: '黑板質感，學術演講',
+    linenDesc: '暖米白底，人文研討',
+    deckDesc: '乾淨白底，商業提案',
+    monoDesc: 'Terminal 風，技術分享',
+    fieldDesc: '暖橘調，工作坊教學',
+
 
     // renderer
     imagePlaceholder: '[圖片]',
@@ -610,6 +638,7 @@ export const strings: Record<Lang, StringsShape> = {
     
     rename: '重新命名',
     moveToFolder: '移至資料夾',
+    convertToPresentation: '轉為簡報',
     deleteFile: '刪除文件',
     deleteFolder: '刪除資料夾',
     deleteFolderConfirm: '此資料夾內有文件，確定要一併刪除？',
@@ -655,5 +684,6 @@ export const strings: Record<Lang, StringsShape> = {
     zoteroPluginDesc: '連結 Zotero 文獻，管理研究專案與閱讀視角',
     zoteroAttach: '連結文獻',
     zoteroUnlink: '取消連結',
+    notesPlaceholder: '這頁你想說什麼...'
   },
 }

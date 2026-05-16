@@ -3,9 +3,8 @@ import { useDocumentStore } from '../store/documentStore'
 import PageEditor from './PageEditor'
 import { useLangStore } from '../store/langStore'
 
-const SCALE_MIN = 0.5
-const SCALE_MAX = 1.5
-const SCALE_STEP = 0.1
+const PAGE_W = 1280
+const PAGE_H = 720
 
 export default function Canvas() {
   const { t } = useLangStore()
@@ -14,19 +13,36 @@ export default function Canvas() {
   const pages = document.pages
 
   const [scale, setScale] = useState(1)
+  const isPresentation = document.mode === 'presentation'
   const pageRefs = useRef<Map<string, HTMLDivElement>>(new Map())
   const scrollRef = useRef<HTMLDivElement>(null)
   const isScrollingTo = useRef(false)
+  const isEditing = useRef(false)
+  const canvasRef = useRef<HTMLDivElement>(null)
 
   // Ctrl + 滾輪縮放
   const handleWheel = useCallback((e: React.WheelEvent<HTMLDivElement>) => {
     if (!e.ctrlKey) return
     e.preventDefault()
     setScale(prev => {
-      const delta = e.deltaY < 0 ? SCALE_STEP : -SCALE_STEP
-      return Math.min(SCALE_MAX, Math.max(SCALE_MIN, Math.round((prev + delta) * 10) / 10))
+      const delta = e.deltaY < 0 ? 0.1 : -0.1
+      return Math.min(1.5, Math.max(0.5, Math.round((prev + delta) * 10) / 10))
     })
   }, [])
+
+  useEffect(() => {
+    if (!canvasRef.current) return
+    const el = canvasRef.current
+    const compute = () => {
+      const available = Math.max(0, el.clientWidth - 48)
+      const fitted = Math.min(1.5, Math.max(0.5, available / PAGE_W))
+      setScale(Math.round(fitted * 10) / 10)
+    }
+    const ro = new ResizeObserver(compute)
+    ro.observe(el)
+    compute()
+    return () => ro.disconnect()
+  }, [isPresentation])
 
   // 點 sidebar 時捲到該頁
   useEffect(() => {
@@ -48,14 +64,14 @@ export default function Canvas() {
       if (!el) return
       const observer = new IntersectionObserver(
         (entries) => {
-          if (isScrollingTo.current) return
+          if (isScrollingTo.current || isEditing.current) return
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               setActivePage(page.id)
             }
           })
         },
-        { threshold: 0.3, root: scrollRef.current }
+        { threshold: 0.1, root: scrollRef.current }
       )
       observer.observe(el)
       observers.push(observer)
@@ -65,7 +81,7 @@ export default function Canvas() {
   }, [pages, setActivePage])
 
   return (
-    <div className="canvas" onWheel={handleWheel}>
+    <div className="canvas" onWheel={handleWheel} ref={canvasRef} onFocusCapture={() => { isEditing.current = true }} onBlurCapture={() => { isEditing.current = false }}>
       {themeCSS && <style>{themeCSS}</style>}
       {scale !== 1 && (
         <div className="canvas-scale-indicator">
@@ -73,42 +89,61 @@ export default function Canvas() {
         </div>
       )}
       <div className="canvas-scroll" ref={scrollRef}>
-        <div style={{ transform: `scale(${scale})`, transformOrigin: 'top center', transition: 'transform 0.1s ease' }}>
-          {pages.length > 0 ? (
-            pages.map(page => (
+        {pages.length > 0 ? (
+          pages.map(page => {
+            const slotW = isPresentation ? PAGE_W * scale : 794
+            return (
               <div
                 key={page.id}
                 ref={el => {
                   if (el) pageRefs.current.set(page.id, el)
                   else pageRefs.current.delete(page.id)
                 }}
+                style={{
+                  position: 'relative',
+                  width: slotW,
+                  height: isPresentation ? PAGE_H * scale : undefined,
+                  minHeight: isPresentation ? PAGE_H * scale : undefined,
+                  flexShrink: 0,
+                  marginBottom: 24,
+                }}
               >
-                <PageEditor page={page} />
+                <div style={isPresentation ? {
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: PAGE_W,
+                  height: PAGE_H,
+                  transformOrigin: 'top left',
+                  transform: `scale(${scale})`,
+                } : undefined}>
+                  <PageEditor page={page} />
+                </div>
               </div>
-            ))
-          ) : (
-            <div className="canvas-empty-state">
-              <div className="canvas-empty-content">
-                <h2 className="canvas-empty-title">{t.onboardingTitle}</h2>
-                <p className="canvas-empty-desc">{t.onboardingOr}</p>
-                <div className="canvas-empty-steps">
-                  <div className="canvas-empty-step">
-                    <span className="step-num">1</span>
-                    <span>{t.onboardingStep1}</span>
-                  </div>
-                  <div className="canvas-empty-step">
-                    <span className="step-num">2</span>
-                    <span>{t.onboardingStep2}</span>
-                  </div>
-                  <div className="canvas-empty-step">
-                    <span className="step-num">3</span>
-                    <span>{t.onboardingStep3}</span>
-                  </div>
+            )
+          })
+        ) : (
+          <div className="canvas-empty-state">
+            <div className="canvas-empty-content">
+              <h2 className="canvas-empty-title">{t.onboardingTitle}</h2>
+              <p className="canvas-empty-desc">{t.onboardingOr}</p>
+              <div className="canvas-empty-steps">
+                <div className="canvas-empty-step">
+                  <span className="step-num">1</span>
+                  <span>{t.onboardingStep1}</span>
+                </div>
+                <div className="canvas-empty-step">
+                  <span className="step-num">2</span>
+                  <span>{t.onboardingStep2}</span>
+                </div>
+                <div className="canvas-empty-step">
+                  <span className="step-num">3</span>
+                  <span>{t.onboardingStep3}</span>
                 </div>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   )

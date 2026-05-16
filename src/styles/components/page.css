@@ -12,10 +12,11 @@
   flex: 1;
   overflow-y: auto;
   overflow-anchor: none;
+  overflow-x: hidden;
   padding: var(--ui-spacing-lg) var(--ui-spacing-lg) 80px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
 }
 
 .canvas-empty {
@@ -56,6 +57,14 @@
   border-radius: var(--ui-radius-sm);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
   position: relative;
+}
+
+/* 簡報模式：16:9 */
+.page--presentation {
+  width: 1280px !important;
+  min-height: unset !important;
+  height: 720px !important;
+  overflow: visible;
 }
 @page {
       size: A4;
@@ -109,4 +118,49 @@
     size: A4;
     margin: 0;
   }
+}
+
+/* Notes 面板（簡報模式）*/
+.page-notes-panel {
+  width: 100%;
+  max-width: 1280px;
+  margin: 8px auto 0;
+  background: var(--ui-bg-elevated, #f0efeb);
+  border: 1px solid var(--ui-border, #e0deda);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.page-notes-toggle {
+  width: 100%;
+  padding: 8px 16px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ui-text-secondary, #888);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.04em;
+}
+
+.page-notes-toggle:hover {
+  color: var(--ui-text-primary, #333);
+}
+
+.page-notes-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 8px 16px 12px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ui-text-primary, #333);
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--ui-border, #e0deda);
+  resize: vertical;
+  font-family: inherit;
+  box-sizing: border-box;
+  outline: none;
 }

@@ -36,6 +36,7 @@ const suppressMathScrollPlugin = new Plugin({
 
 // A4 @ 96dpi，扣掉 padding（上下各 72px）
 const A4_CONTENT_HEIGHT = 1123 - 72 * 2
+const SLIDE_CONTENT_HEIGHT = 720 - 128  // 720px 扣掉上下 padding (64px * 2)
 
 interface PageEditorProps {
   page: Page
@@ -43,7 +44,8 @@ interface PageEditorProps {
 
 export default function PageEditor({ page }: PageEditorProps) {
   const { t } = useLangStore()
-  const { updatePageContent, updatePageTitle } = useDocumentStore()
+  const { document: currentDoc, updatePageContent, updatePageTitle } = useDocumentStore()
+  const isPresentation = currentDoc.mode === 'presentation'
   const editorRef = useRef<HTMLDivElement>(null)
   const [isOverflow, setIsOverflow] = useState(false)
   const [mathModal, setMathModal] = useState<{
@@ -151,7 +153,8 @@ export default function PageEditor({ page }: PageEditorProps) {
 
     const observer = new ResizeObserver(() => {
       const height = proseMirror.scrollHeight
-      setIsOverflow(height > A4_CONTENT_HEIGHT)
+      const limit = isPresentation ? SLIDE_CONTENT_HEIGHT : A4_CONTENT_HEIGHT;
+      setIsOverflow(height > limit)
     })
 
     observer.observe(proseMirror)
@@ -161,7 +164,7 @@ export default function PageEditor({ page }: PageEditorProps) {
   return (
     <div className="page-wrapper">
       {editor && <BubbleToolbar editor={editor} />}
-      <div className={`page ${isOverflow ? 'page-overflow' : ''}`}>
+      <div className={`page${isPresentation ? ' page--presentation' : ''} ${isOverflow ? 'page-overflow' : ''}`}>
         <div ref={editorRef}>
           <EditorContent editor={editor} />
         </div>

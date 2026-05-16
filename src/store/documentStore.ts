@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { JSONContent } from '@tiptap/react'
+import { JSONContent } from '@tiptap/core'
 import { useLangStore } from './langStore'
 
 // ============================================
@@ -9,7 +9,7 @@ import { useLangStore } from './langStore'
 export interface Page {
   id: string
   title: string       // 左側面板顯示用（取自第一個 h1，或「頁面 N」）
-  content: JSONContent // Tiptap JSON
+  content: JSONContent, // Tiptap JSON
 }
 
 export interface ThemeConfig {
@@ -43,6 +43,8 @@ export interface Document {
   createdAt: string
   updatedAt: string
   pluginData?: Record<string, unknown>
+  mode?: 'handout' | 'presentation'
+  speakerNotes?: JSONContent
 }
 
 // ============================================
@@ -62,6 +64,7 @@ interface DocumentStore {
   deletePage: (id: string) => void
   duplicatePage: (id: string) => void
   reorderPages: (fromIndex: number, toIndex: number) => void
+
   setActivePage: (id: string) => void
 
   // 頁面內容更新
@@ -69,7 +72,9 @@ interface DocumentStore {
   updatePageTitle: (id: string, title: string) => void
 
   // 文件操作
+  updateSpeakerNotes: (notes: JSONContent) => void
   setDocumentTitle: (title: string) => void
+  setMode: (mode: 'handout' | 'presentation') => void
   setSavePath: (path: string | null) => void
   setTempPath: (path: string | null) => void
   setDirty: (dirty: boolean) => void
@@ -110,6 +115,7 @@ export const useDocumentStore = create<DocumentStore>()((set) => {
     pages: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    mode: 'handout',
   })
 
   return {
@@ -197,6 +203,8 @@ export const useDocumentStore = create<DocumentStore>()((set) => {
       }
     }),
 
+
+
     setActivePage: (id) => set({ activePageId: id }),
 
     // ── 頁面內容 ──────────────────────────────
@@ -223,12 +231,30 @@ export const useDocumentStore = create<DocumentStore>()((set) => {
       isDirty: true,
     })),
 
+    updateSpeakerNotes: (notes: JSONContent) => set((state) => ({
+      document: {
+        ...state.document,
+        speakerNotes: notes,
+        updatedAt: new Date().toISOString(),
+      },
+      isDirty: true,
+    })),
+
     // ── 文件操作 ──────────────────────────────
 
     setDocumentTitle: (title) => set((state) => ({
       document: {
         ...state.document,
         title,
+        updatedAt: new Date().toISOString(),
+      },
+      isDirty: true,
+    })),
+    
+    setMode: (mode: 'handout' | 'presentation') => set((state) => ({
+      document: {
+        ...state.document,
+        mode,
         updatedAt: new Date().toISOString(),
       },
       isDirty: true,

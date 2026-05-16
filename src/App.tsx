@@ -22,6 +22,7 @@ import { useProjectStore } from './store/projectStore'
 import { useNavigationStore } from './store/navigationStore'
 import { clearPageReferenceCache } from './editor/extensions/PageReferenceSuggestion'
 import AboutPage from './components/AboutPage'
+import PresentationNotes from './components/PresentationNotes'
 
 export default function App() {
   const { document, activePageId, setActivePage, isDirty, savePath } = useDocumentStore()
@@ -188,6 +189,7 @@ export default function App() {
           onDismiss={() => setUpdateInfo(null)}
         />
       )}
+      <PresentationNotes />
     </>
   )
 }

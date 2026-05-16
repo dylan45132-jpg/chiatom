@@ -1,0 +1,12 @@
+{
+  "name": "Mono",
+  "version": "1.0.0",
+  "author": "Chiatom",
+  "description": "Terminal 風，技術分享",
+  "pageSize": "16:9",
+  "blocks": [
+
+    { "name": "重點框", "key": "highlight", "icon": "▣", "class": "block-highlight", "children": [{ "type": "p", "placeholder": "重點內容..." }] },
+    { "name": "全版色塊", "key": "full-bleed", "icon": "█", "class": "block-full-bleed", "children": [{ "type": "h1", "placeholder": "標題" }, { "type": "p", "placeholder": "副標題或說明..." }] }
+  ]
+}

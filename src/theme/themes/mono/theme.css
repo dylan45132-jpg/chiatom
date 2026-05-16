@@ -1,0 +1,152 @@
+/* Mono — Terminal 風，技術分享 */
+
+.page {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  font-size: 16px;
+  line-height: 1.7;
+  color: #d4d4aa;
+  background: #0d1117;
+  padding: 56px 72px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+
+.page h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #e8e8c8;
+  margin: 0 0 24px 0;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.page h1::before {
+  content: '# ';
+  color: #6a9955;
+  font-weight: 400;
+}
+
+.page h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #c8c8a8;
+  margin: 32px 0 16px 0;
+}
+
+.page h2::before {
+  content: '## ';
+  color: #6a9955;
+  font-weight: 400;
+  font-size: 18px;
+}
+
+.page h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #9cdcfe;
+  margin: 24px 0 10px 0;
+}
+
+.page p {
+  margin: 0 0 12px 0;
+  color: #c8c8a8;
+}
+
+.page ul,
+.page ol {
+  margin: 0 0 12px 0;
+  padding-left: 24px;
+  color: #c8c8a8;
+}
+
+.page li {
+  margin-bottom: 6px;
+}
+
+.page li::marker {
+  color: #6a9955;
+}
+
+.page blockquote {
+  border-left: 3px solid #4ec9b0;
+  margin: 16px 0;
+  padding: 8px 20px;
+  color: #9cdcfe;
+  font-style: normal;
+}
+
+.page table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 14px;
+}
+
+.page th {
+  background: #1e2d1e;
+  color: #4ec9b0;
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #4ec9b0;
+}
+
+.page td {
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(212, 212, 170, 0.1);
+  color: #c8c8a8;
+}
+
+.page hr {
+  border: none;
+  border-top: 1px solid rgba(212, 212, 170, 0.15);
+  margin: 24px 0;
+}
+
+.page .block-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin: 16px 0;
+}
+
+.page .block-image-text {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.page .block-highlight {
+  border: 1px solid #4ec9b0;
+  background: rgba(78, 201, 176, 0.06);
+  padding: 20px 24px;
+  margin: 16px 0;
+  color: #4ec9b0;
+  border-radius: 2px;
+}
+
+.page .block-full-bleed {
+  background: #161b22;
+  margin: -56px -72px;
+  padding: 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.page img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid rgba(212, 212, 170, 0.1);
+}
+
+@media print {
+  .page {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

@@ -325,3 +325,14 @@
   color: var(--ui-text-secondary);
   flex-shrink: 0;
 }
+
+.canvas-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-anchor: none;
+  overflow-x: hidden;
+  padding: var(--ui-spacing-lg) var(--ui-spacing-lg) 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

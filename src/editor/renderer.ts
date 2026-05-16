@@ -161,7 +161,8 @@ function hasMathNode(node: JSONContent): boolean {
 export function exportToHtml(
   pages: { title: string; content: JSONContent }[],
   docTitle: string,
-  theme: ThemeConfig
+  theme: ThemeConfig,
+  mode?: 'handout' | 'presentation'
 ): string {
   const t = useLangStore.getState().t
   const hasMath = pages.some(page => hasMathNode(page.content))
@@ -183,6 +184,18 @@ export function exportToHtml(
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #f0f0f0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
 
+        ${mode === 'presentation' ? `
+    .page {
+      width: 1280px;
+      height: 720px;
+      min-height: unset;
+      background: #fff;
+      padding: 64px 80px;
+      margin: 24px auto;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      box-sizing: border-box;
+      overflow: hidden;
+    }` : `
     .page {
       width: 210mm;
       min-height: 297mm;
@@ -190,7 +203,7 @@ export function exportToHtml(
       padding: 20mm 22mm;
       margin: 12mm auto;
       box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-    }
+    }`}
 
     .page p  { margin-bottom: 0.75em; line-height: 1.7; }
     .page h1 { font-size: 1.8em; font-weight: 700; margin-bottom: 0.5em; }
@@ -213,14 +226,35 @@ export function exportToHtml(
     /* ── Theme CSS ── */
     ${theme.css ? theme.css.split('\n').map(l => '    ' + l).join('\n') : ''}
 
-    /* ── Print ── */
+  ${mode === 'presentation' ? `
+  /* ── Presentation override ── */
+  .page {
+    width: 1280px !important;
+    height: 720px !important;
+    min-height: unset !important;
+    box-sizing: border-box !important;
+  }` : ''}
+
+        /* ── Print ── */
+    ${mode === 'presentation' ? `
+    @page {
+      size: 1280px 720px;
+      margin: 0;
+    }
+    @media print {
+      body { background: none; }
+      .page { margin: 0; box-shadow: none; page-break-after: always; width: 1280px; height: 720px; overflow: hidden; }
+      .page:last-child { page-break-after: avoid; }
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }` : `
     @media print {
       body { background: none; }
       .page { margin: 0; box-shadow: none; page-break-after: always; height: 297mm; min-height: unset; overflow: hidden; }
       .page:last-child { page-break-after: avoid; }
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
-    }
+    }`}
   </style>
 </head>
 <body>

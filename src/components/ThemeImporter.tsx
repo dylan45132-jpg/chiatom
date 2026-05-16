@@ -13,13 +13,13 @@ interface ThemeImporterProps {
 export default function ThemeImporter({ onClose }: ThemeImporterProps) {
   const { t } = useLangStore()
   const { setTheme, document } = useDocumentStore()
+  const builtinThemes = getBuiltinThemes(document.mode ?? 'handout')
   const [tab, setTab] = useState<'builtin' | 'folder' | 'paste'>('builtin')
   const [cssText, setCssText] = useState('')
   const [themeName, setThemeName] = useState(t.customTheme)
   const [loading, setLoading] = useState(false)
-  const BUILTIN_THEMES = getBuiltinThemes()
 
-  const handleApplyBuiltinTheme = (theme: (typeof BUILTIN_THEMES)[0]) => {
+  const handleApplyBuiltinTheme = (theme: (typeof builtinThemes)[0]) => {
     const themeConfig: ThemeConfig = {
       name: theme.name,
       css: theme.css,
@@ -99,7 +99,7 @@ export default function ThemeImporter({ onClose }: ThemeImporterProps) {
         <div className="modal-body">
           {tab === 'builtin' && (
             <div className="modal-section builtin-themes-list">
-              {getBuiltinThemes().map(theme => (
+              {builtinThemes.map(theme => (
                 <div key={theme.id} className="builtin-theme-item">
                   <div className="builtin-theme-info">
                     <span className="builtin-theme-name">{theme.name}</span>

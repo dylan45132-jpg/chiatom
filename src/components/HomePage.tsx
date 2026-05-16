@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react'
 import { useDocumentStore } from '../store/documentStore'
 import { useLangStore } from '../store/langStore'
 import { readWorkspace, createWorkspaceFolder, WorkspaceStructure, WorkspaceFile, moveFile, renameFile, renameFolder, deleteFile, deleteFolder } from '../utils/workspace'
-import { loadHandoutFromPath } from '../utils/handoutPackage'
+import { convertToPresentation } from '../utils/presentationConverter'
+import { saveHandout, loadHandoutFromPath } from '../utils/handoutPackage'
 import { open, confirm } from '@tauri-apps/plugin-dialog'
 import { join } from '@tauri-apps/api/path'
 import { FileText, Folder, FolderOpen } from 'lucide-react'
@@ -158,6 +159,29 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings, 
       setShowRename(false)
       await refreshWorkspace()
     } catch (e) {
+    }
+  }
+
+  const handleConvertToPresentation = async (filePath: string) => {
+    try {
+      // 讀取來源文件
+      const sourceDoc = await loadHandoutFromPath(filePath)
+      if (!sourceDoc) return
+      // 轉換
+      const presentationDoc = convertToPresentation(sourceDoc.doc)
+      // 決定儲存路徑：同資料夾，檔名加 _presentation
+      const dir = filePath.substring(0, filePath.lastIndexOf('\\'))
+      const baseName = filePath
+        .substring(filePath.lastIndexOf('\\') + 1)
+        .replace('.handout', '')
+      const savePath = await join(dir, baseName + '_presentation.handout')
+      // 寫入磁碟
+      await saveHandout(presentationDoc, savePath)
+      // 載入並開啟
+      loadFromDocument(presentationDoc, savePath)
+      onOpenEditor()
+    } catch (e) {
+      console.error('轉為簡報失敗：', e)
     }
   }
 
@@ -388,6 +412,9 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings, 
                 closeContextMenu()
               }}>
                 {t.zoteroAddToProject}
+              </div>
+              <div className='home-context-item' onClick={() => { handleConvertToPresentation(contextMenu.path); setContextMenu(null) }}>
+                {t.convertToPresentation}
               </div>
               <div className='home-context-item danger' onClick={() => handleDeleteFile(contextMenu.path)}>
                 {t.deleteFile}

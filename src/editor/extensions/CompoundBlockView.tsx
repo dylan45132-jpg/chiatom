@@ -20,9 +20,7 @@ export default function CompoundBlockView({ node, selected }: NodeViewProps) {
           {t.compoundFallback} ({node.attrs.key})
         </div>
       )}
-      <div className={className}>
-        <NodeViewContent />
-      </div>
+      <NodeViewContent className={className} />
     </NodeViewWrapper>
   )
 }

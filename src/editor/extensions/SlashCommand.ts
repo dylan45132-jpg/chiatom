@@ -21,6 +21,7 @@ type SlashItem = {
 
 function getSlashItems(): SlashItem[] {
   const t = useLangStore.getState().t
+
   return [
     {
       title: t.slashParagraph,
@@ -110,6 +111,7 @@ function getSlashItems(): SlashItem[] {
         editor.commands.insertContent({ type: 'blockMath', attrs: { latex: '\\int_0^1 x^2 dx' } })
       },
     },
+
   ]
 }
 
@@ -120,13 +122,23 @@ function getCompoundItems(): SlashItem[] {
     title: block.name,
     icon: block.icon,
     keywords: [block.key],
-    command: ({ editor, range }: { editor: Editor; range: Range }) =>
+    command: ({ editor, range }: { editor: Editor; range: Range }) => {
+      const children = (block.children ?? []).map(child => {
+        if (child.type === 'ol') return { type: 'orderedList', content: [{ type: 'listItem', content: [{ type: 'paragraph', content: [] }] }] }
+        if (child.type === 'ul') return { type: 'bulletList', content: [{ type: 'listItem', content: [{ type: 'paragraph', content: [] }] }] }
+        if (child.type === 'imagePlaceholder') return { type: 'imagePlaceholder', attrs: { src: null } }
+        if (child.type === 'h1') return { type: 'heading', attrs: { level: 1 }, content: [] }
+        if (child.type === 'h2') return { type: 'heading', attrs: { level: 2 }, content: [] }
+        if (child.type === 'label') return { type: 'paragraph', content: [] }
+        return { type: 'paragraph', content: [] }
+      })
       editor.chain().focus().deleteRange(range)
         .insertContent({
           type: 'compoundBlock',
           attrs: { key: block.key, class: block.class },
-          content: [{ type: 'paragraph' }],
-        }).run(),
+          content: children.length > 0 ? children : [{ type: 'paragraph' }],
+        }).run()
+    },
   }))
 }
 
@@ -241,8 +253,11 @@ export const SlashCommand = Extension.create({
             if (!propsRef) return
             const item = propsRef.items[index]
             if (!item) return
+            const editor = propsRef.editor
             propsRef.command(item)
-            exitSuggestion(propsRef.editor.view, SlashCommandPluginKey)
+            if (editor) {
+              exitSuggestion(editor.view, SlashCommandPluginKey)
+            }
           }
 
           return {

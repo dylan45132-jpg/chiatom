@@ -1,0 +1,142 @@
+/* Deck — 乾淨白底，商業提案 */
+
+.page {
+  font-family: 'Inter', 'Helvetica Neue', 'Noto Sans TC', sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #1a1a1a;
+  background: #ffffff;
+  padding: 64px 80px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+
+.page h1 {
+  font-size: 40px;
+  font-weight: 700;
+  color: #0f0f0f;
+  margin: 0 0 24px 0;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.page h2 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 32px 0 16px 0;
+  letter-spacing: -0.01em;
+}
+
+.page h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2a6dd9;
+  margin: 24px 0 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.page p {
+  margin: 0 0 14px 0;
+  color: #333333;
+}
+
+.page ul,
+.page ol {
+  margin: 0 0 14px 0;
+  padding-left: 24px;
+  color: #333333;
+}
+
+.page li {
+  margin-bottom: 8px;
+}
+
+.page blockquote {
+  border-left: 3px solid #2a6dd9;
+  margin: 16px 0;
+  padding: 8px 20px;
+  color: #555555;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.page table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 16px;
+}
+
+.page th {
+  background: #0f0f0f;
+  color: #ffffff;
+  padding: 10px 14px;
+  text-align: left;
+}
+
+.page td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #e8e8e8;
+  color: #333333;
+}
+
+.page hr {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 24px 0;
+}
+
+.page .block-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin: 16px 0;
+}
+
+.page .block-image-text {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.page .block-highlight {
+  border-left: 4px solid #2a6dd9;
+  background: #f0f5ff;
+  padding: 20px 24px;
+  margin: 16px 0;
+  color: #1a1a1a;
+}
+
+.page .block-full-bleed {
+  background: #0f0f0f;
+  margin: -64px -80px;
+  padding: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 200px;
+  color: #ffffff;
+}
+
+.page .block-full-bleed h1,
+.page .block-full-bleed p {
+  color: #ffffff;
+}
+
+.page img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media print {
+  .page {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

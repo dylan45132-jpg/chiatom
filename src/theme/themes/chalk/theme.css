@@ -1,0 +1,152 @@
+/* Chalk — 黑板質感，學術演講 */
+
+.page {
+  font-family: 'Georgia', 'Noto Serif TC', serif;
+  font-size: 18px;
+  line-height: 1.7;
+  color: #e8e4d9;
+  background: #1e2124;
+  padding: 64px 80px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+
+/* 標題 */
+.page h1 {
+  font-size: 42px;
+  font-weight: 700;
+  color: #f0ece0;
+  margin: 0 0 24px 0;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  border-bottom: 1px solid rgba(232, 228, 217, 0.25);
+  padding-bottom: 16px;
+}
+
+.page h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #e8e4d9;
+  margin: 32px 0 16px 0;
+  line-height: 1.3;
+}
+
+.page h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #c8c4b8;
+  margin: 24px 0 10px 0;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* 段落 */
+.page p {
+  margin: 0 0 14px 0;
+  color: #d8d4c8;
+}
+
+/* 清單 */
+.page ul,
+.page ol {
+  margin: 0 0 14px 0;
+  padding-left: 24px;
+  color: #d8d4c8;
+}
+
+.page li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+/* 引用 */
+.page blockquote {
+  border-left: 3px solid #a0c8a0;
+  margin: 16px 0;
+  padding: 8px 20px;
+  color: #b8b4a8;
+  font-style: italic;
+}
+
+/* 表格 */
+.page table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 16px;
+}
+
+.page th {
+  background: rgba(232, 228, 217, 0.12);
+  color: #f0ece0;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid rgba(232, 228, 217, 0.2);
+}
+
+.page td {
+  padding: 10px 14px;
+  color: #d8d4c8;
+  border-bottom: 1px solid rgba(232, 228, 217, 0.08);
+}
+
+/* 分隔線 */
+.page hr {
+  border: none;
+  border-top: 1px solid rgba(232, 228, 217, 0.2);
+  margin: 24px 0;
+}
+
+/* 複合區塊：兩欄並排 */
+.page .block-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin: 16px 0;
+}
+
+/* 複合區塊：圖文並排 */
+.page .block-image-text {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  margin: 16px 0;
+}
+
+/* 複合區塊：重點框 */
+.page .block-highlight {
+  border: 1px solid rgba(160, 200, 160, 0.4);
+  background: rgba(160, 200, 160, 0.08);
+  border-radius: 4px;
+  padding: 20px 24px;
+  margin: 16px 0;
+  color: #c8e4c8;
+}
+
+/* 複合區塊：全版色塊 */
+.page .block-full-bleed {
+  background: rgba(232, 228, 217, 0.06);
+  margin: -64px -80px;
+  padding: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 200px;
+}
+
+/* 圖片 */
+.page img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 列印 */
+@media print {
+  .page {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
