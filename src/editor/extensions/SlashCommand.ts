@@ -111,6 +111,54 @@ function getSlashItems(): SlashItem[] {
         editor.commands.insertContent({ type: 'blockMath', attrs: { latex: '\\int_0^1 x^2 dx' } })
       },
     },
+{
+  title: '兩欄並排（1:1）',
+  description: '插入等寬兩欄',
+  icon: '▥',
+  keywords: ['兩欄', 'two column', 'columns', '並排', 'layout'],
+  command: ({ editor, range }) => {
+    editor.chain().focus().deleteRange(range).insertContent({
+      type: 'layoutBlock',
+      attrs: { key: 'two-col-1-1', columns: '1fr 1fr' },
+      content: [
+        { type: 'columnSlot', content: [{ type: 'paragraph' }] },
+        { type: 'columnSlot', content: [{ type: 'paragraph' }] },
+      ],
+    }).run()
+  },
+},
+{
+  title: '兩欄並排（2:3）',
+  description: '插入左窄右寬兩欄',
+  icon: '▦',
+  keywords: ['兩欄', 'two column', 'columns', '並排', 'layout'],
+  command: ({ editor, range }) => {
+    editor.chain().focus().deleteRange(range).insertContent({
+      type: 'layoutBlock',
+      attrs: { key: 'two-col-2-3', columns: '2fr 3fr' },
+      content: [
+        { type: 'columnSlot', content: [{ type: 'paragraph' }] },
+        { type: 'columnSlot', content: [{ type: 'paragraph' }] },
+      ],
+    }).run()
+  },
+},
+{
+  title: '兩欄並排（3:2）',
+  description: '插入左寬右窄兩欄',
+  icon: '▧',
+  keywords: ['兩欄', 'two column', 'columns', '並排', 'layout'],
+  command: ({ editor, range }) => {
+    editor.chain().focus().deleteRange(range).insertContent({
+      type: 'layoutBlock',
+      attrs: { key: 'two-col-3-2', columns: '3fr 2fr' },
+      content: [
+        { type: 'columnSlot', content: [{ type: 'paragraph' }] },
+        { type: 'columnSlot', content: [{ type: 'paragraph' }] },
+      ],
+    }).run()
+  },
+},
 
   ]
 }

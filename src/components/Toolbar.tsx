@@ -52,6 +52,7 @@ export default function Toolbar({ onGoHome, onGoSettings }: ToolbarProps) {
   const handleExport = async () => {
     try {
       const resolvedPages = await resolveImageSrcs(document.pages)
+
       const html = exportToHtml(resolvedPages, document.title, document.theme, document.mode)
       const targetPath = await save({
         filters: [{ name: t.filterHtml, extensions: ['html'] }],

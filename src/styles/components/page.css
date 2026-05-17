@@ -164,3 +164,15 @@
   box-sizing: border-box;
   outline: none;
 }
+
+.page--align-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.page--align-bottom {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}

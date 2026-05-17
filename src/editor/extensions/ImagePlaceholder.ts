@@ -15,6 +15,7 @@ export const ImagePlaceholder = Node.create({
       alt:      { default: '' },
       filePath: { default: '' },
       width:    { default: 100 },
+      align: { default: 'left' },
     }
   },
 

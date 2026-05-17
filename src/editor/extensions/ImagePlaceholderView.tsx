@@ -59,7 +59,11 @@ export default function ImagePlaceholderView({ node, updateAttributes, selected 
         <div
           className='image-placeholder-loaded'
           ref={containerRef}
-          style={{ width: `${node.attrs.width ?? 100}%` }}
+          style={{
+  width: `${node.attrs.width ?? 100}%`,
+  marginLeft: node.attrs.align === 'right' || node.attrs.align === 'center' ? 'auto' : '0',
+  marginRight: node.attrs.align === 'left' || node.attrs.align === 'center' ? 'auto' : '0',
+}}
         >
           <img src={node.attrs.src} alt={node.attrs.alt ?? ''} style={{ width: '100%' }} />
           <button

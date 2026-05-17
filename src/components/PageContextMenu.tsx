@@ -37,7 +37,7 @@ export default function PageContextMenu({ menu, onClose, onRename, docId }: Page
   const { t } = useLangStore()
   const menuRef = useRef<HTMLDivElement>(null)
   const [pos, setPos] = useState({ x: menu.x, y: menu.y })
-  const { document, deletePage, duplicatePage } = useDocumentStore()
+  const { document, deletePage, duplicatePage, updatePageVerticalAlign } = useDocumentStore()
   const { getLinksForPage } = useProjectStore()
   const linkedProjects = getLinksForPage(docId, menu.pageId)
   const [showProjectPanel, setShowProjectPanel] = useState(false)
@@ -73,6 +73,8 @@ export default function PageContextMenu({ menu, onClose, onRename, docId }: Page
 
   const pages = document.pages
   const index = pages.findIndex(p => p.id === menu.pageId)
+  const isPresentation = document?.mode === 'presentation'
+  const currentPage = pages[index]
 
   const handleInsertBefore = () => {
     const newPage = { id: crypto.randomUUID(), title: `${t.pageTitle} ${pages.length + 1}`, content: { type: 'doc' as const, content: [{ type: 'paragraph' }] } }
@@ -95,11 +97,35 @@ export default function PageContextMenu({ menu, onClose, onRename, docId }: Page
   const handleDuplicate = () => { duplicatePage(menu.pageId); toast.success(t.toastDuplicated); onClose() }
   const handleDelete = () => { deletePage(menu.pageId); toast.info(t.toastDeleted); onClose() }
   const handleRename = () => { onRename?.(menu.pageId); onClose() }
+  const handleAlignTop = () => { updatePageVerticalAlign(menu.pageId, 'top'); onClose() }
+  const handleAlignCenter = () => { updatePageVerticalAlign(menu.pageId, 'center'); onClose() }
+  const handleAlignBottom = () => { updatePageVerticalAlign(menu.pageId, 'bottom'); onClose() }
+
 
   return (
     <>
       <div ref={menuRef} className='context-menu' style={{ left: pos.x, top: pos.y }}>
         <button className='context-menu-item' onClick={handleRename}>{t.renamePage}</button>
+
+{isPresentation && (
+  <>
+    <div className='context-menu-divider' />
+    <div className='context-menu-label'>垂直對齊</div>
+    <button
+      className={`context-menu-item ${currentPage?.verticalAlign === 'top' || !currentPage?.verticalAlign ? 'context-menu-item--active' : ''}`}
+      onClick={handleAlignTop}
+    >頂部對齊</button>
+    <button
+      className={`context-menu-item ${currentPage?.verticalAlign === 'center' ? 'context-menu-item--active' : ''}`}
+      onClick={handleAlignCenter}
+    >垂直置中</button>
+    <button
+      className={`context-menu-item ${currentPage?.verticalAlign === 'bottom' ? 'context-menu-item--active' : ''}`}
+      onClick={handleAlignBottom}
+    >底部對齊</button>
+  </>
+)}
+
         <div className='context-menu-divider' />
         <button className='context-menu-item' onClick={() => setShowProjectPanel(true)}>
           {t.zoteroAddToProject}

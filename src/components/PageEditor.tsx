@@ -14,6 +14,9 @@ import { PageReference } from '../editor/extensions/PageReference'
 import { PageReferenceSuggestion } from '../editor/extensions/PageReferenceSuggestion'
 import { ImagePlaceholder } from '../editor/extensions/ImagePlaceholder'
 import { CompoundBlock } from '../editor/extensions/CompoundBlock'
+import { LayoutBlock } from '../editor/extensions/LayoutBlock'
+import { ColumnSlot } from '../editor/extensions/ColumnSlot'
+import { FontSize } from '../editor/extensions/FontSize'
 import { Mathematics } from '@tiptap/extension-mathematics'
 import 'katex/dist/katex.min.css'
 import { MathModal } from './MathModal'
@@ -48,6 +51,7 @@ export default function PageEditor({ page }: PageEditorProps) {
   const isPresentation = currentDoc.mode === 'presentation'
   const editorRef = useRef<HTMLDivElement>(null)
   const [isOverflow, setIsOverflow] = useState(false)
+  const verticalAlign = page.verticalAlign ?? 'top'
   const [mathModal, setMathModal] = useState<{
     isOpen: boolean
     initialLatex: string
@@ -72,6 +76,9 @@ export default function PageEditor({ page }: PageEditorProps) {
       Table.configure({ resizable: true }),
       ImagePlaceholder,
       CompoundBlock,
+      FontSize,
+      LayoutBlock,
+      ColumnSlot,
       Mathematics.configure({
         katexOptions: {
           throwOnError: false,
@@ -164,7 +171,7 @@ export default function PageEditor({ page }: PageEditorProps) {
   return (
     <div className="page-wrapper">
       {editor && <BubbleToolbar editor={editor} />}
-      <div className={`page${isPresentation ? ' page--presentation' : ''} ${isOverflow ? 'page-overflow' : ''}`}>
+      <div className={`page${isPresentation ? ' page--presentation' : ''} ${isOverflow ? 'page-overflow' : ''} ${verticalAlign === 'center' ? 'page--align-center' : ''} ${verticalAlign === 'bottom' ? 'page--align-bottom' : ''}`}>
         <div ref={editorRef}>
           <EditorContent editor={editor} />
         </div>

@@ -10,6 +10,7 @@ export interface Page {
   id: string
   title: string       // 左側面板顯示用（取自第一個 h1，或「頁面 N」）
   content: JSONContent, // Tiptap JSON
+  verticalAlign?: 'top' | 'center' | 'bottom',
 }
 
 export interface ThemeConfig {
@@ -60,7 +61,7 @@ interface DocumentStore {
   isDirty: boolean
 
   // 頁面操作
-  addPage: () => void
+    addPage: () => void;
   deletePage: (id: string) => void
   duplicatePage: (id: string) => void
   reorderPages: (fromIndex: number, toIndex: number) => void
@@ -70,6 +71,7 @@ interface DocumentStore {
   // 頁面內容更新
   updatePageContent: (id: string, content: JSONContent) => void
   updatePageTitle: (id: string, title: string) => void
+  updatePageVerticalAlign: (pageId: string, align: 'top' | 'center' | 'bottom') => void
 
   // 文件操作
   updateSpeakerNotes: (notes: JSONContent) => void
@@ -230,6 +232,19 @@ export const useDocumentStore = create<DocumentStore>()((set) => {
       },
       isDirty: true,
     })),
+
+    updatePageVerticalAlign: (pageId, align) => {
+      set(state => ({
+        document: {
+          ...state.document!,
+          pages: state.document!.pages.map(p =>
+            p.id === pageId ? { ...p, verticalAlign: align } : p
+          ),
+          updatedAt: new Date().toISOString(),
+        },
+        isDirty: true,
+      }))
+    },
 
     updateSpeakerNotes: (notes: JSONContent) => set((state) => ({
       document: {

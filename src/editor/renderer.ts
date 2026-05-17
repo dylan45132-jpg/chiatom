@@ -22,6 +22,8 @@ function renderMarks(text: string, marks?: JSONContent['marks']
       case 'underline': return `<u>${acc}</u>`
       case 'strike': return `<s>${acc}</s>`
       case 'code': return `<code>${acc}</code>`
+      case 'fontSize':
+        return `<span style="font-size:${mark.attrs?.size}">${acc}</span>`
       default: return acc
     }
   }, text)
@@ -78,11 +80,30 @@ function renderNode(node: JSONContent, t: any): string {
       return `<div class="${blockClass}">${renderChildren(node, t)}</div>`
     }
 
+    case 'layoutBlock':
+      return `<div
+        data-type="layout-block"
+        data-key="${node.attrs?.key ?? ''}"
+        style="display:grid;grid-template-columns:${node.attrs?.columns ?? '1fr 1fr'};gap:24px;"
+      >${renderChildren(node, t)}</div>`
+
+    case 'columnSlot': {
+      const verticalAlign = node.attrs?.verticalAlign ?? 'top'
+      const justifyContent =
+        verticalAlign === 'center' ? 'center' :
+        verticalAlign === 'bottom' ? 'flex-end' :
+        'flex-start'
+      return `<div data-type="column-slot" style="display:flex;flex-direction:column;justify-content:${justifyContent};">${renderChildren(node, t)}</div>`
+    }
+
     case 'imagePlaceholder': {
       if (node.attrs?.src) {
         const alt = node.attrs?.alt ?? ''
         const width = node.attrs?.width ?? 100
-        return `<img src="${node.attrs.src}" alt="${alt}" style="width:${width}%;display:block;margin:0.75em 0;">`
+        const align = node.attrs?.align ?? 'left'
+        const marginLeft = align === 'center' || align === 'right' ? 'auto' : '0'
+        const marginRight = align === 'center' || align === 'left' ? 'auto' : '0'
+        return `<img src="${node.attrs.src}" alt="${alt}" style="width:${width}%;display:block;margin-top:0.75em;margin-bottom:0.75em;margin-left:${marginLeft};margin-right:${marginRight};">`
       }
       return `<div style="padding:16px;border:2px dashed #ccc;text-align:center;color:#999;margin:0.75em 0;">${t.imagePlaceholder}</div>`
     }
@@ -169,7 +190,16 @@ export function exportToHtml(
 
   const pagesHtml = pages.map(page => {
     const content = renderNode(page.content, t)
-    return `  <div class="page">\n${content}\n  </div>`
+    const verticalAlign = (page as any).verticalAlign ?? 'top'
+    const justifyContent =
+      verticalAlign === 'center' ? 'center' :
+      verticalAlign === 'bottom' ? 'flex-end' :
+      'flex-start'
+    const pageStyle = verticalAlign !== 'top'
+      ? ` style="display:flex;flex-direction:column;justify-content:${justifyContent};"`
+      : ''
+
+    return `  <div class="page"${pageStyle}>\n${content}\n  </div>`
   }).join('\n\n')
 
   return `<!DOCTYPE html>
