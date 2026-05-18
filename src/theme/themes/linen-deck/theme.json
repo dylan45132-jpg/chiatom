@@ -1,0 +1,61 @@
+{
+  "name": "Linen Deck",
+  "version": "1.0.0",
+  "author": "",
+  "description": "人文研討簡報，暖米白質感，與 Linen 講義同一套系。",
+  "pageSize": "16:9",
+  "tags": ["簡報", "人文", "Serif"],
+  "palette": ["#2c2420", "#a07850", "#c8b89a", "#ddd5c5", "#f7f3ec"],
+  "preview": "preview.png",
+  "blocks": [
+    {
+      "name": "封面",
+      "key": "layout-cover",
+      "icon": "🎯",
+      "class": "block-cover",
+      "children": [
+        { "type": "label", "placeholder": "標題" },
+        { "type": "paragraph", "placeholder": "副標題或講師姓名…" }
+      ]
+    },
+    {
+      "name": "標題＋內容",
+      "key": "layout-title-content",
+      "icon": "📄",
+      "class": "block-title-content",
+      "children": [
+        { "type": "label", "placeholder": "投影片標題" },
+        { "type": "paragraph", "placeholder": "內容…" }
+      ]
+    },
+    {
+      "name": "兩欄並排",
+      "key": "layout-two-col",
+      "icon": "⬛",
+      "class": "block-two-col",
+      "children": [
+        { "type": "paragraph", "placeholder": "左欄…" },
+        { "type": "paragraph", "placeholder": "右欄…" }
+      ]
+    },
+    {
+      "name": "全版內容",
+      "key": "layout-full",
+      "icon": "🔲",
+      "class": "block-full",
+      "children": [
+        { "type": "paragraph", "placeholder": "內容…" }
+      ]
+    },
+    {
+      "name": "章節過場",
+      "key": "layout-section",
+      "icon": "📌",
+      "class": "block-section",
+      "children": [
+        { "type": "label", "placeholder": "章節標題" },
+        { "type": "paragraph", "placeholder": "說明文字…" }
+      ]
+    }
+  ]
+}

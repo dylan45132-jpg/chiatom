@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type View = 'home' | 'editor' | 'settings' | 'zotero-projects' | 'about'
+export type View = 'home' | 'editor' | 'settings' | 'zotero-projects' | 'about' | 'theme-store' | 'theme-customize'
 
 export interface NavEntry {
   view: View

@@ -50,6 +50,9 @@ export async function readWorkspace(workspacePath: string): Promise<WorkspaceStr
     const entryPath = await join(workspacePath, entry.name)
 
     if (entry.isDirectory) {
+      // 跳過系統保留資料夾
+      if (entry.name === 'themes') continue
+
       // 讀取子資料夾內的 .handout 檔案
       const subEntries = await readDir(entryPath)
       const files: WorkspaceFile[] = []
@@ -148,3 +151,22 @@ export async function deleteFile(filePath: string): Promise<void> {
 export async function deleteFolder(folderPath: string): Promise<void> {
   await remove(folderPath, { recursive: true })
 }
+
+// ── 主題目錄管理 ──────────────────────────
+
+export async function getThemesPath(workspacePath: string): Promise<string> {
+  return await join(workspacePath, 'themes')
+}
+
+export async function ensureThemesDirExists(workspacePath: string): Promise<void> {
+  const themesPath = await getThemesPath(workspacePath)
+  const themesExists = await exists(themesPath)
+  if (!themesExists) {
+    await mkdir(themesPath, { recursive: true })
+  }
+}
+
+export async function getInstalledThemesPath(workspacePath: string): Promise<string> {
+  return await join(workspacePath, 'themes', 'installedThemes.json')
+}
+

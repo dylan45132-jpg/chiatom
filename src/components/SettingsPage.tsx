@@ -43,8 +43,8 @@ export default function SettingsPage({ workspacePath, onWorkspaceChange, onTheme
     await openUrl('https://github.com/dylan45132-jpg/chiatom')
   }
 
-  const handleOpenThemeGallery = async () => {
-    await openUrl('https://dylan45132-jpg.github.io/chiatom-themes/')
+  const handleOpenThemeStore = () => {
+    navigate('theme-store')
   }
 
   return (
@@ -132,7 +132,7 @@ export default function SettingsPage({ workspacePath, onWorkspaceChange, onTheme
           </div>
           <div className='settings-row'>
             <span className='settings-label'>{t.themeGalleryLabel}</span>
-            <button className='toolbar-btn' onClick={handleOpenThemeGallery}>↗</button>
+            <button className='toolbar-btn' onClick={handleOpenThemeStore}>→</button>
           </div>
         </div>
 

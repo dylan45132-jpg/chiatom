@@ -1,10 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDocumentStore } from '../store/documentStore'
 import { importThemeFromFolder, importThemeFromCss } from '../theme/themeLoader'
 import { toast } from '../store/toastStore'
 import { getBuiltinThemes } from '../theme/builtinThemes'
 import type { ThemeConfig } from '../store/documentStore'
 import { useLangStore } from '../store/langStore'
+import { readTextFile } from '@tauri-apps/plugin-fs'
+import { getSettings } from '../store/settingsStore'
+import { getInstalledThemesPath, getThemesPath, ensureThemesDirExists } from '../utils/workspace'
+import { join } from '@tauri-apps/api/path'
+
+interface InstalledThemeMeta {
+  id: string
+  name: string
+  version: string
+  installedAt: string
+  pageSize?: 'A4' | '16:9'
+}
 
 interface ThemeImporterProps {
   onClose: () => void
@@ -18,6 +30,36 @@ export default function ThemeImporter({ onClose }: ThemeImporterProps) {
   const [cssText, setCssText] = useState('')
   const [themeName, setThemeName] = useState(t.customTheme)
   const [loading, setLoading] = useState(false)
+  const [installedThemes, setInstalledThemes] = useState<InstalledThemeMeta[]>([])
+  const [installedLoaded, setInstalledLoaded] = useState(false)
+
+  useEffect(() => {
+    const loadInstalled = async () => {
+      const workspacePath = getSettings().workspacePath
+      if (!workspacePath) {
+        setInstalledLoaded(true)
+        return
+      }
+      try {
+        await ensureThemesDirExists(workspacePath)
+        const indexPath = await getInstalledThemesPath(workspacePath)
+        const raw = await readTextFile(indexPath)
+        const all: InstalledThemeMeta[] = JSON.parse(raw)
+        const currentMode = document.mode ?? 'handout'
+        const expectedPageSize = currentMode === 'presentation' ? '16:9' : 'A4'
+        const filtered = all.filter(meta =>
+          !meta.pageSize || meta.pageSize === expectedPageSize
+        )
+        setInstalledThemes(filtered)
+      } catch {
+        // installedThemes.json 不存在時視為空清單
+        setInstalledThemes([])
+      } finally {
+        setInstalledLoaded(true)
+      }
+    }
+    loadInstalled()
+  }, [])
 
   const handleApplyBuiltinTheme = (theme: (typeof builtinThemes)[0]) => {
     const themeConfig: ThemeConfig = {
@@ -64,6 +106,26 @@ export default function ThemeImporter({ onClose }: ThemeImporterProps) {
     })
     toast.info(t.toastReset)
     onClose()
+  }
+
+  const handleApplyInstalledTheme = async (meta: InstalledThemeMeta) => {
+    const workspacePath = getSettings().workspacePath
+    if (!workspacePath) return
+    setLoading(true)
+    try {
+      const themesPath = await getThemesPath(workspacePath)
+      const themeDir = await join(themesPath, meta.id)
+      const css = await readTextFile(await join(themeDir, 'theme.css'))
+      const jsonRaw = await readTextFile(await join(themeDir, 'theme.json'))
+      const json = JSON.parse(jsonRaw)
+      setTheme({ name: meta.name, css, json })
+      toast.success(`${t.toastThemeApplied} ${meta.name}`)
+      onClose()
+    } catch {
+      toast.error(t.toastImportFailed)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -113,6 +175,26 @@ export default function ThemeImporter({ onClose }: ThemeImporterProps) {
                   </button>
                 </div>
               ))}
+              {installedLoaded && installedThemes.length > 0 && (
+                <>
+                  <div className="builtin-themes-divider" />
+                  {installedThemes.map(meta => (
+                    <div key={meta.id} className="builtin-theme-item">
+                      <div className="builtin-theme-info">
+                        <span className="builtin-theme-name">{meta.name}</span>
+                        <p className="builtin-theme-desc">v{meta.version}</p>
+                      </div>
+                      <button
+                        className="modal-btn"
+                        onClick={() => handleApplyInstalledTheme(meta)}
+                        disabled={loading}
+                      >
+                        {t.applyTheme}
+                      </button>
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
           )}
 

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import './styles/tokens.css'
 import './styles/base.css'
 import './styles/editor.css'
+import './styles/components/theme-store.css'
 import Toolbar from './components/Toolbar'
 import Sidebar from './components/Sidebar'
 import Canvas from './components/Canvas'
@@ -23,6 +24,8 @@ import { useNavigationStore } from './store/navigationStore'
 import { clearPageReferenceCache } from './editor/extensions/PageReferenceSuggestion'
 import AboutPage from './components/AboutPage'
 import PresentationNotes from './components/PresentationNotes'
+import ThemeStore from './components/ThemeStore'
+import ThemeCustomize from './components/ThemeCustomize'
 
 export default function App() {
   const { document, activePageId, setActivePage, isDirty, savePath } = useDocumentStore()
@@ -174,6 +177,10 @@ export default function App() {
         return <ProjectsPage />
       case 'about':
         return <AboutPage />
+      case 'theme-store':
+        return <ThemeStore />
+      case 'theme-customize':
+        return <ThemeCustomize />
       default:
         return null
     }

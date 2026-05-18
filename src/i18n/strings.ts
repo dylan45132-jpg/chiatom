@@ -106,6 +106,8 @@ type StringsShape = {
   slashImage: string
   slashMathInline: string
   slashMathBlock: string
+  slashColumn: string
+  slashRow: string
   slashNoMatch: string
   toastImageFailed: string
   replaceImage: string
@@ -200,6 +202,18 @@ type StringsShape = {
   zoteroPluginDesc: string
   zoteroAttach: string
   zoteroUnlink: string
+  themeBuiltin: string
+  themeInstalled: string
+  themeInstalling: string
+  themeInstall: string
+  themeStoreTitle: string
+  themeStoreEmpty: string
+  themeStoreError: string
+  themeStoreChecking: string
+  themeCustomize: string
+  themeCopyPrompt: string
+  themeCopied: string
+  themeImportFolder: string
 }
 
 export const strings: Record<Lang, StringsShape> = {
@@ -328,6 +342,8 @@ export const strings: Record<Lang, StringsShape> = {
     slashImage: 'Image',
     slashMathInline: 'Inline equation',
     slashMathBlock: 'Block equation',
+    slashColumn: 'Column',
+    slashRow: 'Row',
     slashNoMatch: 'No matching commands',
 
     // ImagePlaceholder
@@ -442,7 +458,19 @@ export const strings: Record<Lang, StringsShape> = {
     zoteroPluginDesc: 'Link Zotero references and manage research projects',
     zoteroAttach: 'Attach paper',
     zoteroUnlink: 'Unlink paper',
-    notesPlaceholder: 'What do you want to say on this slide...'
+    notesPlaceholder: 'What do you want to say on this slide...',
+  themeBuiltin: 'Built-in',
+  themeInstalled: 'Installed',
+  themeInstalling: 'Installing…',
+  themeInstall: 'Install',
+  themeStoreTitle: 'Theme Store',
+  themeStoreEmpty: 'No themes found.',
+  themeStoreError: 'Failed to load store.',
+  themeStoreChecking: 'Loading…',
+  themeCustomize: 'Custom Theme',
+  themeCopyPrompt: 'Copy Prompt',
+  themeCopied: 'Copied ✓',
+  themeImportFolder: 'Import Theme Folder',
   },
 
   zh: {
@@ -570,8 +598,9 @@ export const strings: Record<Lang, StringsShape> = {
     slashImage: '圖片',
     slashMathInline: '行內方程式',
     slashMathBlock: '區塊方程式',
+    slashColumn: '欄',
+    slashRow: '列',
     slashNoMatch: '沒有符合的指令',
-
     // ImagePlaceholder
     toastImageFailed: '圖片載入失敗',
     replaceImage: '替換圖片',
@@ -684,6 +713,18 @@ export const strings: Record<Lang, StringsShape> = {
     zoteroPluginDesc: '連結 Zotero 文獻，管理研究專案與閱讀視角',
     zoteroAttach: '連結文獻',
     zoteroUnlink: '取消連結',
-    notesPlaceholder: '這頁你想說什麼...'
+    notesPlaceholder: '這頁你想說什麼...',
+  themeBuiltin: '內建',
+  themeInstalled: '已安裝',
+  themeInstalling: '安裝中…',
+  themeInstall: '安裝',
+  themeStoreTitle: '主題商店',
+  themeStoreEmpty: '找不到主題。',
+  themeStoreError: '無法載入商店清單。',
+  themeStoreChecking: '載入中…',
+  themeCustomize: '自訂主題',
+  themeCopyPrompt: '複製 Prompt',
+  themeCopied: '已複製 ✓',
+  themeImportFolder: '匯入主題資料夾',
   },
 }

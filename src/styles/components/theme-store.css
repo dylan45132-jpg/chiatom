@@ -1,0 +1,287 @@
+/* ── Theme Store ────────────────────────── */
+
+.theme-store-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--ui-bg-base);
+  overflow: hidden;
+}
+
+.theme-store-header {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-sm);
+  padding: 0 var(--ui-spacing-md);
+  height: 48px;
+  border-bottom: 1px solid var(--ui-border);
+  flex-shrink: 0;
+}
+
+.theme-store-title {
+  font-size: var(--ui-font-size-md);
+  font-weight: 500;
+  color: var(--ui-text-primary);
+  flex: 1;
+}
+
+.theme-store-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-sm);
+}
+
+/* ── Tag 篩選列 ─────────────────────────── */
+
+.theme-store-tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px var(--ui-spacing-md);
+  border-bottom: 1px solid var(--ui-border);
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+
+.theme-tag-btn {
+  padding: 3px 10px;
+  border-radius: var(--ui-radius-sm);
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-secondary);
+  border: 1px solid var(--ui-border);
+  white-space: nowrap;
+  transition: background 100ms, color 100ms, border-color 100ms;
+}
+
+.theme-tag-btn:hover {
+  color: var(--ui-text-primary);
+  border-color: var(--ui-border-strong);
+}
+
+.theme-tag-btn.is-active {
+  background: var(--ui-text-primary);
+  color: var(--ui-bg-base);
+  border-color: var(--ui-text-primary);
+}
+
+/* ── 內容區 ─────────────────────────────── */
+
+.theme-store-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--ui-spacing-md);
+}
+
+.theme-store-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--ui-spacing-md);
+}
+
+.theme-store-status {
+  text-align: center;
+  padding: 48px var(--ui-spacing-md);
+  color: var(--ui-text-tertiary);
+  font-size: var(--ui-font-size-sm);
+}
+
+.theme-store-status.is-error {
+  color: var(--ui-danger);
+}
+
+.theme-store-error-detail {
+  font-size: 11px;
+  color: var(--ui-text-tertiary);
+  margin-top: 4px;
+  display: block;
+}
+
+/* ── Footer ─────────────────────────────── */
+
+.theme-store-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 8px var(--ui-spacing-md);
+  border-top: 1px solid var(--ui-border);
+  flex-shrink: 0;
+}
+
+.theme-store-footer-info {
+  font-size: 11px;
+  color: var(--ui-text-tertiary);
+}
+
+/* ── Theme Card ─────────────────────────── */
+
+.theme-card {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-md);
+  overflow: hidden;
+  background: var(--ui-bg-elevated);
+  display: flex;
+  flex-direction: column;
+  transition: border-color 120ms;
+}
+
+.theme-card:hover {
+  border-color: var(--ui-border-strong);
+}
+
+/* 色盤預覽區 */
+.theme-card-preview {
+  height: 72px;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-card-palette-bar {
+  flex: 1;
+}
+
+.theme-card-size-badge {
+  position: absolute;
+  bottom: 6px;
+  right: 8px;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--ui-text-primary);
+  background: var(--ui-bg-base);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  padding: 1px 6px;
+  opacity: 0.9;
+}
+
+/* 資訊區 */
+.theme-card-body {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.theme-card-name {
+  font-size: var(--ui-font-size-sm);
+  font-weight: 500;
+  color: var(--ui-text-primary);
+}
+
+.theme-card-desc {
+  font-size: 11px;
+  color: var(--ui-text-tertiary);
+  line-height: 1.4;
+  flex: 1;
+  /* 最多兩行 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.theme-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.theme-card-palette-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.theme-card-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--ui-border);
+  display: inline-block;
+}
+
+/* 按鈕狀態 */
+.theme-card-btn {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: var(--ui-radius-sm);
+  border: 1px solid var(--ui-border-strong);
+  color: var(--ui-text-primary);
+  transition: background 100ms;
+}
+
+.theme-card-btn:hover:not(:disabled) {
+  background: var(--ui-bg-base);
+}
+
+.theme-card-btn.is-builtin,
+.theme-card-btn.is-installed {
+  color: var(--ui-text-tertiary);
+  border-color: var(--ui-border);
+  cursor: default;
+}
+
+.theme-card-btn.is-installing {
+  color: var(--ui-text-tertiary);
+  border-color: var(--ui-border);
+  cursor: default;
+}
+
+/* ── Theme Customize ────────────────────── */
+
+.theme-customize-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--ui-bg-base);
+}
+
+.theme-customize-body {
+  flex: 1;
+  padding: 48px var(--ui-spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 560px;
+}
+
+.theme-customize-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.theme-customize-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.theme-customize-step-num {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--ui-border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ui-text-secondary);
+}
+
+.theme-customize-step-text {
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-text-primary);
+  line-height: 1.5;
+  padding-top: 2px;
+}
+
+.theme-customize-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 240px;
+}

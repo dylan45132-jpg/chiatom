@@ -1,109 +1,320 @@
-/* Slate — 石板灰調，理工講義 */
+/* Slate — 理工學術講義，黑白冷調
+   設計基準主題，所有其他套系以此為參照
+   pageSize: A4 */
+
+/* ─── 基礎頁面 ─────────────────────────────── */
 
 .page {
-  font-family: 'Georgia', 'Noto Serif TC', serif;
+  font-family: 'Georgia', 'Noto Serif TC', 'Times New Roman', serif;
   font-size: 13px;
-  line-height: 1.8;
+  line-height: 1.85;
   color: #1a1a1a;
   background: #ffffff;
   padding: 72px 80px;
+  box-sizing: border-box;
 }
 
-/* 標題 */
+/* ─── 標題層級 ─────────────────────────────── */
+
 .page h1 {
+  font-family: 'Georgia', 'Noto Serif TC', serif;
   font-size: 22px;
-  font-weight: 700;
-  color: #111111;
+  font-weight: bold;
+  line-height: 1.35;
+  color: #1a1a1a;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.01em;
+  /* 下方細線區隔主題區塊 */
+  padding-bottom: 10px;
   border-bottom: 2px solid #1a1a1a;
-  padding-bottom: 6px;
-  margin: 0 0 24px 0;
-  letter-spacing: 0.02em;
 }
 
 .page h2 {
+  font-family: 'Georgia', 'Noto Serif TC', serif;
   font-size: 16px;
-  font-weight: 700;
-  color: #111111;
-  border-left: 3px solid #555555;
-  padding-left: 10px;
-  margin: 28px 0 12px 0;
+  font-weight: bold;
+  line-height: 1.4;
+  color: #1a1a1a;
+  margin: 28px 0 6px 0;
+  letter-spacing: 0;
 }
 
 .page h3 {
-  font-size: 13px;
-  font-weight: 700;
+  font-family: 'Georgia', 'Noto Serif TC', serif;
+  font-size: 13.5px;
+  font-weight: bold;
+  line-height: 1.5;
   color: #333333;
-  margin: 20px 0 8px 0;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  margin: 20px 0 4px 0;
+  letter-spacing: 0;
 }
 
-/* 段落 */
+/* h1 後若緊接 h2，縮短上間距 */
+.page h1 + h2 {
+  margin-top: 20px;
+}
+
+/* ─── 段落 ─────────────────────────────────── */
+
 .page p {
   margin: 0 0 10px 0;
-  color: #1a1a1a;
+  orphans: 2;
+  widows: 2;
 }
 
-/* 清單 */
+/* ─── 清單 ─────────────────────────────────── */
+
 .page ul,
 .page ol {
   margin: 0 0 10px 0;
-  padding-left: 20px;
-  color: #1a1a1a;
+  padding-left: 22px;
 }
 
 .page li {
   margin-bottom: 4px;
+  line-height: 1.8;
 }
 
-/* 引用 */
+.page li > ul,
+.page li > ol {
+  margin: 2px 0 4px 0;
+}
+
+/* ul 改用較細緻的 disc */
+.page ul {
+  list-style-type: disc;
+}
+
+/* ol 數字用正體 */
+.page ol {
+  list-style-type: decimal;
+}
+
+/* ─── 引用 ─────────────────────────────────── */
+
 .page blockquote {
-  border-left: 3px solid #aaaaaa;
   margin: 12px 0;
-  padding: 6px 16px;
+  padding: 2px 0 2px 18px;
+  border-left: 3px solid #aaaaaa;
   color: #555555;
-  font-style: italic;
 }
 
-/* 表格 */
+.page blockquote p {
+  margin: 0;
+}
+
+/* ─── 表格 ─────────────────────────────────── */
+
 .page table {
   width: 100%;
   border-collapse: collapse;
-  margin: 12px 0;
-  font-size: 12px;
+  margin: 14px 0;
+  font-size: 12.5px;
 }
 
 .page th {
   background: #1a1a1a;
   color: #ffffff;
-  padding: 7px 10px;
+  font-weight: bold;
+  font-style: normal;
   text-align: left;
-  font-weight: 600;
+  padding: 7px 12px;
+  font-size: 12px;
+  letter-spacing: 0.02em;
 }
 
 .page td {
-  border: 1px solid #cccccc;
-  padding: 6px 10px;
   color: #1a1a1a;
+  padding: 6px 12px;
+  border-bottom: 1px solid #e0e0e0;
+  vertical-align: top;
 }
 
+/* 斑馬紋，提升可讀性 */
 .page tr:nth-child(even) td {
-  background: #f5f5f5;
+  background: #f7f7f7;
 }
 
-/* 分隔線 */
+.page tr:last-child td {
+  border-bottom: 1px solid #aaaaaa;
+}
+
+/* ─── 分隔線 ─────────────────────────────────── */
+
 .page hr {
   border: none;
-  border-top: 1px solid #cccccc;
-  margin: 20px 0;
+  border-top: 1px solid #dddddd;
+  margin: 22px 0;
 }
 
-/* 圖片 */
+/* ─── 圖片 ─────────────────────────────────── */
+
 .page img {
   max-width: 100%;
   display: block;
-  margin: 12px auto;
+  margin: 14px auto;
 }
+
+/* ─── Layout Block（兩欄並排） ─────────────── */
+
+.page [data-type="layout-block"] {
+  width: 100%;
+  box-sizing: border-box;
+  /* 禁止加 height: 100% */
+}
+
+.page [data-type="column-slot"] {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.page [data-key="layout-two-col"],
+.page [data-key="layout-text-image"],
+.page [data-key="layout-image-text"] {
+  align-items: start;
+}
+
+/* 兩欄之間的 gap */
+.page [data-type="layout-block"] {
+  gap: 24px;
+}
+
+/* ─── 複合區塊 ─────────────────────────────── */
+
+/* 共用基底：內距、邊框半徑 */
+.page .block-highlight,
+.page .block-definition,
+.page .block-example,
+.page .block-note,
+.page .block-summary {
+  margin: 14px 0;
+  padding: 12px 16px;
+  box-sizing: border-box;
+}
+
+/* 重點框
+   最重的視覺份量，黑底白字，用於關鍵定理、核心結論 */
+.page .block-highlight {
+  background: #1a1a1a;
+  color: #ffffff;
+  border-left: none;
+}
+
+.page .block-highlight .block-label {
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #aaaaaa;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.page .block-highlight p {
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.75;
+}
+
+/* 定義框
+   左側深色粗線 + 淺灰底，術語醒目 */
+.page .block-definition {
+  background: #f5f5f5;
+  border-left: 4px solid #1a1a1a;
+}
+
+.page .block-definition .block-label {
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.page .block-definition p {
+  margin: 0;
+  color: #333333;
+  font-size: 12.5px;
+}
+
+/* 例題框
+   左側中灰線，數字清單式，解題步驟感 */
+.page .block-example {
+  border-left: 3px solid #555555;
+  padding-left: 18px;
+  padding-right: 0;
+  background: transparent;
+}
+
+.page .block-example .block-label {
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #555555;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.page .block-example ol {
+  margin: 0;
+  padding-left: 20px;
+  color: #1a1a1a;
+}
+
+.page .block-example ol li {
+  margin-bottom: 5px;
+  font-size: 12.5px;
+}
+
+/* 補充說明
+   最輕的視覺份量，虛線框，視覺退到背景 */
+.page .block-note {
+  border: 1px dashed #aaaaaa;
+  background: transparent;
+  padding: 10px 14px;
+}
+
+.page .block-note p {
+  margin: 0;
+  color: #555555;
+  font-size: 12px;
+  font-style: italic;
+}
+
+/* 摘要條列
+   頂部細線，清晰的條列收尾，適合頁面末尾 */
+.page .block-summary {
+  border-top: 2px solid #1a1a1a;
+  padding: 12px 0 0 0;
+  background: transparent;
+}
+
+.page .block-summary .block-label {
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.page .block-summary ol {
+  margin: 0;
+  padding-left: 20px;
+  color: #1a1a1a;
+}
+
+.page .block-summary ol li {
+  margin-bottom: 4px;
+  font-size: 12.5px;
+  line-height: 1.75;
+}
+
+/* ─── 列印設定（必填） ─────────────────────── */
 
 @media print {
   .page {

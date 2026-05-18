@@ -24,8 +24,11 @@ export interface ThemeDefinition {
   version: string
   author: string
   description: string
-  pageSize: 'A4'
+  pageSize: 'A4' | '16:9'
   blocks: CompoundBlockDef[]
+  tags?: string[]
+  palette?: string[]
+  preview?: string
 }
 
 export interface CompoundBlockDef {
