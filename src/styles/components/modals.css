@@ -142,6 +142,21 @@
 .modal-btn-primary:hover { background: var(--ui-accent-hover); }
 .modal-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
+.modal-btn-white {
+  background: #ffffff;
+  color: #1a1a1a;
+  font-size: var(--ui-font-size-sm);
+  font-weight: 600;
+  padding: 8px var(--ui-spacing-md);
+  border-radius: var(--ui-radius-md);
+  transition: background var(--ui-transition);
+  align-self: flex-start;
+  border: 1px solid var(--ui-border);
+}
+
+.modal-btn-white:hover { background: #f0f0f0; }
+.modal-btn-white:disabled { opacity: 0.5; cursor: not-allowed; }
+
 .modal-footer {
   padding: var(--ui-spacing-md) var(--ui-spacing-lg);
   border-top: 1px solid var(--ui-border);

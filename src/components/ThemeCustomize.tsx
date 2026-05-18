@@ -1,84 +1,46 @@
 import { useState } from 'react'
+import { open } from '@tauri-apps/plugin-dialog'
+import { readTextFile } from '@tauri-apps/plugin-fs'
+import { join } from '@tauri-apps/api/path'
 import { useNavigationStore } from '../store/navigationStore'
 import { useLangStore } from '../store/langStore'
-import { importThemeFromFolder } from '../theme/themeLoader'
-import { useDocumentStore } from '../store/documentStore'
+import { ThemeDefinition, useDocumentStore } from '../store/documentStore'
 import { toast } from '../store/toastStore'
+import { getSettings } from '../store/settingsStore'
+import { getThemesPath, ensureThemesDirExists } from '../utils/workspace'
+import { writeText } from '@tauri-apps/plugin-clipboard-manager'
 
-const CUSTOM_THEME_PROMPT = `你是一位專業的 CSS 設計師，我需要你為 Chiatom 設計一套自訂主題。
+const CUSTOMIZE_PROMPT = `你是一個 CSS 主題設計師。請為 Chiatom 編輯器製作一套完整的主題包，包含以下兩個檔案：
 
-Chiatom 是一個以 A4 頁面為單位的區塊式文件編輯器，主題由兩個檔案組成：
-- theme.css：所有頁面樣式
-- theme.json：主題 metadata 與複合區塊宣告
-
----
-
-【我想要的風格】
-
-（請在這裡描述你的需求，例如：
-- 色調：暗綠色系、工業風灰、溫暖橘調…
-- 字體感：嚴謹學術、現代無衬線、手寫感…
-- 用途：講義、簡報、個人筆記…
-- 參考：某本書的排版、某個網站的風格…）
-
----
-
-【輸出要求】
-
-請輸出兩個完整檔案的內容：
-
-**1. theme.json**
-
-必須包含以下欄位：
-
-\`\`\`json
+1. theme.json — 主題設定檔，格式如下：
 {
   "name": "主題名稱",
   "version": "1.0.0",
   "author": "",
-  "description": "一句話描述風格",
+  "description": "主題描述",
   "pageSize": "A4",
-  "tags": [],
-  "palette": [],
-  "preview": "preview.png",
-  "blocks": []
+  "blocks": [],
+  "tags": ["標籤1", "標籤2"],
+  "palette": ["#深色", "#中色", "#輔色", "#淺輔", "#底色"]
 }
-\`\`\`
 
-**2. theme.css**
+2. theme.css — 樣式檔，定義以下選擇器的樣式：
+.page { } — A4 頁面容器
+h1, h2, h3 { } — 標題
+p, ul, ol { } — 內文
+blockquote { } — 引用
+table { } — 表格
 
-樣式必須全部寫在 \`.page {}\` 選擇器之內，並包含以下必要區塊：
+請告訴我你想要的風格、色調或參考對象，我會產出完整的主題包。`
 
-\`\`\`css
-.page { font-family: ...; font-size: ...; line-height: ...; color: ...; background: ...; padding: 72px 80px; }
-.page h1 { ... }
-.page h2 { ... }
-.page h3 { ... }
-.page p { margin: 0 0 10px 0; }
-.page ul, .page ol { margin: 0 0 10px 0; padding-left: 20px; }
-.page li { margin-bottom: 4px; }
-.page blockquote { ... }
-.page table { width: 100%; border-collapse: collapse; margin: 12px 0; }
-.page th { ... }
-.page td { ... }
-.page hr { border: none; border-top: 1px solid ...; margin: 20px 0; }
-.page img { max-width: 100%; display: block; margin: 12px auto; }
-.page [data-type="layout-block"] { width: 100%; box-sizing: border-box; }
-.page [data-type="column-slot"] { overflow: hidden; display: flex; flex-direction: column; }
-.page [data-key="layout-two-col"], .page [data-key="layout-text-image"], .page [data-key="layout-image-text"] { align-items: start; }
-@media print { .page { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
-\`\`\`
-
----
-
-【注意事項】
-
-- 所有樣式必須在 \`.page {}\` 內，不要寫全域樣式
-- \`padding: 72px 80px\` 是 A4 內距，請保持不變
-- \`[data-type="layout-block"]\` 禁止加 \`height: 100%\`
-- 字體優先使用系統字體（Georgia、Helvetica Neue、Noto Serif TC、Noto Sans TC）
-
-輸出時請直接給出兩個檔案的完整內容，不需要額外說明。`
+const defaultThemeDefinition: ThemeDefinition = {
+  name: '',
+  version: '1.0.0',
+  author: '',
+  description: '',
+  pageSize: 'A4',
+  blocks: [],
+}
 
 export default function ThemeCustomize() {
   const { t } = useLangStore()
@@ -87,21 +49,57 @@ export default function ThemeCustomize() {
   const [copied, setCopied] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const handleCopyPrompt = async () => {
-    try {
-      await navigator.clipboard.writeText(CUSTOM_THEME_PROMPT)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } catch {
-      toast.error('複製失敗')
-    }
+  const handleCopy = async () => {
+    await writeText(CUSTOMIZE_PROMPT)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   const handleImportFolder = async () => {
     setLoading(true)
     try {
-      const theme = await importThemeFromFolder()
-      if (!theme) return
+      const { workspacePath } = getSettings()
+      if (!workspacePath) {
+        toast.error(t.errorNoWorkspace)
+        return
+      }
+
+      await ensureThemesDirExists(workspacePath)
+      const themesPath = await getThemesPath(workspacePath)
+
+      const selected = await open({
+        directory: true,
+        multiple: false,
+        defaultPath: themesPath,
+        title: t.selectThemeFolder,
+      })
+
+      if (!selected || Array.isArray(selected)) return
+
+      const folderPath = selected
+
+      // 讀取 theme.css
+      let css = ''
+      try {
+        const cssPath = await join(folderPath, 'theme.css')
+        css = await readTextFile(cssPath)
+      } catch {
+        throw new Error(t.errorNoCss)
+      }
+
+      // 讀取 theme.json（可選）
+      let json: ThemeDefinition = { ...defaultThemeDefinition }
+      try {
+        const jsonPath = await join(folderPath, 'theme.json')
+        const raw = await readTextFile(jsonPath)
+        json = { ...defaultThemeDefinition, ...JSON.parse(raw) }
+      } catch {
+        // theme.json 不存在時用預設值，不報錯
+      }
+
+      const name = json.name || folderPath.split(/[\\/]/).pop() || t.customTheme
+      const theme = { name, css, json: { ...json, name } }
+
       setTheme(theme)
       toast.success(`${t.toastThemeApplied} ${theme.name}`)
       goBack()
@@ -113,42 +111,88 @@ export default function ThemeCustomize() {
   }
 
   return (
-    <div className='theme-customize-shell'>
+    <div className='theme-store-shell'>
       <div className='theme-store-header'>
         <button className='toolbar-btn icon-btn' onClick={goBack}>←</button>
-        <span className='theme-store-title'>{t.themeCustomize}</span>
+        <span className='theme-store-title'>自訂主題</span>
       </div>
 
       <div className='theme-customize-body'>
+        <h2 className='theme-customize-title'>用 AI 製作你的主題</h2>
+        <p className='theme-customize-sub'>跟著以下三個步驟，讓 AI 幫你產生主題檔案，再匯入 Chiatom。</p>
+
         <div className='theme-customize-steps'>
+          {/* Step 1 */}
           <div className='theme-customize-step'>
-            <span className='theme-customize-step-num'>1</span>
-            <span className='theme-customize-step-text'>複製下方 prompt</span>
+            <div className='theme-customize-step-left'>
+              <div className='theme-customize-step-dot'>1</div>
+              <div className='theme-customize-step-line' />
+            </div>
+            <div className='theme-customize-step-right'>
+              <div className='theme-customize-step-label'>複製 prompt</div>
+              <div className='theme-customize-step-desc'>下方是主題製作的指令，包含 theme.css 與 theme.json 的格式規範。</div>
+              <div className='theme-customize-prompt-box'>
+                <div className='theme-customize-prompt-header'>
+                  <span className='theme-customize-prompt-lang'>PROMPT FOR AI</span>
+                  <button className='ghost-btn' onClick={handleCopy}>
+                    {copied ? (
+                      <>
+                        <i className='codicon codicon-check' />
+                        已複製 ✓
+                      </>
+                    ) : (
+                      <>
+                        <i className='codicon codicon-copy' />
+                        複製
+                      </>
+                    )}
+                  </button>
+                </div>
+                <div className='theme-customize-prompt-text'>
+                  {CUSTOMIZE_PROMPT}
+                </div>
+              </div>
+            </div>
           </div>
+
+          {/* Step 2 */}
           <div className='theme-customize-step'>
-            <span className='theme-customize-step-num'>2</span>
-            <span className='theme-customize-step-text'>貼到你習慣的 AI 工具，描述你想要的風格</span>
+            <div className='theme-customize-step-left'>
+              <div className='theme-customize-step-dot'>2</div>
+              <div className='theme-customize-step-line' />
+            </div>
+            <div className='theme-customize-step-right'>
+              <div className='theme-customize-step-label'>貼到 AI 工具，描述風格</div>
+              <div className='theme-customize-step-desc'>Claude、ChatGPT、Gemini 都可以。在 prompt 的基礎上，加上你對風格的描述。</div>
+            </div>
           </div>
+
+          {/* Step 3 */}
           <div className='theme-customize-step'>
-            <span className='theme-customize-step-num'>3</span>
-            <span className='theme-customize-step-text'>把 AI 輸出的資料夾匯入 Chiatom</span>
+            <div className='theme-customize-step-left'>
+              <div className='theme-customize-step-dot'>3</div>
+            </div>
+            <div className='theme-customize-step-right'>
+              <div className='theme-customize-step-label'>儲存輸出為資料夾</div>
+              <div className='theme-customize-step-desc'>把 AI 給你的 theme.css 和 theme.json 放進同一個資料夾。</div>
+            </div>
           </div>
         </div>
 
-        <div className='theme-customize-actions'>
-          <button
-            className='modal-btn-primary'
-            onClick={handleCopyPrompt}
-          >
-            {copied ? t.themeCopied : t.themeCopyPrompt}
-          </button>
+        <div className='theme-customize-divider' />
 
+        <div className='theme-customize-import'>
+          <div className='theme-customize-import-text'>
+            <div className='theme-customize-import-label'>從資料夾匯入主題</div>
+            <div className='theme-customize-import-desc'>選取包含 theme.css 和 theme.json 的資料夾。</div>
+          </div>
           <button
-            className='modal-btn-primary'
+            className='modal-btn-white'
             onClick={handleImportFolder}
             disabled={loading}
           >
-            {loading ? t.selectingFolder : t.themeImportFolder}
+            <i className='codicon codicon-folder-opened' />
+            {loading ? '匯入中...' : '選取資料夾'}
           </button>
         </div>
       </div>

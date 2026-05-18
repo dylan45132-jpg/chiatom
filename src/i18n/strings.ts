@@ -145,6 +145,7 @@ type StringsShape = {
   darkMode: string
   workspacePath: string
   changeWorkspace: string
+  errorNoWorkspace: string
   language: string
   defaultThemeLabel: string
   github: string
@@ -400,6 +401,7 @@ export const strings: Record<Lang, StringsShape> = {
     darkMode: 'Dark',
     workspacePath: 'Workspace Path',
     changeWorkspace: 'Change',
+    errorNoWorkspace: 'Please set workspace path in settings first',
     language: 'Language',
     defaultThemeLabel: 'Default Theme',
     github: 'GitHub',
@@ -655,6 +657,7 @@ export const strings: Record<Lang, StringsShape> = {
     darkMode: '深色',
     workspacePath: '工作區路徑',
     changeWorkspace: '變更',
+    errorNoWorkspace: '請先在設定頁面指定工作區路徑',
     language: '語言',
     defaultThemeLabel: '預設主題',
     github: 'GitHub',

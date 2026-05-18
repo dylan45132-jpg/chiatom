@@ -177,6 +177,7 @@
   /* 最多兩行 */
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -230,58 +231,158 @@
 
 /* ── Theme Customize ────────────────────── */
 
-.theme-customize-shell {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background: var(--ui-bg-base);
-}
-
 .theme-customize-body {
   flex: 1;
-  padding: 48px var(--ui-spacing-lg);
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  max-width: 560px;
+  overflow-y: auto;
+  padding: 24px 20px 28px;
 }
 
+.theme-customize-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ui-text-primary);
+  margin-bottom: 4px;
+}
+
+.theme-customize-sub {
+  font-size: 12px;
+  color: var(--ui-text-secondary);
+  line-height: 1.55;
+  margin-bottom: 24px;
+}
+
+/* 步驟列表 */
 .theme-customize-steps {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  margin-bottom: 4px;
 }
 
 .theme-customize-step {
   display: flex;
-  align-items: flex-start;
-  gap: 14px;
+  gap: 12px;
+  position: relative;
 }
 
-.theme-customize-step-num {
+.theme-customize-step:not(:last-child) .theme-customize-step-line {
+  position: absolute;
+  left: 10px;
+  top: 22px;
+  bottom: 0;
+  width: 1px;
+  background: var(--ui-border);
+}
+
+.theme-customize-step-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   flex-shrink: 0;
-  width: 22px;
-  height: 22px;
+}
+
+.theme-customize-step-dot {
+  width: 21px;
+  height: 21px;
   border-radius: 50%;
   border: 1px solid var(--ui-border-strong);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--ui-text-secondary);
+  background: var(--ui-bg-base);
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
 }
 
-.theme-customize-step-text {
-  font-size: var(--ui-font-size-sm);
+.theme-customize-step-right {
+  padding-bottom: 18px;
+  flex: 1;
+  min-width: 0;
+}
+
+.theme-customize-step-label {
+  font-size: 13px;
+  font-weight: 500;
   color: var(--ui-text-primary);
-  line-height: 1.5;
-  padding-top: 2px;
+  margin-bottom: 2px;
+  padding-top: 1px;
 }
 
-.theme-customize-actions {
+.theme-customize-step-desc {
+  font-size: 12px;
+  color: var(--ui-text-secondary);
+  line-height: 1.55;
+}
+
+/* Prompt 預覽框 */
+.theme-customize-prompt-box {
+  margin-top: 8px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-md);
+  overflow: hidden;
+  background: var(--ui-bg-elevated);
+}
+
+.theme-customize-prompt-header {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: 240px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--ui-border);
+}
+
+.theme-customize-prompt-lang {
+  font-size: 10px;
+  color: var(--ui-text-tertiary);
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+.theme-customize-prompt-text {
+  padding: 10px 12px;
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--ui-text-secondary);
+  font-family: monospace;
+  max-height: 150px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: var(--ui-bg-sunken);
+}
+
+/* 分隔線 */
+.theme-customize-divider {
+  height: 1px;
+  background: var(--ui-border);
+  margin: 0 0 18px;
+}
+
+/* 匯入區 */
+.theme-customize-import {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.theme-customize-import-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.theme-customize-import-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ui-text-primary);
+  margin-bottom: 2px;
+}
+
+.theme-customize-import-desc {
+  font-size: 12px;
+  color: var(--ui-text-secondary);
+  line-height: 1.5;
 }
