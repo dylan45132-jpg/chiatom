@@ -1,5 +1,3 @@
-gemini -p "完整覆蓋 C:\chiatom\README.md，內容如下：
-
 English | [繁體中文 ↓](#繁體中文)
 
 # Chiatom
@@ -128,6 +126,25 @@ For details on creating your own theme, see [docs/en/theme-guide.md](docs/en/the
 | Editor engine | Tiptap 3.23.x |
 | State management | Zustand 5.x |
 | File format | JSZip (.handout) |
+
+---
+
+## For Developers / Building from Source
+
+Interested in contributing or running the app from source? Here is the recommended development environment.
+
+### Recommended Environment
+| Tool | Version |
+|---|---|
+| Node.js | 24.x |
+| pnpm | 10.x |
+| Rust | 1.95.0+ |
+
+### Steps
+1. Make sure you have fulfilled all the [Tauri prerequisites](https://tauri.app/v2/guides/getting-started/prerequisites) for your operating system.
+2. Clone the repository.
+3. Install frontend dependencies: `pnpm install`
+4. Run the app in development mode: `pnpm tauri dev`
 
 ---
 

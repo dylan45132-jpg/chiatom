@@ -7,6 +7,7 @@ import { Document, Page } from '../store/documentStore'
 import { useLangStore } from '../store/langStore'
 import { getSettings } from '../store/settingsStore'
 import { updateZoteroIndex } from '../plugins/zotero/zoteroIndex'
+import { updateLibraryIndex } from './libraryIndex'
 
 // ... (resolveImageSrcs and other utils remain the same)
 
@@ -116,9 +117,10 @@ export async function saveHandout(
   const finalPath = targetPath.endsWith('.handout') ? targetPath : `${targetPath}.handout`
   await writeFile(finalPath, bytes)
 
+  const settings = getSettings()
+
   // 更新 Zotero index
   try {
-    const settings = getSettings()
     if (settings.workspacePath && targetPath) {
       const zoteroData = doc.pluginData?.['zotero'] as { citekey?: string; paperTitle?: string; tags?: string[] } | undefined
       if (zoteroData?.citekey) {
@@ -133,6 +135,15 @@ export async function saveHandout(
     }
   } catch {
     // index 更新失敗不影響主流程
+  }
+
+  // 更新 Library Index
+  try {
+    if (settings.workspacePath && targetPath) {
+      await updateLibraryIndex(settings.workspacePath, docCopy, targetPath)
+    }
+  } catch (e) {
+    console.error('[LibraryIndex] 更新失敗', e)
   }
 
   return finalPath

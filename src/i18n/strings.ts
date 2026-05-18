@@ -215,6 +215,10 @@ type StringsShape = {
   themeCopyPrompt: string
   themeCopied: string
   themeImportFolder: string
+  library: string
+  librarySearch: string
+  libraryEmpty: string
+  libraryNoResults: string
 }
 
 export const strings: Record<Lang, StringsShape> = {
@@ -473,6 +477,10 @@ export const strings: Record<Lang, StringsShape> = {
   themeCopyPrompt: 'Copy Prompt',
   themeCopied: 'Copied ✓',
   themeImportFolder: 'Import Theme Folder',
+     library: 'Library',
+     librarySearch: 'Search pages…',
+     libraryEmpty: 'No pages yet. Save a document to get started.',
+     libraryNoResults: 'No results found.',
   },
 
   zh: {
@@ -729,5 +737,9 @@ export const strings: Record<Lang, StringsShape> = {
   themeCopyPrompt: '複製 Prompt',
   themeCopied: '已複製 ✓',
   themeImportFolder: '匯入主題資料夾',
+     library: '資料庫',
+     librarySearch: '搜尋頁面…',
+     libraryEmpty: '尚無頁面。儲存文件後即可在此瀏覽。',
+     libraryNoResults: '找不到符合的結果。',
   },
 }

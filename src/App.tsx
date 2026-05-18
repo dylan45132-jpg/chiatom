@@ -26,6 +26,7 @@ import AboutPage from './components/AboutPage'
 import PresentationNotes from './components/PresentationNotes'
 import ThemeStore from './components/ThemeStore'
 import ThemeCustomize from './components/ThemeCustomize'
+import LibraryPage from './components/LibraryPage'
 
 export default function App() {
   const { document, activePageId, setActivePage, isDirty, savePath } = useDocumentStore()
@@ -34,6 +35,7 @@ export default function App() {
   const [settings, setSettings] = useState<Settings>(getSettings())
   const [updateInfo, setUpdateInfo] = useState<UpdateInfo | null>(null)
   const isAskingRef = useRef(false)
+  const t = useLangStore((state) => state.t)
 
   const setThemeMode = (mode: 'light' | 'dark') => {
     window.document.documentElement.setAttribute('data-theme', mode)
@@ -181,6 +183,14 @@ export default function App() {
         return <ThemeStore />
       case 'theme-customize':
         return <ThemeCustomize />
+      case 'library':
+        return <LibraryPage strings={{
+          library: t.library,
+          librarySearch: t.librarySearch,
+          libraryEmpty: t.libraryEmpty,
+          libraryNoResults: t.libraryNoResults,
+          back: t.back,
+        }} />
       default:
         return null
     }

@@ -11,6 +11,7 @@ import { FileText, Folder, FolderOpen } from 'lucide-react'
 import { readZoteroIndex, ZoteroIndex } from '../plugins/zotero/zoteroIndex'
 import { usePluginStore } from '../store/pluginStore'
 import AddToProjectFromFilePanel from './AddToProjectFromFilePanel'
+import { useNavigationStore } from '../store/navigationStore'
 
 interface HomePageProps {
   workspacePath: string | null
@@ -21,6 +22,7 @@ interface HomePageProps {
 
 export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings, onOpenProjects }: HomePageProps) {
   const { loadFromDocument } = useDocumentStore()
+  const { navigate } = useNavigationStore()
   const { t } = useLangStore()
   const [workspace, setWorkspace] = useState<WorkspaceStructure | null>(null)
   const [loading, setLoading] = useState(true)
@@ -272,7 +274,8 @@ export default function HomePage({ workspacePath, onOpenEditor, onOpenSettings, 
       <div className='home-header'>
         <span className='home-logo'>Chiatom</span>
         <div className='home-header-actions'>
-          <button className='toolbar-btn' onClick={onOpenProjects}>{t.zoteroProjects}</button>
+                    <button className='toolbar-btn' onClick={() => navigate('library')}>{t.library}</button>
+           <button className='toolbar-btn' onClick={onOpenProjects}>{t.zoteroProjects}</button>
           <button className='toolbar-btn' onClick={handleOpenDialog}>{t.openFile}</button>
           <button className='toolbar-btn' onClick={() => setShowNewFolder(true)}>{t.newFolder}</button>
           <button className='toolbar-btn primary' onClick={() => setShowNewDoc(true)}>{t.newDocument}</button>

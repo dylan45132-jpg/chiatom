@@ -4,6 +4,7 @@ import { documentDir, join, basename, dirname } from '@tauri-apps/api/path'
 import { readZoteroIndex, updateZoteroIndex } from '../plugins/zotero/zoteroIndex'
 import { readProjects, writeProjects } from '../store/projects'
 import { getSettings } from '../store/settingsStore'
+import { renameDocInIndex, removeDocFromIndex } from './libraryIndex'
 
 export interface WorkspaceFile {
   name: string
@@ -129,6 +130,9 @@ export async function renameFile(filePath: string, newName: string): Promise<str
     if (changed) {
       await writeProjects(workspacePath, projects)
     }
+
+    // 同步更新 library index
+    await renameDocInIndex(workspacePath, filePath, newPath, newName)
   }
 
   return newPath
@@ -145,6 +149,12 @@ export async function renameFolder(folderPath: string, newName: string): Promise
 // 刪除文件
 export async function deleteFile(filePath: string): Promise<void> {
   await remove(filePath)
+
+  // 同步更新 library index
+  const workspacePath = getSettings().workspacePath
+  if (workspacePath) {
+    await removeDocFromIndex(workspacePath, filePath)
+  }
 }
 
 // 刪除資料夾（含內容）
