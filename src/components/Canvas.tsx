@@ -158,6 +158,10 @@ export default function Canvas() {
             ) : (
               <div
                 key={page.id}
+                ref={el => {
+                  if (el) pageRefs.current.set(page.id, el)
+                  else pageRefs.current.delete(page.id)
+                }}
                 style={{
                   width: NOTE_W,
                   height: NOTE_H * scale,
