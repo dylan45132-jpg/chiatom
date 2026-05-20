@@ -27,6 +27,7 @@ import PresentationNotes from './components/PresentationNotes'
 import ThemeStore from './components/ThemeStore'
 import ThemeCustomize from './components/ThemeCustomize'
 import LibraryPage from './components/LibraryPage'
+import PresentationView from './components/PresentationView'
 
 export default function App() {
   const { document, activePageId, setActivePage, isDirty, savePath } = useDocumentStore()
@@ -191,10 +192,13 @@ export default function App() {
           libraryNoResults: t.libraryNoResults,
           back: t.back,
         }} />
+      case 'presentation':
+        return <PresentationView />
       default:
         return null
     }
   }
+
 
   return (
     <>

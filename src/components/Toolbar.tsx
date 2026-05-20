@@ -115,6 +115,15 @@ export default function Toolbar({ onGoHome, onGoSettings }: ToolbarProps) {
         <div className="toolbar-right">
           {renderSaveStatus()}
           <button className="toolbar-btn" onClick={() => setShowTheme(true)}>{t.theme}</button>
+   {document?.mode === 'presentation' && (
+     <button
+       className="toolbar-btn"
+       onClick={() => navigate('presentation')}
+       title="Present"
+     >
+       ▶
+     </button>
+   )}
           <button className="toolbar-btn" onClick={handleExport}>{t.exportHtml}</button>
           <button className="toolbar-btn icon-btn" onClick={onGoSettings} title="Settings">⚙</button>
         </div>

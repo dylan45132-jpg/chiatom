@@ -292,3 +292,11 @@ ${pagesHtml}
 </body>
 </html>`
 }
+
+export function exportPageHtml(
+  page: { title: string; content: JSONContent; verticalAlign?: 'top' | 'center' | 'bottom' },
+  theme: ThemeConfig,
+  mode?: 'handout' | 'presentation'
+): string {
+  return exportToHtml([page], page.title, theme, mode)
+}
