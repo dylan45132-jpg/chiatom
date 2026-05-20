@@ -102,6 +102,27 @@ interface ToolbarPos {
       {pos.mode === 'text' && (
   <>
     <button
+      className={editor.isActive('paragraph') && !editor.isActive('heading') ? 'bubble-btn is-active' : 'bubble-btn'}
+      onMouseDown={e => { e.preventDefault(); editor.chain().focus().setParagraph().run() }}
+      title='段落'
+    >P</button>
+    <button
+      className={editor.isActive('heading', { level: 1 }) ? 'bubble-btn is-active' : 'bubble-btn'}
+      onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleHeading({ level: 1 }).run() }}
+      title='標題 1'
+    >H1</button>
+    <button
+      className={editor.isActive('heading', { level: 2 }) ? 'bubble-btn is-active' : 'bubble-btn'}
+      onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleHeading({ level: 2 }).run() }}
+      title='標題 2'
+    >H2</button>
+    <button
+      className={editor.isActive('heading', { level: 3 }) ? 'bubble-btn is-active' : 'bubble-btn'}
+      onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleHeading({ level: 3 }).run() }}
+      title='標題 3'
+    >H3</button>
+    <div className='bubble-divider' />
+    <button
       className={`bubble-btn ${editor.isActive('bold') ? 'is-active' : ''}`}
       onMouseDown={e => { e.preventDefault(); editor.chain().focus().toggleBold().run() }}
       title={t.bold}

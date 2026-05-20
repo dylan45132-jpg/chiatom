@@ -59,6 +59,11 @@
   position: relative;
 }
 
+.page img,
+.page [data-type='image-placeholder'] img {
+  max-width: 100%;
+}
+
 /* 簡報模式：16:9 */
 .page--presentation {
   width: 1280px !important;

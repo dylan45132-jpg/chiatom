@@ -273,7 +273,7 @@ export default function ProjectsPage() {
                 <div key={i} className='zp-page-link'>
                   <span
                     className='zp-page-id zp-clickable'
-                    onClick={() => handleOpenDoc(link.docId)}
+                    onClick={() => handleOpenPage(link.docId, link.pageId)}
                   >
                     {docLabels[link.docId] ?? link.docId.slice(0, 8) + '…'}
                     {' · '}

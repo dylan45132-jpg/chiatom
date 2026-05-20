@@ -240,6 +240,7 @@ export const PageReferenceSuggestion = Extension.create({
           let expandedDocs: Set<string> = new Set()
           let currentQuery = ''
           let currentGroups: DocGroup[] = []
+          let outsideClickHandler: ((e: MouseEvent) => void) | null = null
 
           const rerender = () => {
             if (!dom || !propsRef) return
@@ -280,6 +281,12 @@ export const PageReferenceSuggestion = Extension.create({
               renderItems(dom.list, items, selectedIndex, expandedDocs, selectDoc, selectPage, toggleDoc)
               updateMenuPosition(dom.root, props.clientRect)
               propsRef = { ...propsRef, items }
+              outsideClickHandler = (e: MouseEvent) => {
+                if (dom && !dom.root.contains(e.target as Node)) {
+                  exitSuggestion(propsRef!.editor.view, PageReferencePluginKey)
+                }
+              }
+              document.addEventListener('mousedown', outsideClickHandler)
             },
 
             onUpdate: async (props) => {
@@ -332,6 +339,10 @@ export const PageReferenceSuggestion = Extension.create({
             },
 
             onExit: () => {
+              if (outsideClickHandler) {
+                document.removeEventListener('mousedown', outsideClickHandler)
+                outsideClickHandler = null
+              }
               dom?.root.remove()
               dom = null
               propsRef = null

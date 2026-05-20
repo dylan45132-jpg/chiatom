@@ -68,6 +68,7 @@ export default function Canvas() {
   // IntersectionObserver：捲動時更新 activePageId
   useEffect(() => {
     if (pages.length === 0) return
+    const debounceTimers = new Map<string, ReturnType<typeof setTimeout>>()
     const observers: IntersectionObserver[] = []
 
     pages.forEach(page => {
@@ -78,17 +79,30 @@ export default function Canvas() {
           if (isScrollingTo.current || isEditing.current) return
           entries.forEach(entry => {
             if (entry.isIntersecting) {
-              setActivePage(page.id)
+              if (debounceTimers.has(page.id)) clearTimeout(debounceTimers.get(page.id)!)
+              const timer = setTimeout(() => {
+                setActivePage(page.id)
+                debounceTimers.delete(page.id)
+              }, 80)
+              debounceTimers.set(page.id, timer)
+            } else {
+              if (debounceTimers.has(page.id)) {
+                clearTimeout(debounceTimers.get(page.id)!)
+                debounceTimers.delete(page.id)
+              }
             }
           })
         },
-        { threshold: 0.1, root: scrollRef.current }
+        { threshold: 0.5, root: scrollRef.current }
       )
       observer.observe(el)
       observers.push(observer)
     })
 
-    return () => observers.forEach(o => o.disconnect())
+    return () => {
+      observers.forEach(o => o.disconnect())
+      debounceTimers.forEach(t => clearTimeout(t))
+    }
   }, [pages, setActivePage])
 
   useEffect(() => {
